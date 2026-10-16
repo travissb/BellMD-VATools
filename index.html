@@ -48,6 +48,49 @@
     .header-meta { display: flex; align-items: center; gap: 19px; color: #c1d5d2; font-size: 14px; }
     .status-dot { display: inline-block; width: 7px; height: 7px; margin-right: 7px; border-radius: 50%; background: #82d3aa; }
 
+    .tool-tabs { display: flex; gap: 4px; padding: 12px 24px 0; border-bottom: 1px solid var(--line); background: var(--surface); }
+    .tool-tab { padding: 10px 14px; color: var(--muted); background: transparent; border: 0; border-bottom: 3px solid transparent; font-weight: 650; }
+    .tool-tab:hover { color: var(--ink); background: #f5f8f7; }
+    .tool-tab[aria-selected="true"] { color: var(--teal-dark); border-bottom-color: var(--teal); }
+    .workspace-panel[hidden] { display: none; }
+    .med-rec-intro { margin: 0 0 16px; color: var(--muted); line-height: 1.55; }
+    .med-rec-inputs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .med-rec-input { padding: 16px; }
+    .med-rec-input h2, .med-rec-results h2 { margin: 0; font-size: 16px; }
+    .med-rec-input p { margin: 5px 0 10px; color: var(--muted); font-size: 13px; }
+    .med-rec-paste { display: block; width: 100%; min-height: 84px; padding: 10px; color: var(--ink); background: #fbfcfc; border: 1px solid var(--line); border-radius: 4px; line-height: 1.5; resize: vertical; }
+    .med-rec-list-actions { display: flex; justify-content: flex-end; margin: 8px 0; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    .med-rec-table-wrap { overflow-x: auto; }
+    .med-rec-table { width: 100%; border-collapse: collapse; text-align: left; }
+    .med-rec-table th { padding: 7px 6px; color: var(--muted); border-bottom: 1px solid var(--line); font-size: 11px; letter-spacing: .04em; text-transform: uppercase; }
+    .med-rec-table td { padding: 6px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+    .med-rec-table td:first-child { width: 100%; }
+    .med-rec-table input { width: 100%; min-width: 220px; padding: 7px; color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 4px; }
+    .med-rec-table .quiet-button { padding: 5px 8px; }
+    .med-rec-table-empty { padding: 10px 6px !important; color: var(--muted); font-size: 13px; }
+    .med-rec-actions { display: flex; align-items: center; gap: 10px; margin: 14px 0; }
+    .med-rec-error { min-height: 1.5em; margin: 0 0 10px; color: #913d3d; font-weight: 650; }
+    .med-rec-disclaimer { margin: 0 0 14px; padding: 12px 14px; color: #71501c; background: var(--amber-pale); border: 1px solid #ecd6aa; border-radius: 5px; line-height: 1.5; }
+    .med-rec-results { padding: 16px; }
+    .med-rec-results-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+    .med-rec-icon-legend { display: flex; flex-wrap: wrap; gap: 12px; margin: 0 0 12px; color: var(--muted); font-size: 12px; }
+    .med-rec-legend-item { display: inline-flex; align-items: center; gap: 5px; }
+    .med-rec-category h3 { display: flex; align-items: center; gap: 7px; }
+    .med-rec-status-icon { display: inline-grid; place-items: center; width: 20px; height: 20px; flex: 0 0 20px; border-radius: 50%; font-size: 14px; font-weight: 800; line-height: 1; }
+    .med-rec-status-icon--unchanged { color: #fff; background: #3b7954; }
+    .med-rec-status-icon--review { color: #79500e; background: #ffe3a3; }
+    .med-rec-status-icon--new { color: #fff; background: #2468a2; }
+    .med-rec-categories { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .med-rec-category { min-width: 0; padding: 13px; background: #fbfcfc; border: 1px solid var(--line); border-radius: 5px; }
+    .med-rec-category h3 { margin: 0 0 9px; font-size: 14px; }
+    .med-rec-category ul { display: grid; margin: 0; padding: 0; list-style: none; }
+    .med-rec-item { padding: 10px 2px; overflow-wrap: anywhere; }
+    .med-rec-item + .med-rec-item { border-top: 1px solid var(--line); }
+    .med-rec-item strong { display: block; margin-bottom: 4px; }
+    .med-rec-item p { margin: 3px 0 0; color: #40555a; font-size: 13px; line-height: 1.45; white-space: pre-wrap; }
+    .med-rec-empty-state { margin: 0; color: var(--muted); font-size: 13px; }
+
     .page { max-width: 1600px; margin: 0 auto; padding: 20px 24px 36px; }
     .encounter-bar {
       display: grid;
@@ -152,7 +195,11 @@
       .app-header { height: 52px; padding: 0 15px; }
       .header-meta { gap: 8px; }
       .header-meta span:last-child { display: none; }
+      .tool-tabs { padding: 8px 12px 0; }
+      .tool-tab { padding: 9px 11px; }
       .page { padding: 12px 12px 24px; }
+      .med-rec-inputs, .med-rec-categories { grid-template-columns: 1fr; }
+      .med-rec-results-header { align-items: flex-start; flex-direction: column; }
       .encounter-bar { grid-template-columns: 1fr; gap: 10px; padding: 14px; }
       .encounter-tag { justify-self: start; }
       .workspace { display: flex; flex-direction: column; align-items: stretch; gap: 12px; }
@@ -184,7 +231,12 @@
     <div class="header-meta"><span><i class="status-dot" aria-hidden="true"></i>Draft encounter</span></div>
   </header>
 
-  <main class="page">
+  <nav class="tool-tabs" role="tablist" aria-label="BellMD tools">
+    <button class="tool-tab" id="exam-note-tab" type="button" role="tab" aria-selected="true" aria-controls="exam-note-panel" tabindex="0">Exam Note</button>
+    <button class="tool-tab" id="med-rec-tab" type="button" role="tab" aria-selected="false" aria-controls="med-rec-panel" tabindex="-1">Med Rec Assist</button>
+  </nav>
+
+  <main class="page workspace-panel" id="exam-note-panel" role="tabpanel" aria-labelledby="exam-note-tab" tabindex="0">
     <section class="encounter-bar" aria-label="Encounter details">
       <div class="workspace-title">
         <p class="eyebrow">Documentation workspace</p>
@@ -226,7 +278,582 @@
     <p class="privacy-note">This page runs locally in your browser and does not save or transmit information. Do not enter patient names, dates of birth, record numbers, contact details, or other identifying information, including in free-text fields. This tool has not been assessed for regulatory compliance and is not a substitute for your organization's approved clinical record.</p>
   </main>
 
+  <main class="page workspace-panel" id="med-rec-panel" role="tabpanel" aria-labelledby="med-rec-tab" tabindex="0" hidden>
+    <section class="encounter-bar" aria-label="Medication reconciliation workspace">
+      <div class="workspace-title">
+        <p class="eyebrow">Documentation workspace</p>
+        <h1>Med Rec Assist</h1>
+        <p>Medication reconciliation</p>
+      </div>
+      <div class="encounter-tag">MEDICATIONS</div>
+    </section>
+    <p class="med-rec-intro">Paste one medication per line into each list; numbered and bulleted lists are supported. The comparison checks medication, dose, frequency, route, formulation, timing, and PRN status. Review any flagged instruction differences and possible additional orders.</p>
+    <div class="med-rec-inputs">
+      <section class="panel med-rec-input" aria-labelledby="outpatient-heading">
+        <h2 id="outpatient-heading">Outpatient medications</h2>
+        <p>Medications taken before admission</p>
+        <textarea class="med-rec-paste" id="outpatient-meds" data-rows="outpatient-med-rows" aria-label="Paste outpatient medications" placeholder="Paste one medication per line"></textarea>
+        <div class="med-rec-list-actions">
+          <button class="quiet-button" type="button" data-add-medications="outpatient-med-rows" data-source="outpatient-meds">Add typed lines</button>
+        </div>
+        <div class="med-rec-table-wrap">
+          <table class="med-rec-table">
+            <thead><tr><th scope="col">Outpatient medication</th><th scope="col"><span class="sr-only">Actions</span></th></tr></thead>
+            <tbody id="outpatient-med-rows"><tr><td class="med-rec-table-empty" colspan="2">No medications added yet.</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+      <section class="panel med-rec-input" aria-labelledby="inpatient-heading">
+        <h2 id="inpatient-heading">Inpatient medications</h2>
+        <p>Medications ordered during admission</p>
+        <textarea class="med-rec-paste" id="inpatient-meds" data-rows="inpatient-med-rows" aria-label="Paste inpatient medications" placeholder="Paste one medication per line"></textarea>
+        <div class="med-rec-list-actions">
+          <button class="quiet-button" type="button" data-add-medications="inpatient-med-rows" data-source="inpatient-meds">Add typed lines</button>
+        </div>
+        <div class="med-rec-table-wrap">
+          <table class="med-rec-table">
+            <thead><tr><th scope="col">Inpatient medication</th><th scope="col"><span class="sr-only">Actions</span></th></tr></thead>
+            <tbody id="inpatient-med-rows"><tr><td class="med-rec-table-empty" colspan="2">No medications added yet.</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+    <div class="med-rec-actions">
+      <button class="copy-button" id="compare-meds" type="button">Compare lists</button>
+      <button class="quiet-button" id="clear-meds" type="button">Clear lists</button>
+      <span id="med-rec-status" role="status"></span>
+    </div>
+    <p class="med-rec-error" id="med-rec-error" role="alert"></p>
+    <p class="med-rec-disclaimer">Comparison aid only: matching uses entered names and structured regimen details, with a limited set of common brand/generic equivalents. Verify every result, including dose, formulation, route, frequency, timing, PRN status, and clinical appropriateness, against the medication record before making discharge decisions. Do not enter identifying patient information.</p>
+    <section class="panel med-rec-results" aria-labelledby="med-rec-results-heading" aria-live="polite">
+      <div class="med-rec-results-header">
+        <h2 id="med-rec-results-heading">Reconciliation results</h2>
+        <button class="quiet-button" id="copy-med-rec" type="button" disabled>Copy results</button>
+      </div>
+      <div class="med-rec-icon-legend" aria-label="Result icon legend">
+        <span class="med-rec-legend-item"><span class="med-rec-status-icon med-rec-status-icon--unchanged" aria-hidden="true">✓</span> Unchanged</span>
+        <span class="med-rec-legend-item"><span class="med-rec-status-icon med-rec-status-icon--review" aria-hidden="true">⚑</span> Review possible change</span>
+        <span class="med-rec-legend-item"><span class="med-rec-status-icon med-rec-status-icon--new" aria-hidden="true">!</span> New</span>
+      </div>
+      <div class="med-rec-categories" id="med-rec-categories">
+        <p class="med-rec-empty-state">Enter both medication lists and select Compare lists.</p>
+      </div>
+    </section>
+  </main>
+
   <script>
+    const toolTabs = [...document.querySelectorAll(".tool-tab")];
+
+    function activateToolTab(tab, moveFocus = false) {
+      for (const item of toolTabs) {
+        const selected = item === tab;
+        item.setAttribute("aria-selected", String(selected));
+        item.tabIndex = selected ? 0 : -1;
+        document.getElementById(item.getAttribute("aria-controls")).hidden = !selected;
+      }
+      document.title = `${tab.textContent.trim()} | BellMD`;
+      if (moveFocus) tab.focus();
+    }
+
+    for (const [index, tab] of toolTabs.entries()) {
+      tab.addEventListener("click", () => activateToolTab(tab));
+      tab.addEventListener("keydown", (event) => {
+        let nextIndex;
+        if (event.key === "ArrowRight") nextIndex = (index + 1) % toolTabs.length;
+        else if (event.key === "ArrowLeft") nextIndex = (index - 1 + toolTabs.length) % toolTabs.length;
+        else if (event.key === "Home") nextIndex = 0;
+        else if (event.key === "End") nextIndex = toolTabs.length - 1;
+        else return;
+        event.preventDefault();
+        activateToolTab(toolTabs[nextIndex], true);
+      });
+    }
+
+    const medicationAliases = new Map(Object.entries({
+      norvasc: "amlodipine",
+      prilosec: "omeprazole",
+      zoloft: "sertraline",
+      neurontin: "gabapentin",
+      microzide: "hydrochlorothiazide",
+      hydrodiuril: "hydrochlorothiazide",
+      lipitor: "atorvastatin",
+      crestor: "rosuvastatin",
+      lasix: "furosemide",
+      synthroid: "levothyroxine",
+      eliquis: "apixaban",
+      xarelto: "rivaroxaban",
+      plavix: "clopidogrel",
+      cozaar: "losartan",
+      diovan: "valsartan",
+      prinivil: "lisinopril",
+      zestril: "lisinopril",
+      glucophage: "metformin",
+      protonix: "pantoprazole",
+      pepcid: "famotidine",
+      coumadin: "warfarin",
+      jardiance: "empagliflozin",
+      januvia: "sitagliptin",
+      ozempic: "semaglutide",
+      ventolin: "albuterol",
+      proventil: "albuterol",
+      advil: "ibuprofen",
+      motrin: "ibuprofen",
+      tylenol: "acetaminophen",
+      zocor: "simvastatin"
+    }));
+    const medicationStrengthPattern = /\b\d+(?:\.\d+)?(?:\s*[-–]\s*\d+(?:\.\d+)?)?\s*(?:mcg|μg|mg|g|grams?|kg|mEq|meq|units?|IU|mL|ml|L|%|tablets?|tabs?|capsules?|caps?|puffs?|patches?|drops?)\b/i;
+    const medicationDirectionPattern = /\b(?:take|administer|once|twice|daily|weekly|nightly|at bedtime|every other day|every\s+\d+|as needed|prn|by mouth|orally|intravenous|intramuscular|subcutaneous|topical|inhaled|q\.?\s*d\.?|q\.?\s*o\.?\s*d\.?|q\.?\s*h\.?\s*s\.?|q\.?\s*a\.?\s*m\.?|q\.?\s*p\.?\s*m\.?|q\.?\s*\d+\s*h(?:ours?)?|bid|b\.?\s*i\.?\s*d\.?|tid|t\.?\s*i\.?\s*d\.?|qid|q\.?\s*i\.?\s*d\.?|po\b|iv\b|im\b|sc\b|sl\b|inh(?:aled)?\b)(?=\b|[.]|$)/i;
+    const medRecError = document.getElementById("med-rec-error");
+    const medRecStatus = document.getElementById("med-rec-status");
+    const medRecCategories = document.getElementById("med-rec-categories");
+    const copyMedRecButton = document.getElementById("copy-med-rec");
+    let medRecPlainText = "";
+
+    function normalizeMedicationName(name) {
+      const normalized = name.toLocaleLowerCase().replace(/[^a-z0-9]+/g, " ").trim().replace(/\s+/g, " ");
+      return medicationAliases.get(normalized) || normalized;
+    }
+
+    function parseMedicationRegimen(regimen) {
+      let remaining = regimen.toLocaleLowerCase();
+      const doseMatch = medicationStrengthPattern.exec(remaining);
+      const dose = doseMatch ? doseMatch[0].toLocaleLowerCase().replace(/\s+/g, " ").trim() : "";
+      if (doseMatch) remaining = remaining.replace(doseMatch[0], " ");
+
+      const forms = [];
+      const formPatterns = [
+        [/\b(?:extended[- ]release|xl|xr|er|sr|cr|controlled[- ]release|sustained[- ]release)\b/g, "extended-release"],
+        [/\b(?:delayed[- ]release|dr|enteric[- ]coated|ec)\b/g, "delayed-release"],
+        [/\b(?:immediate[- ]release|ir)\b/g, "immediate-release"],
+        [/\b(?:nasal|nas|inhaler|inh|nebulized|nebulizer)\b/g, "inhaled-or-nasal-form"],
+        [/\b(?:tablet|tablets|tab|tabs|capsule|capsules|cap|caps)\b/g, "solid-oral-form"]
+      ];
+      for (const [pattern, canonical] of formPatterns) {
+        if (remaining.match(pattern)) forms.push(canonical);
+        remaining = remaining.replace(pattern, " ");
+      }
+
+      const routeMatches = [
+        [/\b(?:by mouth|orally|oral|po)\b/g, "oral"],
+        [/\b(?:intravenous|iv)\b/g, "intravenous"],
+        [/\b(?:intramuscular|im)\b/g, "intramuscular"],
+        [/\b(?:subcutaneous|subcutaneously|sc)\b/g, "subcutaneous"],
+        [/\b(?:topically|topical)\b/g, "topical"],
+        [/\b(?:inhaled|inhalation|inh)\b/g, "inhaled"],
+        [/\b(?:nasal|nas)\b/g, "nasal"],
+        [/\bsl\b/g, "sublingual"]
+      ];
+      const routes = [];
+      for (const [pattern, canonical] of routeMatches) {
+        if (remaining.match(pattern)) routes.push(canonical);
+        remaining = remaining.replace(pattern, " ");
+      }
+
+      const timingSource = remaining;
+      const frequencies = [];
+      const frequencyPatterns = [
+        [/\b(?:twice\s+(?:a\s+)?daily|two\s+times\s+(?:a\s+)?day|every\s+12\s+hours|bid|b\.?\s*i\.?\s*d\.?|q\.?\s*12\s*h(?:ours?)?)\b/g, "twice-daily"],
+        [/\b(?:three\s+times\s+(?:a\s+)?daily|tid|t\.?\s*i\.?\s*d\.?)\b/g, "three-times-daily"],
+        [/\b(?:four\s+times\s+(?:a\s+)?daily|qid|q\.?\s*i\.?\s*d\.?)\b/g, "four-times-daily"],
+        [/\b(?:every\s+other\s+day|qod|q\.?\s*o\.?\s*d\.?)\b/g, "every-other-day"],
+        [/\b(?:every\s+(\d+)\s+hours?|q\.?\s*(\d+)\s*h(?:ours?)?)\b/g, (matches) => {
+          const hours = Number(matches[0].match(/\d+/)[0]);
+          return ({ 24: "daily", 12: "twice-daily", 8: "three-times-daily", 6: "four-times-daily" })[hours] || `every-${hours}-hours`;
+        }],
+        [/\b(?:once\s+(?:a\s+)?daily|once\s+a\s+day|one\s+time\s+(?:a\s+)?day|every\s+day|every morning|each morning|morning|every evening|each evening|evening|nightly|daily|qd|q\.?\s*d\.?|qam|q\.?\s*a\.?\s*m\.?|qpm|q\.?\s*p\.?\s*m\.?|qhs|q\.?\s*h\.?\s*s\.?)\b/g, "daily"]
+      ];
+      for (const [pattern, canonical] of frequencyPatterns) {
+        const matches = remaining.match(pattern);
+        if (!matches) continue;
+        frequencies.push(typeof canonical === "function"
+          ? canonical(matches)
+          : canonical);
+        remaining = remaining.replace(pattern, " ");
+      }
+
+      const timingPatterns = [
+        [/\b(?:q\.?\s*a\.?\s*m\.?|qam|in the morning|every morning|each morning|morning)\b/g, "morning"],
+        [/\b(?:q\.?\s*p\.?\s*m\.?|qpm|in the evening|every evening|each evening|evening)\b/g, "evening"],
+        [/\b(?:q\.?\s*h\.?\s*s\.?|qhs|at bedtime|bedtime|nightly|at night|in the evening)\b/g, "bedtime"]
+      ];
+      const timings = [];
+      for (const [pattern, canonical] of timingPatterns) {
+        if (timingSource.match(pattern)) timings.push(canonical);
+        remaining = remaining.replace(pattern, " ");
+      }
+      if (timings.includes("bedtime")) {
+        const eveningIndex = timings.indexOf("evening");
+        if (eveningIndex !== -1) timings.splice(eveningIndex, 1);
+      }
+
+      const prn = /\b(?:as needed|prn)\b/i.test(remaining);
+      remaining = remaining.replace(/\b(?:as needed|prn)\b/gi, " ");
+      remaining = remaining
+        .replace(/\bw\/o\b/g, " without ")
+        .replace(/\bw\//g, " with ")
+        .replace(/\b(?:take|administer|use|by|in|at|a|an|the)\b/g, " ")
+        .replace(/\bg\.?i\.?\s+upset\b/g, " stomach upset ")
+        .replace(/\bupset stomach\b/g, " stomach upset ")
+        .replace(/[.,;:()[\]{}]/g, " ")
+        .replace(/\b(\d+)\s*[-–]\s*(\d+)\b/g, "$1 to $2")
+        .replace(/\s+/g, " ")
+        .trim();
+      const normalizedInstructions = remaining;
+      return {
+        dose,
+        forms: [...new Set(forms)].sort(),
+        routes: [...new Set(routes)].sort(),
+        frequencies: [...new Set(frequencies)].sort(),
+        timings: [...new Set(timings)].sort(),
+        prn,
+        normalizedInstructions
+      };
+    }
+
+    function doseFrequencyKey(medication) {
+      return JSON.stringify([medication.dose, medication.frequencies]);
+    }
+
+    function regimenDifferenceNotes(outpatient, inpatient) {
+      const notes = [];
+      if (outpatient.dose !== inpatient.dose) notes.push("Dose/strength differs");
+      if (JSON.stringify(outpatient.frequencies) !== JSON.stringify(inpatient.frequencies)) notes.push("Frequency differs");
+      if (JSON.stringify(outpatient.forms) !== JSON.stringify(inpatient.forms)) notes.push("Formulation differs");
+      if (JSON.stringify(outpatient.routes) !== JSON.stringify(inpatient.routes)) notes.push("Route differs");
+      if (JSON.stringify(outpatient.timings) !== JSON.stringify(inpatient.timings)) notes.push("Administration timing differs");
+      if (outpatient.prn !== inpatient.prn) notes.push("PRN status differs");
+      return notes;
+    }
+
+    function instructionDifferenceNote(outpatient, inpatient) {
+      return outpatient.normalizedInstructions !== inpatient.normalizedInstructions
+        ? "Other administration instructions differ"
+        : "";
+    }
+
+    function parseMedicationList(text) {
+      return text.split(/\r?\n/)
+        .map((line) => line.replace(/^\s*(?:(?:\d+|[a-z])[.)]\s*|[-*•]\s*)/iu, "").trim())
+        .filter(Boolean)
+        .map((display) => {
+          const strength = medicationStrengthPattern.exec(display);
+          const direction = strength ? null : medicationDirectionPattern.exec(display);
+          const splitAt = strength?.index ?? direction?.index ?? display.length;
+          const name = display.slice(0, splitAt).replace(/[\s,;:-]+$/, "").trim();
+          const regimen = strength
+            ? display.slice(strength.index).trim()
+            : direction
+              ? display.slice(direction.index).trim()
+              : "";
+          const parsedRegimen = parseMedicationRegimen(regimen);
+          return {
+            display,
+            name: name || display,
+            normalizedName: normalizeMedicationName(name || display),
+            regimen,
+            ...parsedRegimen
+          };
+        });
+    }
+
+    function medicationRows(tbodyId) {
+      return document.getElementById(tbodyId);
+    }
+
+    function addMedicationRows(tbodyId, text) {
+      const medications = parseMedicationList(text);
+      if (!medications.length) return 0;
+      medRecError.textContent = "";
+      medRecStatus.textContent = "";
+      const tbody = medicationRows(tbodyId);
+      tbody.querySelector(".med-rec-table-empty")?.closest("tr").remove();
+
+      for (const medication of medications) {
+        const row = document.createElement("tr");
+        const valueCell = document.createElement("td");
+        const input = document.createElement("input");
+        input.type = "text";
+        input.value = medication.display;
+        input.setAttribute("aria-label", `Medication ${tbody.querySelectorAll("tr").length + 1}`);
+        valueCell.append(input);
+        const actionCell = document.createElement("td");
+        const removeButton = document.createElement("button");
+        removeButton.className = "quiet-button";
+        removeButton.type = "button";
+        removeButton.textContent = "Remove";
+        removeButton.setAttribute("aria-label", `Remove ${medication.name}`);
+        actionCell.append(removeButton);
+        row.append(valueCell, actionCell);
+        tbody.append(row);
+      }
+      invalidateMedicationResults();
+      return medications.length;
+    }
+
+    function renderEmptyMedicationRow(tbodyId) {
+      const tbody = medicationRows(tbodyId);
+      tbody.replaceChildren();
+      const row = document.createElement("tr");
+      const cell = document.createElement("td");
+      cell.className = "med-rec-table-empty";
+      cell.colSpan = 2;
+      cell.textContent = "No medications added yet.";
+      row.append(cell);
+      tbody.append(row);
+    }
+
+    function getMedicationRows(tbodyId) {
+      return [...medicationRows(tbodyId).querySelectorAll("input")]
+        .map((input) => input.value.trim())
+        .filter(Boolean)
+        .join("\n");
+    }
+
+    function invalidateMedicationResults() {
+      if (!medRecPlainText) return;
+      medRecPlainText = "";
+      copyMedRecButton.disabled = true;
+      medRecCategories.replaceChildren();
+      const empty = document.createElement("p");
+      empty.className = "med-rec-empty-state";
+      empty.textContent = "Medication list changed. Compare the lists again to refresh results.";
+      medRecCategories.append(empty);
+      medRecStatus.textContent = "";
+    }
+
+    for (const input of document.querySelectorAll(".med-rec-paste")) {
+      input.addEventListener("paste", (event) => {
+        const pastedText = event.clipboardData?.getData("text");
+        if (!pastedText?.trim()) return;
+        event.preventDefault();
+        addMedicationRows(input.dataset.rows, pastedText);
+        input.value = "";
+      });
+    }
+
+    document.querySelectorAll("[data-add-medications]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const input = document.getElementById(button.dataset.source);
+        const added = addMedicationRows(button.dataset.addMedications, input.value);
+        if (added) input.value = "";
+      });
+    });
+
+    for (const tbody of document.querySelectorAll(".med-rec-table tbody")) {
+      tbody.addEventListener("input", invalidateMedicationResults);
+      tbody.addEventListener("click", (event) => {
+        const button = event.target.closest("button");
+        if (!button) return;
+        medRecError.textContent = "";
+        button.closest("tr").remove();
+        if (!tbody.querySelector("input")) renderEmptyMedicationRow(tbody.id);
+        invalidateMedicationResults();
+      });
+    }
+
+    function compareMedicationLists(outpatient, inpatient) {
+      const results = { new: [], unchanged: [], doseChange: [], otherChange: [], duplicates: [], notOrdered: [] };
+      const inpatientByName = new Map();
+      for (const medication of inpatient) {
+        if (!inpatientByName.has(medication.normalizedName)) inpatientByName.set(medication.normalizedName, []);
+        inpatientByName.get(medication.normalizedName).push(medication);
+      }
+      const outpatientByName = new Map();
+      for (const medication of outpatient) {
+        if (!outpatientByName.has(medication.normalizedName)) outpatientByName.set(medication.normalizedName, []);
+        outpatientByName.get(medication.normalizedName).push(medication);
+      }
+
+      for (const [name, inpatientMeds] of inpatientByName) {
+        const outpatientMeds = outpatientByName.get(name) || [];
+        if (!outpatientMeds.length) {
+          results.new.push(...inpatientMeds.map((medication) => ({ medication })));
+          continue;
+        }
+
+        const unmatchedOutpatient = new Set(outpatientMeds.keys());
+        const unmatchedInpatient = new Set(inpatientMeds.keys());
+        const matchedPairs = [];
+        for (const inpatientIndex of unmatchedInpatient) {
+          const matchingOutpatientIndex = [...unmatchedOutpatient].find((outpatientIndex) =>
+            doseFrequencyKey(outpatientMeds[outpatientIndex]) === doseFrequencyKey(inpatientMeds[inpatientIndex])
+          );
+          if (matchingOutpatientIndex === undefined) continue;
+          matchedPairs.push([matchingOutpatientIndex, inpatientIndex]);
+          unmatchedOutpatient.delete(matchingOutpatientIndex);
+          unmatchedInpatient.delete(inpatientIndex);
+        }
+
+        while (unmatchedOutpatient.size && unmatchedInpatient.size) {
+          const outpatientIndex = unmatchedOutpatient.values().next().value;
+          const inpatientIndex = unmatchedInpatient.values().next().value;
+          matchedPairs.push([outpatientIndex, inpatientIndex]);
+          unmatchedOutpatient.delete(outpatientIndex);
+          unmatchedInpatient.delete(inpatientIndex);
+        }
+
+        for (const [outpatientIndex, inpatientIndex] of matchedPairs) {
+          const outpatientMedication = outpatientMeds[outpatientIndex];
+          const inpatientMedication = inpatientMeds[inpatientIndex];
+          if (doseFrequencyKey(outpatientMedication) !== doseFrequencyKey(inpatientMedication)) {
+            results.doseChange.push({
+              outpatient: outpatientMedication,
+              inpatient: inpatientMedication,
+              instructionNote: instructionDifferenceNote(outpatientMedication, inpatientMedication)
+            });
+            continue;
+          }
+
+          const reviewNotes = regimenDifferenceNotes(outpatientMedication, inpatientMedication);
+          if (reviewNotes.length) {
+            const instructionNote = instructionDifferenceNote(outpatientMedication, inpatientMedication);
+            if (instructionNote) reviewNotes.push(instructionNote);
+            results.otherChange.push({ outpatient: outpatientMedication, inpatient: inpatientMedication, reviewNotes });
+          } else {
+            const instructionNote = instructionDifferenceNote(outpatientMedication, inpatientMedication);
+            results.unchanged.push({ outpatient: outpatientMedication, inpatient: inpatientMedication, instructionNote });
+          }
+        }
+
+        for (const inpatientIndex of unmatchedInpatient) {
+          results.duplicates.push({
+            outpatient: outpatientMeds[0],
+            medication: inpatientMeds[inpatientIndex]
+          });
+        }
+        for (const outpatientIndex of unmatchedOutpatient) {
+          results.notOrdered.push({ medication: outpatientMeds[outpatientIndex] });
+        }
+      }
+
+      return results;
+    }
+
+    function renderMedRecResults(results) {
+      const categories = [
+        ["NEW", results.new, (item) => [item.medication.display], "new", "!"],
+        ["UNCHANGED", results.unchanged, (item) => [`Outpatient: ${item.outpatient.display}`, `Inpatient: ${item.inpatient.display}`, ...(item.instructionNote ? [`${item.instructionNote}; review.`] : [])], "unchanged", "✓"],
+        ["DOSE / FREQUENCY CHANGE", results.doseChange, (item) => [
+          `Outpatient: ${item.outpatient.display}`,
+          `Inpatient: ${item.inpatient.display}`,
+          ...(item.instructionNote ? [`${item.instructionNote}; review.`] : []),
+          ...regimenDifferenceNotes(item.outpatient, item.inpatient).map((note) => `${note}.`)
+        ], "review", "⚑"],
+        ["OTHER REGIMEN CHANGE — REVIEW", results.otherChange, (item) => [`Outpatient: ${item.outpatient.display}`, `Inpatient: ${item.inpatient.display}`, ...item.reviewNotes.map((note) => `${note}; review.`)], "review", "⚑"],
+        ["POSSIBLE DUPLICATE / ADDITIONAL ORDER", results.duplicates, (item) => [`Outpatient: ${item.outpatient.display}`, `Additional inpatient order: ${item.medication.display}`, "Same medication name appears more than once inpatient; verify whether this is an additional order or duplicate."], "review", "⚑"],
+        ["NOT ORDERED DURING ADMISSION", results.notOrdered, (item) => [item.medication.display], "review", "⚑"]
+      ];
+      medRecCategories.replaceChildren();
+      const plainSections = [];
+
+      for (const [heading, items, linesForItem, status, icon] of categories) {
+        const section = document.createElement("section");
+        section.className = "med-rec-category";
+        const title = document.createElement("h3");
+        const statusIcon = document.createElement("span");
+        statusIcon.className = `med-rec-status-icon med-rec-status-icon--${status}`;
+        statusIcon.setAttribute("aria-hidden", "true");
+        statusIcon.textContent = icon;
+        title.append(statusIcon, document.createTextNode(`${heading} (${items.length})`));
+        section.append(title);
+        const sectionLines = [`${heading} (${items.length})`];
+        if (items.length) {
+          const list = document.createElement("ul");
+          for (const item of items) {
+            const listItem = document.createElement("li");
+            listItem.className = "med-rec-item";
+            const name = document.createElement("strong");
+            const medication = item.inpatient || item.medication;
+            name.textContent = medication.name;
+            listItem.append(name);
+            const itemLines = linesForItem(item);
+            for (const line of itemLines) {
+              const details = document.createElement("p");
+              details.textContent = line;
+              listItem.append(details);
+            }
+            const medicationEntries = item.inpatient
+              ? [item.outpatient, item.inpatient]
+              : [item.medication];
+            if (medicationEntries.some((entry) => !entry.dose || !entry.frequencies.length)) {
+              const warning = document.createElement("p");
+              warning.textContent = "Dose or frequency not detected; verify this comparison.";
+              listItem.append(warning);
+              itemLines.push("Dose or frequency not detected; verify this comparison.");
+            }
+            list.append(listItem);
+            sectionLines.push(`${medication.name}\n${itemLines.join("\n")}`);
+          }
+          section.append(list);
+        } else {
+          const empty = document.createElement("p");
+          empty.className = "med-rec-empty-state";
+          empty.textContent = "None";
+          section.append(empty);
+        }
+        medRecCategories.append(section);
+        plainSections.push(sectionLines.join("\n"));
+      }
+      medRecPlainText = plainSections.join("\n\n");
+      copyMedRecButton.disabled = false;
+      medRecStatus.textContent = "";
+    }
+
+    function runMedicationReconciliation() {
+      medRecError.textContent = "";
+      medRecStatus.textContent = "";
+      const outpatient = parseMedicationList(getMedicationRows("outpatient-med-rows"));
+      const inpatient = parseMedicationList(getMedicationRows("inpatient-med-rows"));
+      if (!outpatient.length || !inpatient.length) {
+        medRecError.textContent = "Enter at least one medication in both lists before comparing.";
+        medRecCategories.replaceChildren();
+        medRecPlainText = "";
+        copyMedRecButton.disabled = true;
+        return;
+      }
+      renderMedRecResults(compareMedicationLists(outpatient, inpatient));
+    }
+
+    document.getElementById("compare-meds").addEventListener("click", runMedicationReconciliation);
+    document.getElementById("clear-meds").addEventListener("click", () => {
+      document.getElementById("outpatient-meds").value = "";
+      document.getElementById("inpatient-meds").value = "";
+      renderEmptyMedicationRow("outpatient-med-rows");
+      renderEmptyMedicationRow("inpatient-med-rows");
+      medRecError.textContent = "";
+      medRecStatus.textContent = "";
+      medRecCategories.replaceChildren();
+      const empty = document.createElement("p");
+      empty.className = "med-rec-empty-state";
+      empty.textContent = "Enter both medication lists and select Compare lists.";
+      medRecCategories.append(empty);
+      medRecPlainText = "";
+      copyMedRecButton.disabled = true;
+    });
+    copyMedRecButton.addEventListener("click", async () => {
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(medRecPlainText);
+        } else {
+          const temporary = document.createElement("textarea");
+          temporary.value = medRecPlainText;
+          temporary.setAttribute("readonly", "");
+          temporary.style.position = "fixed";
+          temporary.style.opacity = "0";
+          document.body.append(temporary);
+          temporary.select();
+          const copied = document.execCommand("copy");
+          temporary.remove();
+          if (!copied) throw new Error("Clipboard copy was not available");
+        }
+        medRecError.textContent = "";
+        medRecStatus.textContent = "Results copied.";
+      } catch (error) {
+        medRecError.textContent = "Copy unavailable. Select and copy the results manually.";
+        medRecStatus.textContent = "";
+      }
+    });
+
     const finding = (group, id, label, affirmative, negative, normalWhen) => ({ group, id, label, affirmative, negative, normalWhen });
     const systems = [
       { id: "general", label: "General", icon: "GN", normal: "Well-developed, well-nourished, in no acute distress (NAD).", findings: [
