@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f7f7">
+  <title>Exam Note | BellMD</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172a30;
+      --muted: #65767b;
+      --line: #dce5e5;
+      --surface: #ffffff;
+      --canvas: #f1f5f4;
+      --teal: #087e78;
+      --teal-dark: #076660;
+      --teal-pale: #e4f4f1;
+      --green: #3b7954;
+      --amber: #a76b20;
+      --amber-pale: #fff4df;
+      --shadow: 0 12px 32px rgba(27, 54, 59, .07);
+      font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+      font-size: 14px;
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--canvas); color: var(--ink); }
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, input:focus-visible, textarea:focus-visible {
+      outline: 3px solid rgba(8, 126, 120, .24);
+      outline-offset: 2px;
+    }
+
+    .app-header {
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 26px;
+      color: #edf8f6;
+      background: #17383b;
+      border-bottom: 3px solid #37a69a;
+    }
+    .brand { display: flex; align-items: center; gap: 11px; font-size: 14px; font-weight: 700; letter-spacing: .02em; }
+    .brand-mark { width: 25px; height: 25px; display: grid; place-items: center; border: 1px solid #84c9be; border-radius: 6px; color: #a5e1d7; font-size: 17px; line-height: 1; }
+    .header-meta { display: flex; align-items: center; gap: 19px; color: #c1d5d2; font-size: 12px; }
+    .status-dot { display: inline-block; width: 7px; height: 7px; margin-right: 7px; border-radius: 50%; background: #82d3aa; }
+
+    .page { max-width: 1600px; margin: 0 auto; padding: 20px 24px 36px; }
+    .encounter-bar {
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) auto;
+      align-items: center;
+      gap: 20px;
+      padding: 16px 20px;
+      margin-bottom: 18px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      box-shadow: var(--shadow);
+    }
+    .workspace-title { min-width: 0; }
+    .eyebrow { margin: 0 0 5px; color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .workspace-title h1 { margin: 0; font-size: 19px; line-height: 1.2; font-weight: 650; }
+    .workspace-title p { margin: 5px 0 0; color: var(--muted); font-size: 12px; }
+    .encounter-field { min-width: 0; }
+    .encounter-field label, .field-label { display: block; margin-bottom: 5px; color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
+    .encounter-field input { width: 100%; padding: 5px 0; color: var(--ink); background: transparent; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; }
+    .encounter-tag { justify-self: end; padding: 7px 10px; color: var(--teal-dark); background: var(--teal-pale); border-radius: 4px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+
+    .workspace { display: grid; grid-template-columns: 200px minmax(0, 1fr) 360px; gap: 14px; align-items: start; }
+    .panel { min-width: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 7px; box-shadow: var(--shadow); }
+    .rail { position: sticky; top: 14px; overflow: hidden; }
+    .rail-heading { padding: 17px 16px 13px; border-bottom: 1px solid var(--line); }
+    .rail-heading h2 { margin: 0; font-size: 13px; font-weight: 700; }
+    .rail-heading p { margin: 5px 0 0; color: var(--muted); font-size: 11px; }
+    .system-nav { padding: 7px; }
+    .system-link { width: 100%; display: flex; align-items: center; gap: 9px; padding: 9px; color: #40555a; text-align: left; background: transparent; border: 0; border-radius: 4px; font-size: 12px; }
+    .system-link:hover { background: #f2f7f6; }
+    .system-link.active { color: var(--teal-dark); background: var(--teal-pale); font-weight: 700; }
+    .system-icon { display: grid; place-items: center; width: 21px; height: 21px; flex: 0 0 21px; color: #547175; background: #eff4f3; border-radius: 5px; font-size: 10px; font-weight: 700; }
+    .system-link.active .system-icon { color: var(--teal-dark); background: #cdebe5; }
+    .system-state { width: 6px; height: 6px; margin-left: auto; border-radius: 50%; background: #cbd5d5; }
+    .system-state.done { background: #4b9a69; }
+    .rail-foot { padding: 12px 15px 14px; color: var(--muted); border-top: 1px solid var(--line); font-size: 10px; line-height: 1.5; }
+
+    .editor { min-width: 0; overflow: hidden; }
+    .editor-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 18px 19px 14px; border-bottom: 1px solid var(--line); }
+    .editor-head h2 { margin: 0; font-size: 16px; font-weight: 700; }
+    .editor-head p { margin: 5px 0 0; color: var(--muted); font-size: 11px; }
+    .editor-tools { display: flex; align-items: center; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
+    .completion { flex: 0 0 auto; color: var(--muted); font-size: 11px; white-space: nowrap; }
+    .editor-form { padding: 15px 19px 20px; }
+    .field-label { display: block; margin-bottom: 5px; color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
+    #system-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 18px; }
+    .system-section { min-width: 0; align-self: start; overflow: hidden; background: #fff; border: 1px solid var(--line); border-radius: 5px; scroll-margin-top: 18px; }
+    .system-summary { display: flex; align-items: center; gap: 8px; min-height: 42px; padding: 8px 10px; cursor: pointer; list-style: none; }
+    .system-summary::-webkit-details-marker { display: none; }
+    .system-summary::marker { content: ""; }
+    .system-summary h3 { margin: 0; font-size: 12px; font-weight: 700; }
+    .system-summary-count { margin-left: auto; color: var(--muted); font-size: 9px; white-space: nowrap; }
+    .system-summary::after { content: "+"; display: grid; place-items: center; width: 18px; height: 18px; color: #52666a; border: 1px solid var(--line); border-radius: 50%; font-size: 12px; line-height: 1; }
+    .system-section[open] > .system-summary { border-bottom: 1px solid var(--line); }
+    .system-section[open] > .system-summary::after { content: "-"; }
+    .system-content { padding: 9px 10px 10px; }
+    .system-actions { display: flex; justify-content: flex-end; margin-bottom: 8px; }
+    .normal-button { padding: 5px 8px; color: var(--teal-dark); background: #f1f8f6; border: 1px solid #c9e5df; border-radius: 4px; font-size: 10px; font-weight: 700; }
+    .normal-button:hover { background: var(--teal-pale); }
+    .finding-group + .finding-group { margin-top: 8px; }
+    .finding-group-label { display: block; margin-bottom: 4px; color: var(--muted); font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .finding-options { display: flex; flex-wrap: wrap; gap: 4px; }
+    .finding-choice { display: inline-flex; align-items: center; gap: 4px; min-height: 24px; padding: 3px 5px 3px 7px; color: #40555a; background: #fff; border: 1px solid #d8e1e1; border-radius: 4px; font-size: 9px; text-align: left; }
+    .finding-choice:hover { background: #f5f8f7; border-color: #aabfbd; }
+    .finding-choice::after { content: ""; display: grid; place-items: center; width: 12px; height: 12px; flex: 0 0 12px; color: transparent; border: 1px solid #bdcaca; border-radius: 50%; font-size: 8px; font-weight: 700; line-height: 1; }
+    .finding-choice[data-state="affirmative"]::after { content: "+"; }
+    .finding-choice[data-state="negative"]::after { content: "-"; }
+    .finding-choice[data-normality="normal"] { color: #28643a; background: #e8f4e9; border-color: #9bc9a1; }
+    .finding-choice[data-normality="normal"]::after { color: #fff; background: #3b7954; border-color: #3b7954; }
+    .finding-choice[data-normality="abnormal"] { color: #913d3d; background: #fff0ef; border-color: #dfa3a0; }
+    .finding-choice[data-normality="abnormal"]::after { color: #fff; background: #b94747; border-color: #b94747; }
+    .system-section textarea { width: 100%; min-height: 54px; padding: 8px 9px; color: var(--ink); background: #fbfcfc; border: 1px solid #d8e1e1; border-radius: 4px; line-height: 1.45; resize: vertical; }
+    .system-section textarea::placeholder { color: #91a0a2; }
+    .quiet-button { padding: 7px 10px; color: #53666a; background: white; border: 1px solid var(--line); border-radius: 4px; font-size: 11px; }
+    .quiet-button:hover { background: #f5f8f7; }
+
+    .preview { width: 100%; max-width: 360px; justify-self: stretch; position: sticky; top: 14px; overflow: hidden; }
+    .preview-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px 16px; border-bottom: 1px solid var(--line); }
+    .preview-title { display: flex; align-items: center; gap: 8px; }
+    .preview-title h2 { margin: 0; font-size: 13px; }
+    .live-pill { display: inline-flex; align-items: center; gap: 5px; padding: 4px 6px; color: var(--green); background: #edf6ef; border-radius: 3px; font-size: 9px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+    .live-pill::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: #54a56d; }
+    .copy-button { display: inline-flex; align-items: center; gap: 7px; padding: 8px 11px; color: white; background: var(--teal); border: 0; border-radius: 4px; font-size: 11px; font-weight: 700; }
+    .copy-button:hover { background: var(--teal-dark); }
+    .copy-button:disabled { cursor: not-allowed; opacity: .48; }
+    .copy-icon { font-size: 14px; line-height: 1; }
+    .preview-content { min-height: 400px; max-height: calc(100vh - 190px); overflow: auto; padding: 21px 20px 23px; }
+    .note-output { margin: 0; color: #30464b; font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; font-size: 11px; line-height: 1.75; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .preview-empty { color: #809194; font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif; font-size: 12px; line-height: 1.6; }
+    .preview-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 16px; color: var(--muted); background: #fafcfc; border-top: 1px solid var(--line); font-size: 10px; }
+    .copy-status { color: var(--green); font-weight: 700; }
+    .privacy-note { margin: 14px 2px 0; color: #718184; font-size: 10px; line-height: 1.5; }
+
+    @media (max-width: 1100px) {
+      .workspace { grid-template-columns: 170px minmax(0, 1fr); gap: 12px; }
+      .preview { position: static; grid-column: 2; }
+      .rail { grid-row: span 2; }
+      .preview-content { max-height: none; min-height: 260px; }
+    }
+    @media (max-width: 720px) {
+      .app-header { height: 52px; padding: 0 15px; }
+      .header-meta { gap: 8px; }
+      .header-meta span:last-child { display: none; }
+      .page { padding: 12px 12px 24px; }
+      .encounter-bar { grid-template-columns: 1fr; gap: 10px; padding: 14px; }
+      .encounter-tag { justify-self: start; }
+      .workspace { display: flex; flex-direction: column; align-items: stretch; gap: 12px; }
+      .rail { position: static; order: 0; }
+      .system-nav { display: flex; gap: 4px; overflow-x: auto; padding: 8px; }
+      .system-link { width: auto; min-width: max-content; padding: 7px 9px; }
+      .system-link .system-state { display: none; }
+      .rail-heading { padding: 12px 14px 10px; }
+      .rail-heading p, .rail-foot { display: none; }
+      .editor, .preview { width: 100%; max-width: none; justify-self: stretch; }
+      #system-fields { grid-template-columns: 1fr; }
+      .preview { position: static; }
+      .preview-content { min-height: 230px; max-height: 60vh; padding: 16px; }
+      .editor-head { flex-wrap: wrap; padding-left: 14px; padding-right: 14px; }
+      .editor-tools { width: 100%; justify-content: space-between; }
+      .editor-form { padding-left: 14px; padding-right: 14px; }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .panel { animation: arrive .32s ease-out both; }
+      .editor { animation-delay: .04s; }
+      .preview { animation-delay: .08s; }
+      @keyframes arrive { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    }
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">+</span><span>BellMD</span></div>
+    <div class="header-meta"><span><i class="status-dot" aria-hidden="true"></i>Draft encounter</span></div>
+  </header>
+
+  <main class="page">
+    <section class="encounter-bar" aria-label="Encounter details">
+      <div class="workspace-title">
+        <p class="eyebrow">Documentation workspace</p>
+        <h1>Physical Examination</h1>
+        <p>Compose and review exam findings</p>
+      </div>
+      <div class="encounter-tag">PHYSICAL EXAM</div>
+    </section>
+
+    <div class="workspace">
+      <aside class="panel rail" aria-label="Exam sections">
+        <div class="rail-heading"><h2>Exam sections</h2><p>Choose a section to document</p></div>
+        <nav class="system-nav" id="system-nav" aria-label="Physical exam systems"></nav>
+        <div class="rail-foot">Findings are included in the note only after you enter them. Review all documentation for accuracy.</div>
+      </aside>
+
+      <section class="panel editor" aria-labelledby="editor-heading">
+        <div class="editor-head">
+          <div><h2 id="editor-heading">Exam documentation</h2><p>Enter observed findings by system.</p></div>
+          <div class="editor-tools">
+            <div class="completion" id="completion" aria-live="polite">0 of 10 documented</div>
+            <button class="quiet-button" id="clear-button" type="button" title="Clear all selected and typed exam findings">Clear all findings</button>
+          </div>
+        </div>
+        <form class="editor-form" id="exam-form" autocomplete="off">
+          <div id="system-fields"></div>
+        </form>
+      </section>
+
+      <aside class="panel preview" aria-labelledby="preview-heading">
+        <div class="preview-head">
+          <div class="preview-title"><h2 id="preview-heading">Note preview</h2><span class="live-pill">Live</span></div>
+          <button class="copy-button" id="copy-button" type="button" disabled title="Copy the generated note to the clipboard"><span class="copy-icon" aria-hidden="true">▢</span><span>Copy note</span></button>
+        </div>
+        <div class="preview-content" aria-live="polite" aria-atomic="true"><pre class="note-output" id="note-output"><span class="preview-empty">Your note will appear here as you document the encounter.</span></pre></div>
+        <div class="preview-foot"><span id="note-count">0 characters</span><span class="copy-status" id="copy-status" role="status"></span></div>
+      </aside>
+    </div>
+    <p class="privacy-note">This page runs locally in your browser and does not save or transmit information. Do not enter patient names, dates of birth, record numbers, contact details, or other identifying information, including in free-text fields. This tool has not been assessed for regulatory compliance and is not a substitute for your organization's approved clinical record.</p>
+  </main>
+
+  <script>
+    const finding = (group, id, label, affirmative, negative, normalWhen) => ({ group, id, label, affirmative, negative, normalWhen });
+    const systems = [
+      { id: "general", label: "General", icon: "GN", normal: "Well-developed, well-nourished, in no acute distress (NAD).", findings: [
+        finding("Mental status", "alert-oriented", "Alert & Oriented", "Alert and oriented.", "Not alert and oriented.", "affirmative"),
+        finding("Mental status", "somnolent", "Somnolent", "Somnolent.", "Not somnolent.", "negative"),
+        finding("Mental status", "lethargic", "Lethargic", "Lethargic.", "Not lethargic.", "negative"),
+        finding("Mental status", "unresponsive", "Unresponsive", "Unresponsive.", "Responsive.", "negative"),
+        finding("Distress", "nad", "No Acute Distress (NAD)", "No acute distress (NAD).", "Acute distress present.", "affirmative"),
+        finding("Distress", "mild-distress", "Mild Distress", "Mild distress.", "No mild distress noted.", "negative"),
+        finding("Distress", "moderate-distress", "Moderate Distress", "Moderate distress.", "No moderate distress noted.", "negative"),
+        finding("Distress", "severe-distress", "Severe Distress", "Severe distress.", "No severe distress noted.", "negative"),
+        finding("Nutrition / Appearance", "well-nourished", "Well-Nourished", "Well-nourished.", "Not well-nourished.", "affirmative"),
+        finding("Nutrition / Appearance", "cachectic", "Cachectic", "Cachectic appearance.", "Not cachectic.", "negative"),
+        finding("Nutrition / Appearance", "obese", "Obese", "Obese appearance.", "Not obese.", "negative"),
+        finding("Nutrition / Appearance", "frail", "Frail", "Frail appearance.", "Not frail.", "negative"),
+        finding("General findings", "diaphoretic", "Diaphoretic", "Diaphoretic.", "Not diaphoretic.", "negative"),
+        finding("General findings", "ill-appearing", "Ill-Appearing", "Ill-appearing.", "Not ill-appearing.", "negative")
+      ] },
+      { id: "head-neck", label: "HEENT", icon: "EN", normal: "Normocephalic, atraumatic (NC/AT). PERRLA, EOMI, conjunctivae normal, no discharge. Oropharynx clear, mucosa moist, tympanic membranes normal.", findings: [
+        finding("Head", "normocephalic", "Normocephalic / Atraumatic", "Normocephalic and atraumatic (NC/AT).", "Abnormal head shape or trauma noted.", "affirmative"),
+        finding("Head", "head-trauma", "Trauma / Contusion", "Head trauma or contusion present.", "No head trauma or contusion.", "negative"),
+        finding("Head", "scalp-tenderness", "Scalp Tenderness", "Scalp tenderness present.", "No scalp tenderness.", "negative"),
+        finding("Eyes - Pupils / Movement", "perrla", "PERRLA (Pupils Equal, Round, Reactive to Light & Accommodation)", "PERRLA.", "Pupillary response abnormal.", "affirmative"),
+        finding("Eyes - Pupils / Movement", "eomi", "EOMI (Extraocular Movements Intact)", "Extraocular movements intact (EOMI).", "Extraocular movements abnormal.", "affirmative"),
+        finding("Eyes - Conjunctiva / Sclera", "conjunctiva-normal", "Conjunctiva Normal", "Conjunctivae normal.", "Conjunctivae abnormal.", "affirmative"),
+        finding("Eyes - Conjunctiva / Sclera", "conjunctival-injection", "Conjunctival Injection / Redness", "Conjunctival injection or redness present.", "No conjunctival injection.", "negative"),
+        finding("Eyes - Conjunctiva / Sclera", "scleral-icterus", "Scleral Icterus", "Scleral icterus present.", "No scleral icterus.", "negative"),
+        finding("Eyes - Fundi", "fundi-normal", "Fundi Normal", "Fundi normal.", "Fundi abnormal.", "affirmative"),
+        finding("Eyes - Fundi", "papilledema", "Papilledema", "Papilledema present.", "No papilledema.", "negative"),
+        finding("Eyes - Other", "eye-discharge", "Discharge Present", "Ocular discharge present.", "No ocular discharge.", "negative"),
+        finding("Eyes - Other", "subconjunctival-hemorrhage", "Subconjunctival Hemorrhage", "Subconjunctival hemorrhage present.", "No subconjunctival hemorrhage.", "negative"),
+        finding("Ears", "tms-normal", "TMs Normal / Clear", "Tympanic membranes normal and clear.", "Tympanic membranes abnormal.", "affirmative"),
+        finding("Ears", "tm-erythema", "Erythematous TMs", "Tympanic membranes erythematous.", "No tympanic membrane erythema.", "negative"),
+        finding("Ears", "tm-bulging", "Bulging TMs", "Tympanic membranes bulging.", "No tympanic membrane bulging.", "negative"),
+        finding("Ears", "ear-effusion", "Fluid / Effusion", "Middle ear fluid or effusion present.", "No middle ear fluid or effusion.", "negative"),
+        finding("Ears", "ear-exudate", "Exudate", "Ear exudate present.", "No ear exudate.", "negative"),
+        finding("Nose", "nasal-mucosa-normal", "Mucosa Normal", "Nasal mucosa normal.", "Nasal mucosa abnormal.", "affirmative"),
+        finding("Nose", "rhinorrhea", "Rhinorrhea", "Rhinorrhea present.", "No rhinorrhea.", "negative"),
+        finding("Nose", "nasal-congestion", "Nasal Congestion", "Nasal congestion present.", "No nasal congestion.", "negative"),
+        finding("Nose", "deviated-septum", "Deviated Septum", "Deviated septum present.", "No deviated septum noted.", "negative"),
+        finding("Nose", "epistaxis", "Epistaxis", "Epistaxis present.", "No epistaxis.", "negative"),
+        finding("Mouth / Throat", "mucosa-moist", "Mucosa Moist", "Oral mucosa moist.", "Oral mucosa dry.", "affirmative"),
+        finding("Mouth / Throat", "dry-mucosa", "Dry Mucous Membranes", "Dry mucous membranes.", "Mucous membranes moist.", "negative"),
+        finding("Mouth / Throat", "pharyngeal-erythema", "Pharyngeal Erythema", "Pharyngeal erythema present.", "No pharyngeal erythema.", "negative"),
+        finding("Mouth / Throat", "throat-exudate", "Exudate", "Pharyngeal exudate present.", "No pharyngeal exudate.", "negative"),
+        finding("Mouth / Throat", "tonsillar-hypertrophy", "Tonsillar Hypertrophy", "Tonsillar hypertrophy present.", "No tonsillar hypertrophy.", "negative"),
+        finding("Mouth / Throat", "cobblestoning", "Cobblestoning", "Pharyngeal cobblestoning present.", "No pharyngeal cobblestoning.", "negative")
+      ] },
+      { id: "cardiovascular", label: "Cardiovascular", icon: "CV", normal: "Regular rate and rhythm, normal S1/S2, no murmurs, rubs, or gallops.", findings: [
+        finding("Rate / Rhythm", "rrr", "Regular Rate & Rhythm (RRR)", "Regular rate and rhythm (RRR).", "Rate or rhythm abnormal.", "affirmative"),
+        finding("Rate / Rhythm", "tachycardia", "Tachycardia", "Tachycardia present.", "No tachycardia.", "negative"),
+        finding("Rate / Rhythm", "bradycardia", "Bradycardia", "Bradycardia present.", "No bradycardia.", "negative"),
+        finding("Rate / Rhythm", "irregularly-irregular", "Irregularly Irregular", "Irregularly irregular rhythm.", "Rhythm regular.", "negative"),
+        finding("Heart Sounds", "normal-s1-s2", "Normal S1 & S2", "Normal S1 and S2.", "Heart sounds abnormal.", "affirmative"),
+        finding("Heart Sounds", "s3", "S3 Present", "S3 present.", "No S3 appreciated.", "negative"),
+        finding("Heart Sounds", "s4", "S4 Present", "S4 present.", "No S4 appreciated.", "negative"),
+        finding("Ectopic Sounds", "no-murmur-rub-gallop", "No Murmur / Rub / Gallop", "No murmur, rub, or gallop.", "Murmur, rub, or gallop present.", "affirmative"),
+        finding("Ectopic Sounds", "systolic-murmur", "Systolic Murmur", "Systolic murmur present.", "No systolic murmur.", "negative"),
+        finding("Ectopic Sounds", "diastolic-murmur", "Diastolic Murmur", "Diastolic murmur present.", "No diastolic murmur.", "negative"),
+        finding("Ectopic Sounds", "friction-rub", "Friction Rub", "Friction rub present.", "No friction rub.", "negative"),
+        finding("Ectopic Sounds", "gallop", "Gallop", "Gallop present.", "No gallop.", "negative"),
+        finding("Pulses", "pulses-2-plus", "Peripheral Pulses 2+ Bilaterally", "Peripheral pulses 2+ bilaterally.", "Peripheral pulses diminished or asymmetric.", "affirmative"),
+        finding("Pulses", "diminished-pulses", "Diminished Pulses", "Peripheral pulses diminished.", "Peripheral pulses not diminished.", "negative"),
+        finding("Pulses", "absent-pulses", "Absent Pulses", "Peripheral pulses absent.", "Peripheral pulses present.", "negative"),
+        finding("Edema", "no-peripheral-edema", "No Peripheral Edema", "No peripheral edema.", "Peripheral edema present.", "affirmative"),
+        finding("Edema", "trace-edema", "Trace Edema", "Trace edema present.", "No trace edema.", "negative"),
+        finding("Edema", "edema-1-plus", "1+ Edema", "1+ edema present.", "No 1+ edema.", "negative"),
+        finding("Edema", "edema-2-plus", "2+ Edema", "2+ edema present.", "No 2+ edema.", "negative"),
+        finding("Edema", "edema-3-plus", "3+ Edema", "3+ edema present.", "No 3+ edema.", "negative"),
+        finding("Edema", "edema-4-plus", "4+ Edema", "4+ edema present.", "No 4+ edema.", "negative")
+      ] },
+      { id: "respiratory", label: "Respiratory", icon: "RS", normal: "Clear to auscultation bilaterally (CTAB), normal effort, no wheezes, rales, or rhonchi.", findings: [
+        finding("Effort", "normal-effort", "Normal Effort", "Normal respiratory effort.", "Respiratory effort abnormal.", "affirmative"),
+        finding("Effort", "respiratory-distress", "Respiratory Distress", "Respiratory distress present.", "No respiratory distress.", "negative"),
+        finding("Effort", "tachypnea", "Tachypnea", "Tachypnea present.", "No tachypnea.", "negative"),
+        finding("Effort", "retractions", "Intercostal Retractions", "Intercostal retractions present.", "No intercostal retractions.", "negative"),
+        finding("Effort", "accessory-muscle-use", "Accessory Muscle Use", "Accessory muscle use present.", "No accessory muscle use.", "negative"),
+        finding("Auscultation", "ctab", "Clear to Auscultation Bilaterally", "Clear to auscultation bilaterally (CTAB).", "Abnormal breath sounds present.", "affirmative"),
+        finding("Auscultation", "wheezing", "Wheezing (Inspiratory / Expiratory)", "Wheezing present.", "No wheezing.", "negative"),
+        finding("Auscultation", "rales-crackles", "Rales / Crackles", "Rales or crackles present.", "No rales or crackles.", "negative"),
+        finding("Auscultation", "rhonchi", "Rhonchi", "Rhonchi present.", "No rhonchi.", "negative"),
+        finding("Auscultation", "decreased-breath-sounds", "Decreased Breath Sounds", "Breath sounds decreased.", "Breath sounds not decreased.", "negative"),
+        finding("Auscultation", "stridor", "Stridor", "Stridor present.", "No stridor.", "negative")
+      ] },
+      { id: "gastrointestinal", label: "Abdomen", icon: "GI", normal: "Soft, non-tender, non-distended (SNTND), active bowel sounds, no hepatosplenomegaly.", findings: [
+        finding("Inspection / Palpation", "abdomen-soft", "Soft", "Abdomen soft.", "Abdomen not soft.", "affirmative"),
+        finding("Inspection / Palpation", "abdomen-nontender", "Non-Tender", "Abdomen non-tender.", "Abdominal tenderness present.", "affirmative"),
+        finding("Inspection / Palpation", "abdomen-nondistended", "Non-Distended", "Abdomen non-distended.", "Abdominal distension present.", "affirmative"),
+        finding("Tenderness by Region", "tender-ruq", "Tender to Palpation - RUQ", "Tender to palpation in RUQ.", "No RUQ tenderness.", "negative"),
+        finding("Tenderness by Region", "tender-luq", "Tender to Palpation - LUQ", "Tender to palpation in LUQ.", "No LUQ tenderness.", "negative"),
+        finding("Tenderness by Region", "tender-rlq", "Tender to Palpation - RLQ", "Tender to palpation in RLQ.", "No RLQ tenderness.", "negative"),
+        finding("Tenderness by Region", "tender-llq", "Tender to Palpation - LLQ", "Tender to palpation in LLQ.", "No LLQ tenderness.", "negative"),
+        finding("Tenderness by Region", "tender-epigastric", "Tender to Palpation - Epigastric", "Epigastric tenderness to palpation.", "No epigastric tenderness.", "negative"),
+        finding("Tenderness by Region", "tender-suprapubic", "Tender to Palpation - Suprapubic", "Suprapubic tenderness to palpation.", "No suprapubic tenderness.", "negative"),
+        finding("Peritoneal Signs", "no-guarding-rebound", "No Guarding / Rebound", "No guarding or rebound tenderness.", "Guarding or rebound tenderness present.", "affirmative"),
+        finding("Peritoneal Signs", "guarding-present", "Guarding Present", "Abdominal guarding present.", "No guarding.", "negative"),
+        finding("Peritoneal Signs", "rebound-tenderness", "Rebound Tenderness", "Rebound tenderness present.", "No rebound tenderness.", "negative"),
+        finding("Peritoneal Signs", "rigid-abdomen", "Rigid Abdomen", "Abdomen rigid.", "Abdomen not rigid.", "negative"),
+        finding("Bowel Sounds", "normal-bowel-sounds", "Normal / Active Bowel Sounds", "Bowel sounds normal and active.", "Bowel sounds abnormal.", "affirmative"),
+        finding("Bowel Sounds", "hyperactive-bowel-sounds", "Hyperactive", "Bowel sounds hyperactive.", "Bowel sounds not hyperactive.", "negative"),
+        finding("Bowel Sounds", "hypoactive-bowel-sounds", "Hypoactive", "Bowel sounds hypoactive.", "Bowel sounds not hypoactive.", "negative"),
+        finding("Bowel Sounds", "absent-bowel-sounds", "Absent", "Bowel sounds absent.", "Bowel sounds present.", "negative"),
+        finding("Organomegaly", "no-hsm", "No Hepatosplenomegaly (HSM)", "No hepatosplenomegaly (HSM).", "Hepatomegaly or splenomegaly present.", "affirmative"),
+        finding("Organomegaly", "hepatomegaly", "Hepatomegaly", "Hepatomegaly present.", "No hepatomegaly.", "negative"),
+        finding("Organomegaly", "splenomegaly", "Splenomegaly", "Splenomegaly present.", "No splenomegaly.", "negative")
+      ] },
+      { id: "musculoskeletal", label: "Musculoskeletal", icon: "MS", normal: "Normal range of motion (ROM), no deformity, non-tender, intact strength.", findings: [
+        finding("Movement / Range", "normal-rom", "Normal Range of Motion", "Normal range of motion.", "Range of motion abnormal.", "affirmative"),
+        finding("Movement / Range", "decreased-rom", "Decreased ROM", "Range of motion decreased.", "Range of motion not decreased.", "negative"),
+        finding("Movement / Range", "joint-stiffness", "Joint Stiffness", "Joint stiffness present.", "No joint stiffness.", "negative"),
+        finding("Inspection / Palpation", "no-deformity", "No Deformity", "No deformity.", "Deformity present.", "affirmative"),
+        finding("Inspection / Palpation", "deformity", "Deformity Present", "Deformity present.", "No deformity.", "negative"),
+        finding("Inspection / Palpation", "joint-swelling-effusion", "Joint Swelling / Effusion", "Joint swelling or effusion present.", "No joint swelling or effusion.", "negative"),
+        finding("Inspection / Palpation", "joint-erythema", "Erythema", "Joint erythema present.", "No joint erythema.", "negative"),
+        finding("Tenderness", "non-tender", "Non-Tender", "Non-tender.", "Tenderness present.", "affirmative"),
+        finding("Tenderness", "spine-tenderness", "Spine Tenderness", "Spinal tenderness present.", "No spinal tenderness.", "negative"),
+        finding("Tenderness", "joint-tenderness", "Joint Tenderness", "Joint tenderness present.", "No joint tenderness.", "negative"),
+        finding("Tenderness", "muscle-tenderness", "Muscle Group Tenderness", "Muscle group tenderness present.", "No muscle group tenderness.", "negative"),
+        finding("Tone / Stability", "normal-muscle-tone", "Normal Muscle Tone", "Muscle tone normal.", "Muscle tone abnormal.", "affirmative"),
+        finding("Tone / Stability", "joint-instability", "Joint Instability", "Joint instability present.", "No joint instability.", "negative")
+      ] },
+      { id: "skin", label: "Skin", icon: "SK", normal: "Warm, dry, intact, no rashes, lesions, or cyanosis.", findings: [
+        finding("Temperature / Moisture", "warm-dry", "Warm & Dry", "Skin warm and dry.", "Skin cool or moist.", "affirmative"),
+        finding("Temperature / Moisture", "cool-clammy", "Cool / Clammy", "Skin cool or clammy.", "Skin not cool or clammy.", "negative"),
+        finding("Temperature / Moisture", "diaphoretic", "Diaphoretic", "Diaphoretic.", "Not diaphoretic.", "negative"),
+        finding("Color", "normal-color", "Normal Color", "Skin color normal.", "Skin color abnormal.", "affirmative"),
+        finding("Color", "pallor", "Pallor", "Pallor present.", "No pallor.", "negative"),
+        finding("Color", "cyanosis", "Cyanosis", "Cyanosis present.", "No cyanosis.", "negative"),
+        finding("Color", "jaundice", "Jaundice", "Jaundice present.", "No jaundice.", "negative"),
+        finding("Color", "skin-erythema", "Erythema", "Skin erythema present.", "No skin erythema.", "negative"),
+        finding("Lesions / Rashes", "no-lesions", "No Lesions", "No lesions.", "Skin lesions present.", "affirmative"),
+        finding("Lesions / Rashes", "rash-present", "Rash Present", "Rash present.", "No rash.", "negative"),
+        finding("Lesions / Rashes", "maculopapular-rash", "Maculopapular Rash", "Maculopapular rash present.", "No maculopapular rash.", "negative"),
+        finding("Lesions / Rashes", "petechial-rash", "Petechial Rash", "Petechial rash present.", "No petechial rash.", "negative"),
+        finding("Lesions / Rashes", "vesicular-rash", "Vesicular Rash", "Vesicular rash present.", "No vesicular rash.", "negative"),
+        finding("Lesions / Rashes", "abrasions-lacerations", "Abrasions / Lacerations", "Abrasions or lacerations present.", "No abrasions or lacerations.", "negative"),
+        finding("Lesions / Rashes", "ulcer", "Ulcer Present", "Ulcer present.", "No ulcer.", "negative")
+      ] },
+      { id: "neurologic", label: "Neurological", icon: "NE", normal: "Alert, oriented x4, cranial nerves II-XII intact, motor/sensory intact, normal gait.", findings: [
+        finding("Cranial Nerves", "cn-intact", "Cranial Nerves II-XII Intact", "Cranial nerves II-XII intact.", "Cranial nerve abnormality present.", "affirmative"),
+        finding("Cranial Nerves", "facial-asymmetry", "Facies Asymmetrical / CN Palsy", "Facial asymmetry or cranial nerve palsy present.", "No facial asymmetry or cranial nerve palsy.", "negative"),
+        finding("Motor Strength", "strength-5-5", "5/5 Strength Upper & Lower Extremities", "Strength 5/5 in upper and lower extremities.", "Strength below 5/5 in one or more extremities.", "affirmative"),
+        finding("Motor Strength", "focal-weakness", "Focal Deficit / Weakness", "Focal deficit or weakness present.", "No focal deficit or weakness.", "negative"),
+        finding("Sensation", "light-touch-intact", "Intact to Light Touch", "Sensation intact to light touch.", "Sensation abnormal to light touch.", "affirmative"),
+        finding("Sensation", "sensory-loss", "Sensory Loss / Numbness", "Sensory loss or numbness present.", "No sensory loss or numbness.", "negative"),
+        finding("Reflexes", "dtrs-2-plus", "2+ DTRs Bilaterally", "Deep tendon reflexes 2+ bilaterally.", "Deep tendon reflexes not 2+ bilaterally.", "affirmative"),
+        finding("Reflexes", "hyperreflexia", "Hyperreflexia", "Hyperreflexia present.", "No hyperreflexia.", "negative"),
+        finding("Reflexes", "hyporeflexia", "Hyporeflexia", "Hyporeflexia present.", "No hyporeflexia.", "negative"),
+        finding("Reflexes", "babinski", "Babinski Present", "Babinski sign present.", "Babinski sign absent.", "negative"),
+        finding("Gait", "steady-gait", "Steady / Normal Gait", "Gait steady and normal.", "Gait abnormal.", "affirmative"),
+        finding("Gait", "ataxic-gait", "Ataxic Gait", "Ataxic gait.", "No ataxic gait.", "negative"),
+        finding("Gait", "unsteady-gait", "Unsteady", "Gait unsteady.", "Gait steady.", "negative")
+      ] },
+      { id: "psychiatric", label: "Psychiatric", icon: "PS", normal: "Normal mood, affect, behavior, and judgment.", findings: [
+        finding("Mood & Affect", "normal-mood-affect", "Normal Mood & Affect", "Mood and affect normal.", "Mood or affect abnormal.", "affirmative"),
+        finding("Mood & Affect", "anxious", "Anxious", "Anxious.", "Not anxious.", "negative"),
+        finding("Mood & Affect", "depressed", "Depressed", "Depressed mood.", "Not depressed.", "negative"),
+        finding("Mood & Affect", "flat-affect", "Flat Affect", "Flat affect.", "Affect not flat.", "negative"),
+        finding("Mood & Affect", "labile", "Labile", "Labile affect.", "Affect not labile.", "negative"),
+        finding("Behavior / Thought", "cooperative", "Cooperative", "Cooperative.", "Not cooperative.", "affirmative"),
+        finding("Behavior / Thought", "agitated", "Agitated", "Agitated.", "Not agitated.", "negative"),
+        finding("Behavior / Thought", "uncooperative", "Uncooperative", "Uncooperative.", "Cooperative.", "negative"),
+        finding("Behavior / Thought", "hallucinations-delusions", "Hallucinations / Delusions", "Hallucinations or delusions present.", "No hallucinations or delusions reported or observed.", "negative"),
+        finding("Judgment", "intact-judgment", "Intact Judgment & Insight", "Judgment and insight intact.", "Judgment or insight impaired.", "affirmative"),
+        finding("Judgment", "impaired-judgment", "Impaired Judgment", "Judgment impaired.", "Judgment intact.", "negative")
+      ] },
+      { id: "lymphatic", label: "Lymphatic", icon: "LH", normal: "No lymphadenopathy (LAD) in cervical, axillary, or inguinal chains.", findings: [
+        finding("Lymph Nodes", "no-lymphadenopathy", "No Lymphadenopathy", "No lymphadenopathy.", "Lymphadenopathy present.", "affirmative"),
+        finding("Lymph Nodes", "cervical-lad", "Cervical Lymphadenopathy", "Cervical lymphadenopathy present.", "No cervical lymphadenopathy.", "negative"),
+        finding("Lymph Nodes", "axillary-lad", "Axillary Lymphadenopathy", "Axillary lymphadenopathy present.", "No axillary lymphadenopathy.", "negative"),
+        finding("Lymph Nodes", "inguinal-lad", "Inguinal Lymphadenopathy", "Inguinal lymphadenopathy present.", "No inguinal lymphadenopathy.", "negative"),
+        finding("Node Characteristics", "tender-nodes", "Tender Nodes", "Tender lymph nodes present.", "No tender nodes.", "negative"),
+        finding("Node Characteristics", "fixed-matted-nodes", "Fixed / Matted Nodes", "Fixed or matted lymph nodes present.", "No fixed or matted nodes.", "negative")
+      ] },
+      { id: "genitourinary", label: "Genitourinary", icon: "GU", normal: "External genitalia normal, no lesions, discharge, or tenderness.", findings: [
+        finding("Male", "normal-male-genitalia", "Normal Male Genitalia", "Male genitalia normal.", "Male genitalia abnormal.", "affirmative"),
+        finding("Male", "male-no-lesions-discharge", "No Lesions / Discharge", "No genital lesions or discharge.", "Genital lesions or discharge present.", "affirmative"),
+        finding("Male", "testicular-tenderness", "Testicular Tenderness", "Testicular tenderness present.", "No testicular tenderness.", "negative"),
+        finding("Male", "testicular-masses", "Masses", "Testicular masses present.", "No testicular masses.", "negative"),
+        finding("Female", "normal-external-genitalia", "Normal External Genitalia", "External genitalia normal.", "External genitalia abnormal.", "affirmative"),
+        finding("Female", "female-no-discharge", "No Discharge", "No vaginal discharge.", "Vaginal discharge present.", "affirmative"),
+        finding("Female", "cmt", "Cervical Motion Tenderness (CMT)", "Cervical motion tenderness present.", "No cervical motion tenderness.", "negative"),
+        finding("Female", "adnexal-tenderness", "Adnexal Tenderness", "Adnexal tenderness present.", "No adnexal tenderness.", "negative"),
+        finding("Rectal", "normal-sphincter-tone", "Normal Sphincter Tone", "Sphincter tone normal.", "Sphincter tone abnormal.", "affirmative"),
+        finding("Rectal", "no-heme-positive-stool", "No Heme-Positive Stool", "No heme-positive stool.", "Heme-positive stool present.", "affirmative"),
+        finding("Rectal", "hemorrhoids", "Hemorrhoids Present", "Hemorrhoids present.", "No hemorrhoids.", "negative"),
+        finding("Rectal", "rectal-masses", "Masses", "Rectal masses present.", "No rectal masses.", "negative")
+      ] }
+    ];
+
+    const mutuallyExclusiveAffirmative = [
+      ["alert-oriented", "somnolent", "lethargic", "unresponsive"],
+      ["nad", "mild-distress", "moderate-distress", "severe-distress"],
+      ["well-nourished", "cachectic"],
+      ["cachectic", "obese"],
+      ["normocephalic", "head-trauma"],
+      ["tms-normal", "tm-erythema"],
+      ["tms-normal", "tm-bulging"],
+      ["tms-normal", "ear-effusion"],
+      ["conjunctiva-normal", "conjunctival-injection"],
+      ["fundi-normal", "papilledema"],
+      ["mucosa-moist", "dry-mucosa"],
+      ["rrr", "tachycardia"],
+      ["rrr", "bradycardia"],
+      ["rrr", "irregularly-irregular"],
+      ["tachycardia", "bradycardia"],
+      ["no-murmur-rub-gallop", "systolic-murmur"],
+      ["no-murmur-rub-gallop", "diastolic-murmur"],
+      ["no-murmur-rub-gallop", "friction-rub"],
+      ["no-murmur-rub-gallop", "gallop"],
+      ["pulses-2-plus", "diminished-pulses", "absent-pulses"],
+      ["trace-edema", "edema-1-plus", "edema-2-plus", "edema-3-plus", "edema-4-plus", "no-peripheral-edema"],
+      ["normal-effort", "respiratory-distress", "retractions", "accessory-muscle-use"],
+      ["ctab", "wheezing"],
+      ["ctab", "rales-crackles"],
+      ["ctab", "rhonchi"],
+      ["ctab", "decreased-breath-sounds"],
+      ["ctab", "stridor"],
+      ["abdomen-soft", "rigid-abdomen"],
+      ["abdomen-nontender", "tender-ruq", "tender-luq", "tender-rlq", "tender-llq", "tender-epigastric", "tender-suprapubic"],
+      ["no-guarding-rebound", "guarding-present"],
+      ["no-guarding-rebound", "rebound-tenderness"],
+      ["normal-bowel-sounds", "hyperactive-bowel-sounds", "hypoactive-bowel-sounds", "absent-bowel-sounds"],
+      ["no-hsm", "hepatomegaly"],
+      ["no-hsm", "splenomegaly"],
+      ["normal-rom", "decreased-rom"],
+      ["no-deformity", "deformity"],
+      ["non-tender", "spine-tenderness", "joint-tenderness", "muscle-tenderness"],
+      ["warm-dry", "cool-clammy"],
+      ["warm-dry", "diaphoretic"],
+      ["normal-color", "pallor"],
+      ["normal-color", "cyanosis"],
+      ["normal-color", "jaundice"],
+      ["normal-color", "skin-erythema"],
+      ["no-lesions", "rash-present"],
+      ["no-lesions", "maculopapular-rash"],
+      ["no-lesions", "petechial-rash"],
+      ["no-lesions", "vesicular-rash"],
+      ["no-lesions", "abrasions-lacerations"],
+      ["no-lesions", "ulcer"],
+      ["cn-intact", "facial-asymmetry"],
+      ["strength-5-5", "focal-weakness"],
+      ["light-touch-intact", "sensory-loss"],
+      ["dtrs-2-plus", "hyperreflexia"],
+      ["dtrs-2-plus", "hyporeflexia"],
+      ["steady-gait", "ataxic-gait"],
+      ["steady-gait", "unsteady-gait"],
+      ["normal-mood-affect", "anxious"],
+      ["normal-mood-affect", "depressed"],
+      ["normal-mood-affect", "flat-affect"],
+      ["normal-mood-affect", "labile"],
+      ["cooperative", "uncooperative"],
+      ["intact-judgment", "impaired-judgment"],
+      ["no-lymphadenopathy", "cervical-lad"],
+      ["no-lymphadenopathy", "axillary-lad"],
+      ["no-lymphadenopathy", "inguinal-lad"],
+      ["no-lymphadenopathy", "tender-nodes"],
+      ["no-lymphadenopathy", "fixed-matted-nodes"],
+      ["normal-male-genitalia", "testicular-tenderness"],
+      ["normal-male-genitalia", "testicular-masses"]
+    ];
+
+    const $ = (selector) => document.querySelector(selector);
+    const systemNav = $("#system-nav");
+    const systemFields = $("#system-fields");
+    const noteOutput = $("#note-output");
+    const copyButton = $("#copy-button");
+    const copyStatus = $("#copy-status");
+    const form = $("#exam-form");
+
+    function initialize() {
+      for (const system of systems) {
+        const link = document.createElement("button");
+        link.className = "system-link";
+        link.type = "button";
+        link.dataset.target = system.id;
+        link.innerHTML = `<span class="system-icon" aria-hidden="true">${system.icon}</span><span>${system.label}</span><span class="system-state" aria-hidden="true"></span>`;
+        link.addEventListener("click", () => {
+          const target = document.getElementById(system.id);
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+          setActiveSystem(system.id);
+        });
+        systemNav.append(link);
+
+        const section = document.createElement("details");
+        section.className = "system-section";
+        section.id = system.id;
+        section.open = true;
+        const groups = [...new Set(system.findings.map((finding) => finding.group))];
+        const groupedChoices = groups.map((group) => {
+          const choices = system.findings
+            .filter((finding) => finding.group === group)
+            .map((finding) => `<button class="finding-choice" type="button" data-finding-id="${finding.id}" data-state="clear" aria-pressed="false" aria-label="${finding.label}. Not selected. Click or press Enter for affirmative; right-click or press Shift+Enter for negative; repeat to clear." title="Left-click: affirmative. Right-click: negative. Repeat the same action to clear.">${finding.label}</button>`)
+            .join("");
+          return `<div class="finding-group"><span class="finding-group-label">${group}</span><div class="finding-options" role="group" aria-label="${system.label}: ${group}">${choices}</div></div>`;
+        }).join("");
+        section.innerHTML = `<summary class="system-summary"><h3>${system.label}</h3><span class="system-summary-count" id="${system.id}-summary-count">${system.findings.length} options</span></summary><div class="system-content"><div class="system-actions"><button class="normal-button" type="button" data-normal="${system.id}" title="Insert the normal summary and clear selected findings in this section">WNL</button></div>${groupedChoices}<label class="field-label" for="finding-${system.id}">Other findings</label><textarea id="finding-${system.id}" data-system="${system.id}" placeholder="Enter other observed ${system.label.toLowerCase()} findings" rows="2"></textarea></div>`;
+        systemFields.append(section);
+      }
+
+      systemFields.addEventListener("click", (event) => {
+        const choice = event.target.closest(".finding-choice");
+        if (choice) {
+          toggleFinding(choice, "affirmative");
+          return;
+        }
+        const button = event.target.closest("[data-normal]");
+        if (!button) return;
+        const system = systems.find((item) => item.id === button.dataset.normal);
+        const section = document.getElementById(system.id);
+        for (const choice of section.querySelectorAll(".finding-choice")) setFindingState(choice, "clear");
+        const input = document.getElementById(`finding-${button.dataset.normal}`);
+        input.value = system.normal;
+        updateNote();
+        input.focus();
+      });
+
+      systemFields.addEventListener("contextmenu", (event) => {
+        const choice = event.target.closest(".finding-choice");
+        if (!choice) return;
+        event.preventDefault();
+        toggleFinding(choice, "negative");
+      });
+
+      systemFields.addEventListener("keydown", (event) => {
+        const choice = event.target.closest(".finding-choice");
+        if (!choice || !event.shiftKey || (event.key !== "Enter" && event.key !== " ")) return;
+        event.preventDefault();
+        toggleFinding(choice, "negative");
+      });
+
+      form.addEventListener("input", updateNote);
+      form.addEventListener("change", updateNote);
+      $("#clear-button").addEventListener("click", clearExam);
+      copyButton.addEventListener("click", copyNote);
+      updateNote();
+    }
+
+    function buildNote() {
+      const lines = [];
+
+      lines.push("PHYSICAL EXAMINATION");
+
+      const findings = systems
+        .map((system) => ({ label: system.label, value: getSystemFindings(system) }))
+        .filter((system) => system.value);
+      if (findings.length) {
+        for (const finding of findings) lines.push(`${finding.label}: ${finding.value}`);
+      }
+      return lines.join("\n");
+    }
+
+    function getSystemFindings(system) {
+      const section = document.getElementById(system.id);
+      const selected = [...section.querySelectorAll(".finding-choice")].flatMap((button) => {
+        const finding = system.findings.find((item) => item.id === button.dataset.findingId);
+        if (button.dataset.state === "affirmative") return [finding.affirmative];
+        if (button.dataset.state === "negative") return [finding.negative];
+        return [];
+      });
+      const other = $(`#finding-${system.id}`).value.trim();
+      return [...selected, other].filter(Boolean).join(" ");
+    }
+
+    function setFindingState(button, state) {
+      button.dataset.state = state;
+      button.setAttribute("aria-pressed", String(state !== "clear"));
+      const system = systems.find((item) => item.id === button.closest(".system-section").id);
+      const finding = system.findings.find((item) => item.id === button.dataset.findingId);
+      if (state === "clear") delete button.dataset.normality;
+      else button.dataset.normality = state === finding.normalWhen ? "normal" : "abnormal";
+      const status = state === "clear" ? "not selected" : `${button.dataset.normality}, ${state} selected`;
+      button.setAttribute("aria-label", `${finding.label}, ${status}. Click or press Enter for affirmative; right-click or press Shift+Enter for negative; repeat the same action to clear.`);
+    }
+
+    function toggleFinding(button, requestedState) {
+      const system = systems.find((item) => item.id === button.closest(".system-section").id);
+      const otherFindings = $(`#finding-${system.id}`);
+      if (otherFindings.value.trim() === system.normal) otherFindings.value = "";
+      const state = button.dataset.state === requestedState ? "clear" : requestedState;
+      if (state === "affirmative") {
+        const conflictingIds = new Set(mutuallyExclusiveAffirmative
+          .filter((set) => set.includes(button.dataset.findingId))
+          .flat());
+        for (const id of conflictingIds) {
+          if (id === button.dataset.findingId) continue;
+          const conflictingButton = systemFields.querySelector(`.finding-choice[data-finding-id="${id}"]`);
+          if (conflictingButton?.dataset.state === "affirmative") setFindingState(conflictingButton, "clear");
+        }
+      }
+      setFindingState(button, state);
+      updateNote();
+    }
+
+    function updateNote() {
+      const note = buildNote();
+      const documented = systems.filter((system) => getSystemFindings(system)).length;
+      noteOutput.textContent = note;
+      copyButton.disabled = !note.trim();
+      $("#completion").textContent = `${documented} of ${systems.length} documented`;
+      $("#note-count").textContent = `${note.length} characters`;
+      for (const system of systems) {
+        const navLink = systemNav.querySelector(`[data-target="${system.id}"]`);
+        const section = document.getElementById(system.id);
+        const selectedCount = section.querySelectorAll('.finding-choice[data-state="affirmative"], .finding-choice[data-state="negative"]').length;
+        const hasOther = Boolean($(`#finding-${system.id}`).value.trim());
+        const hasFindings = selectedCount > 0 || hasOther;
+        navLink.querySelector(".system-state").classList.toggle("done", hasFindings);
+        $(`#${system.id}-summary-count`).textContent = selectedCount ? `${selectedCount} selected` : hasOther ? "Other findings" : `${system.findings.length} options`;
+      }
+      copyStatus.textContent = "";
+    }
+
+    function setActiveSystem(id) {
+      for (const link of systemNav.querySelectorAll(".system-link")) {
+        const active = link.dataset.target === id;
+        link.classList.toggle("active", active);
+        if (active) link.setAttribute("aria-current", "location");
+        else link.removeAttribute("aria-current");
+      }
+    }
+
+    async function copyNote() {
+      const text = buildNote();
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          const temporary = document.createElement("textarea");
+          temporary.value = text;
+          temporary.setAttribute("readonly", "");
+          temporary.style.position = "fixed";
+          temporary.style.opacity = "0";
+          document.body.append(temporary);
+          temporary.select();
+          const copied = document.execCommand("copy");
+          temporary.remove();
+          if (!copied) throw new Error("Clipboard copy was not available");
+        }
+        copyStatus.textContent = "Copied";
+      } catch {
+        copyStatus.textContent = "Copy unavailable";
+      }
+    }
+
+    function clearExam() {
+      if (!window.confirm("Clear all exam findings?")) return;
+      form.reset();
+      for (const choice of systemFields.querySelectorAll(".finding-choice")) setFindingState(choice, "clear");
+      setActiveSystem("");
+      updateNote();
+    }
+
+    initialize();
+  </script>
+</body>
+</html>
