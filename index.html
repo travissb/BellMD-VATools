@@ -93,6 +93,81 @@
     .med-rec-item strong { display: block; margin-bottom: 4px; }
     .med-rec-item p { margin: 3px 0 0; color: var(--ink); font-size: 13px; line-height: 1.45; white-space: pre-wrap; }
     .med-rec-empty-state { margin: 0; color: var(--muted); font-size: 13px; }
+    .pre-rounds-intro { margin: 0 0 16px; color: var(--muted); line-height: 1.55; }
+    #pre-rounds-panel > .encounter-bar { padding: 12px 16px; margin-bottom: 12px; }
+    #pre-rounds-panel .workspace-title h1 { font-size: 19px; }
+    #pre-rounds-panel .workspace-title p { margin-top: 3px; }
+    #pre-rounds-panel > .pre-rounds-intro { margin-bottom: 10px; font-size: 13px; }
+    .pre-rounds-layout { display: grid; grid-template-columns: minmax(420px, .8fr) minmax(0, 1.4fr); gap: 12px; align-items: start; }
+    .pre-rounds-input-panel, .pre-rounds-output-panel { padding: 12px; border-top: 3px solid var(--brand-teal); }
+    .pre-rounds-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 9px; }
+    .pre-rounds-toolbar h2 { margin: 0; font-size: 15px; }
+    .pre-rounds-toolbar .copy-button { margin-left: auto; }
+    .pre-rounds-patient-tabs { display: flex; gap: 3px; overflow-x: auto; margin-bottom: 8px; border-bottom: 1px solid var(--line); }
+    .pre-rounds-patient-tab { flex: 0 0 auto; max-width: 220px; overflow: hidden; padding: 6px 9px; color: var(--muted); background: transparent; border: 0; border-bottom: 3px solid transparent; text-overflow: ellipsis; white-space: nowrap; }
+    .pre-rounds-patient-tab[aria-selected="true"] { color: var(--brand-blue); border-bottom-color: var(--brand-teal); font-weight: 700; }
+    .pre-rounds-patients { display: grid; }
+    .pre-rounds-patient-form[hidden] { display: none; }
+    .pre-rounds-patient-form { padding: 10px; background: #fafbfd; border: 1px solid var(--line); border-radius: 6px; }
+    .pre-rounds-patient-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+    .pre-rounds-patient-heading h3 { margin: 0; font-size: 14px; }
+    .pre-rounds-fields { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+    .pre-rounds-field { min-width: 0; }
+    .pre-rounds-field--wide { grid-column: 1 / -1; }
+    .pre-rounds-field label, .pre-rounds-labs legend { display: block; margin-bottom: 2px; color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+    .pre-rounds-field input, .pre-rounds-field textarea, .pre-rounds-labs input { width: 100%; padding: 5px 7px; color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 5px; }
+    .pre-rounds-field textarea { min-height: 44px; line-height: 1.35; resize: vertical; }
+    .pre-rounds-labs { min-width: 0; grid-column: 1 / -1; margin: 0; padding: 6px; border: 1px solid var(--line); border-radius: 5px; }
+    .pre-rounds-labs legend { padding: 0 4px; }
+    .pre-rounds-lab-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px; }
+    .pre-rounds-lab-grid label { min-width: 0; color: var(--muted); font-size: 9px; font-weight: 700; }
+    .pre-rounds-lab-grid input { display: block; margin-top: 2px; padding: 5px; }
+    .pre-rounds-preview-list { display: grid; gap: 16px; }
+    .pre-rounds-preview-empty { padding: 18px; color: var(--muted); text-align: center; }
+    .pre-rounds-sheet-wrap { min-width: 0; padding: 8px; background: #eef1f5; border: 1px solid var(--line); border-radius: 6px; }
+    .pre-rounds-sheet-actions { display: flex; justify-content: flex-end; margin-bottom: 8px; }
+    .pre-rounds-sheet { padding: 10px; color: #172536; background: #fff; border: 1px solid #d5deea; border-radius: 8px; box-shadow: 0 3px 12px rgba(15, 23, 42, .08); }
+    .pre-rounds-sheet table { width: 100%; border-collapse: collapse; table-layout: fixed; font-family: Arial, sans-serif; font-size: 11px; }
+    .pre-rounds-sheet th, .pre-rounds-sheet td { padding: 5px 6px; border: 1px solid #aebdce; vertical-align: top; text-align: left; overflow-wrap: anywhere; }
+    .pre-rounds-sheet th { color: #23384e; font-weight: 700; background: #edf3f8; }
+    .pre-rounds-sheet > table > tbody > tr:first-child th { color: #fff; background: #344b63; border-color: #344b63; }
+    .pre-rounds-sheet > table > tbody > tr:first-child td { background: #f8fafc; font-weight: 600; }
+    .pre-rounds-sheet .pre-rounds-row-subjective th,
+    .pre-rounds-sheet .pre-rounds-row-vitals-heading th,
+    .pre-rounds-sheet .pre-rounds-row-labs > th,
+    .pre-rounds-sheet .pre-rounds-row-imaging > th,
+    .pre-rounds-sheet .pre-rounds-row-assessment > th { background: #e5edf5; }
+    .pre-rounds-sheet .pre-rounds-row-subjective > td,
+    .pre-rounds-sheet .pre-rounds-row-vitals > td,
+    .pre-rounds-sheet .pre-rounds-row-imaging > td,
+    .pre-rounds-sheet .pre-rounds-row-assessment > td { background: #fff; }
+    .pre-rounds-sheet .pre-rounds-imaging-result + .pre-rounds-imaging-result { margin-top: 4px; padding-top: 4px; border-top: 1px solid #aebdce; }
+    .pre-rounds-sheet .pre-rounds-todo-list { display: grid; gap: 3px; }
+    .pre-rounds-sheet .pre-rounds-todo-item { display: flex; gap: 4px; align-items: flex-start; }
+    .pre-rounds-sheet .pre-rounds-todo-checkbox { flex: 0 0 auto; }
+    .pre-rounds-sheet .pre-rounds-row-vitals-heading th { border-bottom-color: #8fa2b6; }
+    .pre-rounds-sheet .pre-rounds-row-vitals td { border-top-color: #8fa2b6; }
+    .pre-rounds-sheet .pre-rounds-lab-values { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px 10px; }
+    .pre-rounds-sheet .pre-rounds-lab-value { min-width: 0; }
+    .pre-rounds-sheet .pre-rounds-lab-value strong { margin-right: 4px; }
+    .pre-rounds-sheet .pre-rounds-cell-content { min-height: 24px; white-space: pre-wrap; }
+    .pre-rounds-exam-checklist { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3px 8px; font-size: 9px; line-height: 1.2; }
+    .pre-rounds-exam-line { display: flex; flex-wrap: wrap; gap: 1px 5px; }
+    .pre-rounds-exam-system { min-width: 42px; font-weight: 700; }
+    .pre-rounds-exam-choice { display: inline-block; white-space: nowrap; }
+    .pre-rounds-vitals-list { display: grid; gap: 3px; }
+    .pre-rounds-vital-item { display: flex; justify-content: space-between; gap: 4px; white-space: nowrap; }
+    .pre-rounds-vital-item strong { flex: 0 0 auto; }
+    .pre-rounds-vital-item span { min-width: 0; text-align: right; }
+    .pre-rounds-handwrite--subjective { height: 62px; }
+    .pre-rounds-handwrite--todos { height: 100px; }
+    .pre-rounds-handwrite--assessment { height: 90px; }
+    .pre-rounds-lab-diagram { width: 100%; height: auto; color: #111; font-family: Arial, sans-serif; }
+    .pre-rounds-lab-diagram line { stroke: #111; stroke-width: 1.5; }
+    .pre-rounds-lab-diagram .fishbone-heading { font-size: 12px; font-weight: 700; text-anchor: middle; }
+    .pre-rounds-lab-diagram .fishbone-label { font-size: 10px; font-weight: 700; text-anchor: middle; }
+    .pre-rounds-lab-diagram .fishbone-value { font-size: 11px; text-anchor: middle; }
+    .pre-rounds-status { min-height: 1.4em; margin: 9px 0 0; color: var(--brand-green); font-size: 12px; font-weight: 700; }
 
     .page { max-width: 1600px; margin: 0 auto; padding: 20px 24px 36px; }
     .encounter-bar {
@@ -118,6 +193,72 @@
     .encounter-tag { justify-self: end; padding: 8px 11px; color: var(--brand-teal); background: var(--brand-teal-pale); border-radius: 5px; font-size: 13px; font-weight: 750; letter-spacing: .04em; white-space: nowrap; }
 
     .workspace { display: grid; grid-template-columns: 200px minmax(0, 1fr) 360px; gap: 14px; align-items: start; }
+    #exam-note-panel { padding-top: 12px; }
+    #exam-note-panel > .encounter-bar { padding: 10px 14px; margin-bottom: 10px; }
+    #exam-note-panel .workspace-title h1 { font-size: 19px; }
+    #exam-note-panel .workspace-title p { margin-top: 3px; }
+    #exam-note-panel .encounter-tag { padding: 6px 9px; font-size: 11px; }
+    #exam-note-panel .workspace { grid-template-columns: 170px minmax(0, 1fr); gap: 10px; }
+    #exam-note-panel .rail-heading { padding: 12px 13px 10px; }
+    #exam-note-panel .rail-heading p { margin-top: 3px; font-size: 12px; }
+    #exam-note-panel .system-nav { padding: 5px; }
+    #exam-note-panel .system-link { gap: 7px; padding: 7px; font-size: 13px; }
+    #exam-note-panel .rail-foot { padding: 9px 12px 11px; font-size: 11px; }
+    #exam-note-panel .editor-head { padding: 12px 14px 10px; }
+    #exam-note-panel .editor-head h2 { font-size: 16px; }
+    #exam-note-panel .editor-head p { margin-top: 3px; font-size: 12px; }
+    #exam-note-panel .editor-form { padding: 10px 12px 14px; }
+    #exam-note-panel #system-fields { column-gap: 10px; row-gap: 7px; }
+    #exam-note-panel .system-summary { min-height: 34px; padding: 6px 8px; }
+    #exam-note-panel .system-content { padding: 7px 8px 8px; }
+    #exam-note-panel .finding-group + .finding-group { margin-top: 6px; }
+    #exam-note-panel .finding-group-label { margin-bottom: 3px; font-size: 10px; }
+    #exam-note-panel .finding-options { gap: 3px; }
+    #exam-note-panel .finding-choice { min-height: 23px; padding: 2px 4px 2px 6px; font-size: 10px; }
+    #exam-note-panel .system-section textarea { min-height: 34px; padding: 5px 7px; font-size: 11px; line-height: 1.3; }
+    #exam-note-panel .system-section textarea::placeholder { font-size: 10px; }
+    #exam-note-panel .preview { position: fixed; z-index: 50; right: 14px; bottom: 14px; top: auto; display: flex; width: min(400px, calc(100vw - 28px)); max-width: none; max-height: min(55vh, 520px); flex-direction: column; border-color: #b8c5d4; border-radius: 8px; box-shadow: 0 12px 34px rgba(15, 23, 42, .22); }
+    #exam-note-panel .preview-head { flex: 0 0 auto; padding: 9px 11px; }
+    #exam-note-panel .preview-actions { display: flex; align-items: center; gap: 7px; }
+    #exam-note-panel .preview-content { min-height: 90px; max-height: none; flex: 1 1 auto; padding: 11px 12px; }
+    #exam-note-panel .preview-foot { flex: 0 0 auto; padding: 7px 11px; }
+    #exam-note-panel .preview[data-collapsed="true"] .preview-content,
+    #exam-note-panel .preview[data-collapsed="true"] .preview-foot { display: none; }
+    #exam-note-panel .preview-collapse { width: 28px; height: 28px; padding: 0; color: var(--brand-blue); background: #fff; border: 1px solid var(--line); border-radius: 5px; font-size: 18px; line-height: 1; }
+    #ros-panel { padding-top: 12px; }
+    #ros-panel > .encounter-bar { padding: 10px 14px; margin-bottom: 10px; }
+    #ros-panel .workspace-title h1 { font-size: 19px; }
+    #ros-panel .workspace-title p { margin-top: 3px; }
+    #ros-panel .encounter-tag { padding: 6px 9px; font-size: 11px; }
+    #ros-panel .workspace { grid-template-columns: 170px minmax(0, 1fr); gap: 10px; }
+    #ros-panel .rail-heading { padding: 12px 13px 10px; }
+    #ros-panel .rail-heading p { margin-top: 3px; font-size: 12px; }
+    #ros-panel .system-nav { padding: 5px; }
+    #ros-panel .system-link { gap: 7px; padding: 7px; font-size: 13px; }
+    #ros-panel .rail-foot { padding: 9px 12px 11px; font-size: 11px; }
+    #ros-panel .editor-head { padding: 12px 14px 10px; }
+    #ros-panel .editor-head h2 { font-size: 16px; }
+    #ros-panel .editor-head p { margin-top: 3px; font-size: 12px; }
+    #ros-panel .editor-form { padding: 10px 12px 14px; }
+    #ros-panel #ros-system-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 10px; row-gap: 7px; }
+    #ros-panel .system-summary { min-height: 34px; padding: 6px 8px; }
+    #ros-panel .system-content { padding: 7px 8px 8px; }
+    #ros-panel .finding-group + .finding-group { margin-top: 6px; }
+    #ros-panel .finding-group-label { margin-bottom: 3px; font-size: 10px; }
+    #ros-panel .finding-options { gap: 3px; }
+    #ros-panel .ros-choice { min-height: 23px; padding: 2px 4px 2px 6px; font-size: 10px; }
+    #ros-panel .system-section textarea { min-height: 34px; padding: 5px 7px; font-size: 11px; line-height: 1.3; }
+    #ros-panel .system-section textarea::placeholder { font-size: 10px; }
+    #ros-panel .preview { position: fixed; z-index: 50; right: 14px; bottom: 14px; top: auto; display: flex; width: min(400px, calc(100vw - 28px)); max-width: none; max-height: min(55vh, 520px); flex-direction: column; border-color: #b8c5d4; border-radius: 8px; box-shadow: 0 12px 34px rgba(15, 23, 42, .22); }
+    #ros-panel .preview-head { flex: 0 0 auto; padding: 9px 11px; }
+    #ros-panel .preview-actions { display: flex; align-items: center; gap: 7px; }
+    #ros-panel .preview-content { min-height: 90px; max-height: none; flex: 1 1 auto; padding: 11px 12px; }
+    #ros-panel .preview-foot { flex: 0 0 auto; padding: 7px 11px; }
+    #ros-panel .preview[data-collapsed="true"] .preview-content,
+    #ros-panel .preview[data-collapsed="true"] .preview-foot { display: none; }
+    #ros-panel .preview-collapse { width: 28px; height: 28px; padding: 0; color: var(--brand-blue); background: #fff; border: 1px solid var(--line); border-radius: 5px; font-size: 18px; line-height: 1; }
+    #ros-panel .ros-choice[data-state="affirmative"] { color: var(--brand-maroon); background: var(--brand-maroon-pale); border-color: #cda1b1; }
+    #ros-panel .ros-choice[data-state="negative"] { color: #166534; background: var(--brand-green-pale); border-color: #86d4a2; }
     .panel { min-width: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; box-shadow: var(--shadow); transition: box-shadow .18s ease, border-color .18s ease; }
     .panel:hover { border-color: #c4cce0; box-shadow: var(--shadow-raised); }
     .panel.med-rec-input { border-top: 3px solid var(--brand-teal); }
@@ -170,6 +311,14 @@
     .finding-choice[data-normality="normal"]::after { color: #fff; background: var(--brand-green); border-color: var(--brand-green); }
     .finding-choice[data-normality="abnormal"] { color: var(--brand-maroon); background: var(--brand-maroon-pale); border-color: #cda1b1; }
     .finding-choice[data-normality="abnormal"]::after { color: #fff; background: var(--brand-maroon); border-color: var(--brand-maroon); }
+    .finding-detail-editor { position: fixed; z-index: 1000; width: min(320px, calc(100vw - 24px)); padding: 10px; background: #fff; border: 1px solid #aab9bb; border-radius: 7px; box-shadow: 0 8px 24px rgba(15, 23, 42, .2); }
+    .finding-detail-editor[hidden] { display: none; }
+    .finding-detail-editor label { display: block; margin-bottom: 5px; color: var(--muted); font-size: 11px; font-weight: 700; }
+    .finding-detail-editor textarea { width: 100%; min-height: 58px; padding: 7px; color: var(--ink); border: 1px solid #d5dae2; border-radius: 4px; line-height: 1.4; resize: vertical; }
+    .finding-detail-actions { display: flex; justify-content: flex-end; gap: 6px; margin-top: 7px; }
+    .finding-detail-actions button { min-width: 30px; padding: 3px 8px; border: 1px solid var(--line); border-radius: 4px; background: #fff; font-weight: 700; }
+    .finding-detail-accept { color: #166534; }
+    .finding-detail-reject { color: var(--brand-maroon); }
     .system-section textarea { width: 100%; min-height: 54px; padding: 8px 9px; color: var(--ink); background: #fafbfd; border: 1px solid #d5dae2; border-radius: 5px; line-height: 1.45; resize: vertical; }
     .system-section textarea::placeholder { color: #91a0a2; }
     .quiet-button { padding: 7px 10px; color: var(--brand-blue); background: white; border: 1px solid #cbd5e1; border-radius: 5px; font-size: 13px; transition: background .15s ease, border-color .15s ease; }
@@ -194,7 +343,10 @@
 
     @media (max-width: 1100px) {
       .workspace { grid-template-columns: 170px minmax(0, 1fr); gap: 12px; }
-      .preview { position: static; grid-column: 2; }
+      #exam-note-panel .workspace { grid-template-columns: 160px minmax(0, 1fr); gap: 10px; }
+      #ros-panel .workspace { grid-template-columns: 160px minmax(0, 1fr); gap: 10px; }
+      #exam-note-panel .preview { right: 12px; bottom: 12px; grid-column: auto; }
+      #ros-panel .preview { right: 12px; bottom: 12px; grid-column: auto; }
       .rail { grid-row: span 2; }
       .preview-content { max-height: none; min-height: 260px; }
     }
@@ -208,6 +360,8 @@
       .encounter-bar { grid-template-columns: 1fr; gap: 10px; padding: 14px; }
       .encounter-tag { justify-self: start; }
       .workspace { display: flex; flex-direction: column; align-items: stretch; gap: 12px; }
+      #exam-note-panel .workspace { gap: 10px; }
+      #ros-panel .workspace { gap: 10px; }
       .rail { position: static; order: 0; }
       .system-nav { display: flex; gap: 4px; overflow-x: auto; padding: 8px; }
       .system-link { width: auto; min-width: max-content; padding: 7px 9px; }
@@ -216,11 +370,73 @@
       .rail-heading p, .rail-foot { display: none; }
       .editor, .preview { width: 100%; max-width: none; justify-self: stretch; }
       #system-fields { grid-template-columns: 1fr; }
-      .preview { position: static; }
+      #exam-note-panel .preview { position: fixed; right: 8px; bottom: 8px; width: calc(100vw - 16px); max-height: 50vh; }
+      #ros-panel .preview { position: fixed; right: 8px; bottom: 8px; width: calc(100vw - 16px); max-height: 50vh; }
+      #ros-panel #ros-system-fields { grid-template-columns: 1fr; }
       .preview-content { min-height: 230px; max-height: 60vh; padding: 16px; }
       .editor-head { flex-wrap: wrap; padding-left: 14px; padding-right: 14px; }
       .editor-tools { width: 100%; justify-content: space-between; }
       .editor-form { padding-left: 14px; padding-right: 14px; }
+      .pre-rounds-layout { grid-template-columns: 1fr; }
+      .pre-rounds-input-panel, .pre-rounds-output-panel { padding: 13px; }
+      .pre-rounds-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .pre-rounds-lab-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .pre-rounds-sheet { padding: 6px; }
+      .pre-rounds-sheet th, .pre-rounds-sheet td { padding: 4px; font-size: 10px; }
+    }
+    @media print {
+      @page { size: Letter portrait; margin: 0.25in; }
+      body { background: #fff; color: #000; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .app-header, .tool-tabs, .workspace-panel:not(#pre-rounds-panel), #pre-rounds-panel > .encounter-bar,
+      #pre-rounds-panel > .pre-rounds-intro, .pre-rounds-input-panel, .pre-rounds-toolbar,
+      .pre-rounds-sheet-actions, #pre-rounds-panel > .privacy-note { display: none !important; }
+      #pre-rounds-panel { display: block !important; max-width: none; padding: 0; margin: 0; }
+      .pre-rounds-layout { display: block; }
+      .pre-rounds-output-panel { padding: 0; border: 0; box-shadow: none; }
+      .pre-rounds-output-panel > h2, .pre-rounds-status { display: none; }
+      .pre-rounds-preview-list { display: block; }
+      .pre-rounds-sheet-wrap {
+        min-height: 5.2in;
+        height: auto;
+        padding: 0;
+        margin: 0;
+        border: 0;
+        border-radius: 0;
+        background: #fff;
+        break-inside: avoid-page;
+        page-break-inside: avoid;
+        box-sizing: border-box;
+      }
+      .pre-rounds-sheet { min-height: 5.2in; padding: 0; color: #000; background: #fff; border: 0; border-radius: 0; box-shadow: none; box-sizing: border-box; break-inside: avoid-page; page-break-inside: avoid; }
+      .pre-rounds-sheet table { width: 100%; height: 5.2in; font-size: 7pt; break-inside: avoid-page; page-break-inside: avoid; }
+      .pre-rounds-sheet tr { break-inside: avoid-page; page-break-inside: avoid; }
+      .pre-rounds-sheet th, .pre-rounds-sheet td { padding: 2pt; color: #000; border-color: #333; line-height: 1.05; }
+      .pre-rounds-sheet th { background: #e8e8e8; }
+      .pre-rounds-sheet > table > tbody > tr:first-child th { color: #000; background: #e8e8e8; border-color: #333; }
+      .pre-rounds-sheet > table > tbody > tr:first-child td,
+      .pre-rounds-sheet .pre-rounds-row-subjective > td,
+      .pre-rounds-sheet .pre-rounds-row-vitals > td,
+      .pre-rounds-sheet .pre-rounds-row-imaging > td,
+      .pre-rounds-sheet .pre-rounds-row-assessment > td { background: #fff; }
+      .pre-rounds-sheet .pre-rounds-row-subjective th,
+      .pre-rounds-sheet .pre-rounds-row-vitals-heading th,
+      .pre-rounds-sheet .pre-rounds-row-labs > th,
+      .pre-rounds-sheet .pre-rounds-row-imaging > th,
+      .pre-rounds-sheet .pre-rounds-row-assessment > th { background: #e8e8e8; }
+      .pre-rounds-sheet .pre-rounds-row-heading { height: 7%; }
+      .pre-rounds-sheet .pre-rounds-row-subjective { height: 12%; }
+      .pre-rounds-sheet .pre-rounds-row-vitals-heading { height: 6%; }
+      .pre-rounds-sheet .pre-rounds-row-vitals { height: 15%; }
+      .pre-rounds-sheet .pre-rounds-row-labs { height: 18%; }
+      .pre-rounds-sheet .pre-rounds-row-imaging { height: 15%; }
+      .pre-rounds-sheet .pre-rounds-row-assessment { height: 22%; }
+      .pre-rounds-sheet .pre-rounds-handwrite--subjective { height: auto; }
+      .pre-rounds-sheet .pre-rounds-handwrite--todos { height: auto; }
+      .pre-rounds-sheet .pre-rounds-handwrite--assessment { height: auto; }
+      .pre-rounds-exam-checklist { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1pt 4pt; font-size: 6pt; line-height: 1.05; }
+      .pre-rounds-exam-line { gap: 0 3pt; }
+      .pre-rounds-exam-system { min-width: 30pt; }
+      .pre-rounds-lab-diagram { height: 0.62in; }
     }
     @media (prefers-reduced-motion: no-preference) {
       .panel { animation: arrive .32s ease-out both; }
@@ -237,6 +453,8 @@
 
   <nav class="tool-tabs" role="tablist" aria-label="BellMD tools">
     <button class="tool-tab" id="exam-note-tab" type="button" role="tab" aria-selected="true" aria-controls="exam-note-panel" tabindex="0">Exam Note</button>
+    <button class="tool-tab" id="ros-tab" type="button" role="tab" aria-selected="false" aria-controls="ros-panel" tabindex="-1">ROS</button>
+    <button class="tool-tab" id="pre-rounds-tab" type="button" role="tab" aria-selected="false" aria-controls="pre-rounds-panel" tabindex="-1">Pre-Rounds</button>
     <button class="tool-tab" id="med-rec-tab" type="button" role="tab" aria-selected="false" aria-controls="med-rec-panel" tabindex="-1">Med Rec Assist</button>
   </nav>
 
@@ -273,13 +491,58 @@
       <aside class="panel preview" aria-labelledby="preview-heading">
         <div class="preview-head">
           <div class="preview-title"><h2 id="preview-heading">Note preview</h2><span class="live-pill">Live</span></div>
-          <button class="copy-button" id="copy-button" type="button" disabled title="Copy the generated note to the clipboard"><span class="copy-icon" aria-hidden="true">▢</span><span>Copy note</span></button>
+          <div class="preview-actions">
+            <button class="copy-button" id="copy-button" type="button" disabled title="Copy the generated note to the clipboard"><span class="copy-icon" aria-hidden="true">▢</span><span>Copy note</span></button>
+            <button class="preview-collapse" id="preview-collapse" type="button" aria-expanded="true" aria-controls="note-preview-content" aria-label="Minimize note preview" title="Minimize note preview">−</button>
+          </div>
         </div>
-        <div class="preview-content" aria-live="polite" aria-atomic="true"><pre class="note-output" id="note-output"><span class="preview-empty">Your note will appear here as you document the encounter.</span></pre></div>
+        <div class="preview-content" id="note-preview-content" aria-live="polite" aria-atomic="true"><pre class="note-output" id="note-output"><span class="preview-empty">Your note will appear here as you document the encounter.</span></pre></div>
         <div class="preview-foot"><span id="note-count">0 characters</span><span class="copy-status" id="copy-status" role="status"></span></div>
       </aside>
     </div>
     <p class="privacy-note">This page runs locally in your browser and does not save or transmit information. Do not enter patient names, dates of birth, record numbers, contact details, or other identifying information, including in free-text fields. This tool has not been assessed for regulatory compliance and is not a substitute for your organization's approved clinical record.</p>
+  </main>
+
+  <main class="page workspace-panel" id="ros-panel" role="tabpanel" aria-labelledby="ros-tab" tabindex="0" hidden>
+    <section class="encounter-bar" aria-label="Review of systems">
+      <div class="workspace-title">
+        <p class="eyebrow">Documentation workspace</p>
+        <h1>Review of Systems</h1>
+        <p>Quickly document pertinent symptoms by system</p>
+      </div>
+      <div class="encounter-tag">REVIEW OF SYSTEMS</div>
+    </section>
+    <div class="workspace">
+      <aside class="panel rail" aria-label="Review of systems sections">
+        <div class="rail-heading"><h2>ROS sections</h2><p>Choose a system to document</p></div>
+        <nav class="system-nav" id="ros-system-nav" aria-label="Review of systems"></nav>
+        <div class="rail-foot">Click a symptom for positive, right-click or press Shift+Enter for negative. Use Normal for a system summary.</div>
+      </aside>
+      <section class="panel editor" aria-labelledby="ros-editor-heading">
+        <div class="editor-head">
+          <div><h2 id="ros-editor-heading">ROS documentation</h2><p>Document positive and negative symptoms by system.</p></div>
+          <div class="editor-tools">
+            <div class="completion" id="ros-completion" aria-live="polite">0 of 14 documented</div>
+            <button class="quiet-button" id="ros-clear-button" type="button" title="Clear all selected and typed ROS findings">Clear all findings</button>
+          </div>
+        </div>
+        <form class="editor-form" id="ros-form" autocomplete="off">
+          <div id="ros-system-fields"></div>
+        </form>
+      </section>
+      <aside class="panel preview" id="ros-preview" aria-labelledby="ros-preview-heading">
+        <div class="preview-head">
+          <div class="preview-title"><h2 id="ros-preview-heading">Note preview</h2><span class="live-pill">Live</span></div>
+          <div class="preview-actions">
+            <button class="copy-button" id="ros-copy-button" type="button" disabled title="Copy the generated ROS"><span class="copy-icon" aria-hidden="true">▢</span><span>Copy note</span></button>
+            <button class="preview-collapse" id="ros-preview-collapse" type="button" aria-expanded="true" aria-controls="ros-note-preview-content" aria-label="Minimize note preview" title="Minimize note preview">−</button>
+          </div>
+        </div>
+        <div class="preview-content" id="ros-note-preview-content" aria-live="polite" aria-atomic="true"><pre class="note-output" id="ros-note-output"><span class="preview-empty">Your ROS will appear here as you document the encounter.</span></pre></div>
+        <div class="preview-foot"><span id="ros-note-count">0 characters</span><span class="copy-status" id="ros-copy-status" role="status"></span></div>
+      </aside>
+    </div>
+    <p class="privacy-note">This page runs locally in your browser and does not save or transmit information. Do not enter patient identifiers. Review all generated documentation for accuracy; this tool is not a substitute for your organization's approved clinical record.</p>
   </main>
 
   <main class="page workspace-panel" id="med-rec-panel" role="tabpanel" aria-labelledby="med-rec-tab" tabindex="0" hidden>
@@ -291,7 +554,7 @@
       </div>
       <div class="encounter-tag">MEDICATIONS</div>
     </section>
-    <p class="med-rec-intro">Paste one medication per line into each list; numbered and bulleted lists are supported. The comparison checks medication, dose, frequency, route, formulation, timing, and PRN status. Review any flagged instruction differences and possible additional orders.</p>
+    <p class="med-rec-intro">Paste one medication per line into each list; numbered and bulleted lists are supported. INDICATION fields are excluded from comparison. The comparison checks medication, dose, frequency, route, formulation, timing, and PRN status. Review any flagged instruction differences and possible additional orders.</p>
     <div class="med-rec-inputs">
       <section class="panel med-rec-input" aria-labelledby="outpatient-heading">
         <h2 id="outpatient-heading">Outpatient medications</h2>
@@ -343,6 +606,83 @@
         <p class="med-rec-empty-state">Enter both medication lists and select Compare lists.</p>
       </div>
     </section>
+  </main>
+
+  <main class="page workspace-panel" id="pre-rounds-panel" role="tabpanel" aria-labelledby="pre-rounds-tab" tabindex="0" hidden>
+    <section class="encounter-bar" aria-label="Pre-rounds worksheet">
+      <div class="workspace-title">
+        <p class="eyebrow">Documentation workspace</p>
+        <h1>Pre-Rounds</h1>
+        <p>Build one printable rounding sheet per patient</p>
+      </div>
+      <div class="encounter-tag">ROUNDING SHEETS</div>
+    </section>
+    <p class="pre-rounds-intro">Enter or paste information into the matching fields. Each patient gets a separate sheet in the preview; copy an individual sheet or all sheets into Word, or print the full set.</p>
+    <div class="pre-rounds-layout">
+      <section class="panel pre-rounds-input-panel" aria-labelledby="pre-rounds-input-heading">
+        <div class="pre-rounds-toolbar">
+          <h2 id="pre-rounds-input-heading">Patient information</h2>
+          <button class="quiet-button" id="add-pre-rounds-patient" type="button">Add patient</button>
+        </div>
+        <div class="pre-rounds-patient-tabs" id="pre-rounds-patient-tabs" role="tablist" aria-label="Patients"></div>
+        <div class="pre-rounds-patients" id="pre-rounds-patients"></div>
+      </section>
+      <section class="panel pre-rounds-output-panel" aria-labelledby="pre-rounds-output-heading">
+        <div class="pre-rounds-toolbar">
+          <h2 id="pre-rounds-output-heading">Printable preview</h2>
+          <button class="quiet-button" id="print-pre-rounds" type="button">Print sheets</button>
+          <button class="copy-button" id="copy-all-pre-rounds" type="button">Copy all</button>
+        </div>
+        <div class="pre-rounds-preview-list" id="pre-rounds-preview-list" aria-live="polite"></div>
+        <p class="pre-rounds-status" id="pre-rounds-status" role="status"></p>
+      </section>
+    </div>
+    <template id="pre-rounds-patient-template">
+      <section class="pre-rounds-patient-form" aria-label="Patient information">
+        <div class="pre-rounds-patient-heading">
+          <h3>Patient 1</h3>
+          <button class="quiet-button" type="button" data-remove-patient>Remove</button>
+        </div>
+        <div class="pre-rounds-fields">
+          <div class="pre-rounds-field"><label>Name<input data-field="name" autocomplete="off"></label></div>
+          <div class="pre-rounds-field"><label>Room #<input data-field="room" autocomplete="off"></label></div>
+          <div class="pre-rounds-field"><label>Primary Dx<input data-field="primary-dx" autocomplete="off"></label></div>
+          <div class="pre-rounds-field pre-rounds-field--wide"><label>Subjective<textarea data-field="subjective" rows="2"></textarea></label></div>
+          <div class="pre-rounds-field"><label>Temp<input data-field="temp" autocomplete="off"></label></div>
+          <div class="pre-rounds-field"><label>HR<input data-field="hr" autocomplete="off"></label></div>
+          <div class="pre-rounds-field"><label>RR<input data-field="rr" autocomplete="off"></label></div>
+          <div class="pre-rounds-field"><label>BP<input data-field="bp" autocomplete="off"></label></div>
+          <div class="pre-rounds-field"><label>SpO2<input data-field="o2" autocomplete="off"></label></div>
+          <fieldset class="pre-rounds-labs">
+            <legend>Labs</legend>
+            <div class="pre-rounds-field pre-rounds-field--wide">
+              <label>Paste EMR labs<textarea data-emr-labs rows="4" placeholder="Paste lab results here; recognized results update automatically"></textarea></label>
+              <span data-lab-status role="status"></span>
+            </div>
+            <div class="pre-rounds-lab-grid">
+              <label>Na<input data-field="na" autocomplete="off"></label>
+              <label>K<input data-field="k" autocomplete="off"></label>
+              <label>Cl<input data-field="cl" autocomplete="off"></label>
+              <label>HCO3<input data-field="hco3" autocomplete="off"></label>
+              <label>BUN<input data-field="bun" autocomplete="off"></label>
+              <label>Cr<input data-field="cr" autocomplete="off"></label>
+              <label>Gluc<input data-field="gluc" autocomplete="off"></label>
+              <label>Ca<input data-field="ca" autocomplete="off"></label>
+              <label>Mg<input data-field="mg" autocomplete="off"></label>
+              <label>PO4<input data-field="po4" autocomplete="off"></label>
+              <label>WBC<input data-field="wbc" autocomplete="off"></label>
+              <label>Hgb<input data-field="hgb" autocomplete="off"></label>
+              <label>Hct<input data-field="hct" autocomplete="off"></label>
+              <label>Plts<input data-field="plts" autocomplete="off"></label>
+            </div>
+          </fieldset>
+          <div class="pre-rounds-field pre-rounds-field--wide"><label>Imaging / Micro<textarea data-field="imaging" rows="3" placeholder="Paste reports; titles, dates, impressions, and key microbiology results appear in the worksheet"></textarea></label></div>
+          <div class="pre-rounds-field pre-rounds-field--wide"><label>A&amp;P<textarea data-field="assessment" rows="4"></textarea></label></div>
+          <div class="pre-rounds-field pre-rounds-field--wide"><label>To Dos<textarea data-field="todos" rows="3"></textarea></label></div>
+        </div>
+      </section>
+    </template>
+    <p class="privacy-note">This page runs locally in your browser and does not save or transmit information. Use only as permitted by your organization's policies, verify all information, and do not treat the generated sheet as a substitute for the approved medical record.</p>
   </main>
 
   <script>
@@ -538,7 +878,8 @@
     function parseMedicationList(text) {
       return text.split(/\r?\n/)
         .map((line) => line.replace(/^\s*(?:(?:\d+|[a-z])[.)]\s*|[-*•]\s*)/iu, "").trim())
-        .filter(Boolean)
+        .map((line) => line.replace(/\s*\(?\s*\bINDICATION\b(?:\s*[:\-–—]\s*|\s+)[\s\S]*$/i, "").trim())
+        .filter((line) => line && !/^INDICATION\b/i.test(line))
         .map((display) => {
           const strength = medicationStrengthPattern.exec(display);
           const direction = strength ? null : medicationDirectionPattern.exec(display);
@@ -863,6 +1204,644 @@
       }
     });
 
+    const preRoundsPatients = document.getElementById("pre-rounds-patients");
+    const preRoundsPatientTabs = document.getElementById("pre-rounds-patient-tabs");
+    const preRoundsPreviewList = document.getElementById("pre-rounds-preview-list");
+    const preRoundsStatus = document.getElementById("pre-rounds-status");
+    let preRoundsPatientCount = 0;
+    let selectedPreRoundsPatientId = "";
+    const preRoundsLabFields = [
+      ["Na", "na"], ["K", "k"], ["Cl", "cl"], ["HCO3", "hco3"],
+      ["BUN", "bun"], ["Cr", "cr"], ["Gluc", "gluc"], ["Ca", "ca"],
+      ["Mg", "mg"], ["PO4", "po4"], ["WBC", "wbc"],
+      ["Hgb", "hgb"], ["Hct", "hct"], ["Plts", "plts"]
+    ];
+    const preRoundsVitals = [
+      ["Temp", "temp"], ["HR", "hr"], ["RR", "rr"], ["BP", "bp"], ["SpO2", "o2"]
+    ];
+
+    function preRoundsFieldValue(card, field) {
+      return card.querySelector(`[data-field="${field}"]`).value.trim();
+    }
+
+    const emrLabAliases = new Map([
+      ["sodium", "na"], ["na", "na"],
+      ["potassium", "k"], ["k", "k"],
+      ["chloride", "cl"], ["cl", "cl"],
+      ["co2", "hco3"], ["carbon dioxide", "hco3"], ["bicarbonate", "hco3"], ["hco3", "hco3"],
+      ["bun", "bun"], ["urea nitrogen", "bun"], ["blood urea nitrogen", "bun"],
+      ["creatinine", "cr"], ["creat", "cr"], ["cr", "cr"],
+      ["glucose", "gluc"], ["gluc", "gluc"],
+      ["calcium", "ca"], ["ca", "ca"],
+      ["magnesium", "mg"], ["mg", "mg"],
+      ["phosphate", "po4"], ["phosphorus", "po4"], ["po4", "po4"],
+      ["white blood cell count", "wbc"], ["white blood cells", "wbc"], ["wbc", "wbc"],
+      ["hemoglobin", "hgb"], ["haemoglobin", "hgb"], ["hgb", "hgb"],
+      ["hematocrit", "hct"], ["haematocrit", "hct"], ["hct", "hct"],
+      ["platelet count", "plts"], ["platelets", "plts"], ["platelet", "plts"], ["plt", "plts"], ["plts", "plts"]
+    ].map(([name, field]) => [name.replace(/[^a-z0-9]/g, ""), field]));
+
+    function parseEmrLabs(text) {
+      const parsed = new Map();
+      const unrecognized = [];
+      for (const line of text.split(/\r?\n/)) {
+        if (!line.trim()) continue;
+        const match = line.match(/^\s*([A-Za-z][A-Za-z0-9 /()+.-]*?)\s+([<>]?\s*\d+(?:\.\d+)?)(?=\s|$)/);
+        if (!match) {
+          unrecognized.push({ name: line.trim(), value: "", unit: "", referenceRange: "" });
+          continue;
+        }
+        const normalizedName = match[1].replace(/[^a-z0-9]/gi, "").toLocaleLowerCase();
+        const field = emrLabAliases.get(normalizedName);
+        if (!field) {
+          const remainder = line.slice(match[0].length).trim();
+          const referenceRange = remainder.match(/\([^)]*\)/)?.[0] || "";
+          const unit = remainder
+            .replace(/\([^)]*\)/g, " ")
+            .replace(/\b\d{1,2}\/\d{1,2}\/\d{2,4}\s+\d{1,2}:\d{2}(?::\d{2})?\b/g, " ")
+            .replace(/\b[HL]\b/g, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+          unrecognized.push({
+            name: match[1].trim(),
+            value: match[2].replace(/\s+/g, ""),
+            unit,
+            referenceRange
+          });
+          continue;
+        }
+        parsed.set(field, match[2].replace(/\s+/g, ""));
+      }
+      return { parsed, unrecognized };
+    }
+
+    const imagingTitlePrefixes = [
+      "CTABDOMENPELVIS", "CTABDPEL", "CTAP", "CTCHESTABDOMENPELVIS", "CTCAP", "CTCHEST", "CTHEAD", "CTBRAIN", "CTSPINE", "CTNECK", "CTPELVIS", "CTABD", "CTPE", "CTPA", "CTANGIO", "CTA", "CTV",
+      "MRCP", "MRI", "MRA", "MRV", "CXR", "CHESTXRAY", "CHESTRADIOGRAPH", "KUB", "AXR", "ABDOMINALXRAY", "XR", "XRY",
+      "ULTRASOUND", "USG", "US", "ECHO", "TTE", "TEE", "EKG", "ECG", "PETCT", "PET", "NM", "VQSCAN",
+      "BLOODCULTURE", "BLOODCX", "BCX", "URINECULTURE", "URINECX", "UCX", "SPUTUMCULTURE", "SPUTUMCX", "RESPIRATORYCULTURE",
+      "WOUNDCULTURE", "WOUNDCX", "STOOLCULTURE", "STOOLCX", "AFBCULTURE", "AFBCX", "FUNGALCULTURE", "FUNGALCX",
+      "CSFCULTURE", "CSFCX", "GRAMSTAIN", "MRSA", "VRE", "CDIFFTOXIN", "CDIFF", "C DIFF", "STOOLOP", "OVAANDPARASITE",
+      "GIPANEL", "GI PANEL", "GIPCR", "GI PCR", "GIPATHOGEN", "RVP", "RESPIRATORYVIRALPANEL", "RESPIRATORYPANEL",
+      "RESPIRATORYPCR", "COVID", "SARS COV", "FLU", "RSV", "HPYLORI", "LEGIONELLA", "STREPTOCOCCUSPNEUMONIAE", "PCR", "NAAT", "CULTURE"
+    ].map((alias) => alias.replace(/[^a-z0-9]/gi, "").toLocaleUpperCase());
+
+    function isImagingMicroTitle(title) {
+      const normalized = title.replace(/[^a-z0-9]/gi, "").toLocaleUpperCase();
+      return imagingTitlePrefixes.some((alias) => normalized.startsWith(alias));
+    }
+
+    function isMicrobiologyTitle(title) {
+      const normalized = title.replace(/[^a-z0-9]/gi, "").toLocaleUpperCase();
+      return /(?:CULTURE|CX$|BCX|UCX|SPUTUMCX|WOUNDCX|STOOLCX|AFBCX|FUNGALCX|CSFCX|GRAMSTAIN|MRSA|VRE|CDIFF|STOOLOP|OVAANDPARASITE|GIPANEL|GIPCR|GIPATHOGEN|RVP|RESPIRATORY.*PANEL|RESPIRATORYPCR|COVID|FLU|RSV|HPYLORI|LEGIONELLA|PNEUMONIAE|PCR|NAAT)/i.test(normalized);
+    }
+
+    function parseImagingMicro(text) {
+      const datePattern = /\b(?:\d{4}-\d{2}-\d{2}(?:[ T]\d{2}:\d{2}(?::\d{2})?)?|\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+\d{1,2},?\s+\d{4})\b/i;
+      const metadataLine = /^(?:patient|mrn|accession|order|status|specimen|collection|collected|result\s+date|study\s+date|exam\s+date|performed\s+date|report\s+date|study|exam|performed|report|date|time|provider|location|indication|comparison|technique)\b\s*[:#-]/i;
+      const sectionHeader = /^(impression|conclusion|findings|culture result|result|interpretation|microbiology|culture|gram stain|organism(?:\s+\d+)?|susceptibility|antibiotic susceptibility)\s*:?\s*(.*)$/i;
+      const cleanLine = (line) => line.replace(/^\s*(?:[-*•]\s*)/, "").replace(/\s+/g, " ").trim();
+      const chunks = text.replace(/\r/g, "").split(/\n\s*\n+/).map((chunk) => chunk.split("\n").map(cleanLine).filter(Boolean)).filter((lines) => lines.length);
+      const reports = [];
+
+      for (const lines of chunks) {
+        const titleLine = lines.map((line) => line.replace(datePattern, " ").replace(/\s+/g, " ").trim())
+          .find((line) => line && !metadataLine.test(line) && !/^culture result\b/i.test(line) && !sectionHeader.test(line));
+        const title = titleLine && titleLine.length <= 120 ? titleLine.replace(/\s+(?:result|study|exam)\s+date\s*:.*/i, "").trim() : "";
+        const dateLine = lines.find((line) => datePattern.test(line));
+        const date = dateLine?.match(datePattern)?.[0] || "";
+        const previous = reports[reports.length - 1];
+        const hasReportTitle = title && (isImagingMicroTitle(title)
+          || title === lines[0] && /^[A-Z0-9][A-Z0-9 /(),+.-]{2,}$/.test(title));
+        const startsReport = hasReportTitle && previous && previous.lines.some((line) => sectionHeader.test(line) || /\b(?:impression|no growth|positive|negative|detected|not detected|organism|findings)\b/i.test(line));
+        if (!previous || startsReport) {
+          reports.push({ title: hasReportTitle ? title : "", date, lines: [...lines] });
+        } else {
+          if (!previous.title && hasReportTitle) previous.title = title;
+          if (!previous.date && date) previous.date = date;
+          previous.lines.push(...lines);
+        }
+      }
+
+      return reports.map((report) => {
+        let activeSection = "";
+        const impressions = [];
+        const findings = [];
+        const microbiology = [];
+        const pertinent = [];
+        const isMicrobiologyReport = isMicrobiologyTitle(report.title)
+          || /\b(?:culture|microbiology|organism|gram stain|susceptibility|pcr|respiratory panel)\b/i.test(`${report.title} ${report.lines.join(" ")}`);
+        const keyFindingPattern = /\b(?:acute|chronic|mass|lesion|nodule|fracture|effusion|opacity|consolidation|atelectasis|hemorrhage|infarct|obstruction|dilatation|stone|pneumothorax|edema|thrombus|embol|no evidence|no acute|without acute|normal|clear|stable|unchanged|interval|positive|negative|detected|not detected|no growth|organism|growth|grew|isolat|susceptib|resistant|sensitive|gram stain|colony count|cfu)\b/i;
+        for (const line of report.lines) {
+          if (metadataLine.test(line) || datePattern.test(line) && /^(?:date|time|study|exam|result|collection|collected|performed|report)\b/i.test(line)) continue;
+          const section = line.match(sectionHeader);
+          if (section) {
+            activeSection = section[1].toLocaleLowerCase();
+            const sectionText = cleanLine(section[2]);
+            if (sectionText) {
+              if (activeSection === "impression" || activeSection === "conclusion") impressions.push(sectionText);
+              else if (activeSection === "findings") findings.push(sectionText);
+              else if (/microbiology|culture|gram stain|organism|susceptibility/.test(activeSection) || activeSection === "result" && isMicrobiologyReport) microbiology.push(sectionText);
+            }
+            continue;
+          }
+          const isMicrobiology = /\b(?:culture|microbiology|organism|gram stain|susceptib|resistant|sensitive|colony count|cfu|pcr|viral panel)\b/i.test(`${report.title} ${line}`);
+          if (activeSection === "impression" || activeSection === "conclusion") impressions.push(line);
+          else if (activeSection === "findings") findings.push(line);
+          else if (isMicrobiology && /\b(?:no growth|growth|grew|isolat|organism|gram|detected|not detected|positive|negative|susceptib|resistant|sensitive|cfu|colony count|pending|final)\b/i.test(line)) microbiology.push(line);
+          if (keyFindingPattern.test(line)) pertinent.push(line);
+        }
+        const selected = isMicrobiologyReport
+          ? [...new Set(microbiology.length ? microbiology : pertinent)]
+          : [...new Set(impressions.length ? impressions : findings.length ? findings.filter((line) => keyFindingPattern.test(line)) : pertinent)];
+        return { title: report.title, date: report.date, summary: selected.join(" "), recognized: selected.length > 0 };
+      }).filter((report) => report.title || report.date || report.summary);
+    }
+
+    function applyEmrLabs(card) {
+      const paste = card.querySelector("[data-emr-labs]");
+      const status = card.querySelector("[data-lab-status]");
+      const { parsed, unrecognized } = parseEmrLabs(paste.value);
+      card._unrecognizedLabs = unrecognized;
+      if (!parsed.size) {
+        status.textContent = unrecognized.length
+          ? `Added ${unrecognized.length} additional lab result${unrecognized.length === 1 ? "" : "s"} below the fishbones.`
+          : paste.value.trim() ? "Waiting for recognized lab names and numeric results." : "";
+        status.style.color = "var(--muted)";
+        renderPreRounds();
+        return false;
+      }
+      for (const [field, value] of parsed) {
+        card.querySelector(`[data-field="${field}"]`).value = value;
+      }
+      const extraText = unrecognized.length
+        ? ` Added ${unrecognized.length} additional result${unrecognized.length === 1 ? "" : "s"} below the fishbones.`
+        : "";
+      status.textContent = `Applied ${parsed.size} lab result${parsed.size === 1 ? "" : "s"}.${extraText}`;
+      status.style.color = "var(--brand-green)";
+      renderPreRounds();
+      return true;
+    }
+
+    function appendPreRoundsCell(row, tag, text, colspan = 1, rowspan = 1) {
+      const cell = document.createElement(tag);
+      if (colspan > 1) cell.colSpan = colspan;
+      if (rowspan > 1) cell.rowSpan = rowspan;
+      cell.textContent = text;
+      cell.style.border = "1px solid #333";
+      cell.style.padding = "6px";
+      cell.style.verticalAlign = "top";
+      cell.style.textAlign = "left";
+      cell.style.whiteSpace = "pre-wrap";
+      cell.style.overflowWrap = "anywhere";
+      if (tag === "th") {
+        cell.style.fontWeight = "bold";
+      }
+      row.append(cell);
+      return cell;
+    }
+
+    function makePreRoundsExamChecklist(container) {
+      const checklist = document.createElement("div");
+      checklist.className = "pre-rounds-exam-checklist";
+      const systems = [
+        ["General", ["Well-appearing", "Ill-appearing", "NAD", "Distressed", "Febrile"]],
+        ["HEENT", ["NC/AT", "PERRL", "EOMI", "MMM", "OP clear"]],
+        ["CV", ["RRR", "Irregular", "No murmur", "Murmur", "No JVD"]],
+        ["Resp", ["CTAB", "Wheeze", "Crackles", "Rhonchi", "Diminished"]],
+        ["Abd", ["Soft", "NT", "Tender", "Distended", "+BS"]],
+        ["GU", ["No suprapubic tenderness", "CVA tenderness"]],
+        ["MSK", ["Normal ROM", "Limited ROM", "Tenderness"]],
+        ["Ext", ["No edema", "Edema", "Pulses intact"]],
+        ["Neuro", ["Alert/oriented", "No focal deficit", "Weakness", "Sensory deficit"]],
+        ["Skin", ["Warm/dry", "Rash", "Wound"]],
+        ["Psych", ["Normal affect", "Anxious", "Depressed"]]
+      ];
+      for (const [system, choices] of systems) {
+        const line = document.createElement("div");
+        line.className = "pre-rounds-exam-line";
+        const label = document.createElement("strong");
+        label.className = "pre-rounds-exam-system";
+        label.textContent = `${system}:`;
+        line.append(label);
+        for (const choice of choices) {
+          const option = document.createElement("span");
+          option.className = "pre-rounds-exam-choice";
+          option.textContent = `□ ${choice}`;
+          line.append(option);
+        }
+        checklist.append(line);
+      }
+      container.append(checklist);
+    }
+
+    function makeFishboneDiagram(title, values, lines, points, plainText) {
+      const namespace = "http://www.w3.org/2000/svg";
+      const svg = document.createElementNS(namespace, "svg");
+      svg.setAttribute("class", "pre-rounds-lab-diagram");
+      svg.setAttribute("viewBox", "0 0 300 120");
+      svg.setAttribute("width", "100%");
+      svg.setAttribute("height", "120");
+      svg.setAttribute("role", "img");
+      svg.setAttribute("aria-label", `${title}: ${plainText.replace(/\n/g, "; ")}`);
+      svg.dataset.plainText = `${title}\n${plainText}`;
+      svg.style.display = "block";
+      svg.style.maxWidth = "100%";
+      svg.style.fontFamily = "Arial, sans-serif";
+      svg.style.color = "#111";
+
+      const heading = document.createElementNS(namespace, "text");
+      heading.textContent = title;
+      heading.setAttribute("x", "150");
+      heading.setAttribute("y", "13");
+      heading.setAttribute("text-anchor", "middle");
+      heading.setAttribute("font-size", "12");
+      heading.setAttribute("font-weight", "700");
+      svg.append(heading);
+
+      for (const [x1, y1, x2, y2] of lines) {
+        const line = document.createElementNS(namespace, "line");
+        line.setAttribute("x1", x1);
+        line.setAttribute("y1", y1);
+        line.setAttribute("x2", x2);
+        line.setAttribute("y2", y2);
+        line.setAttribute("stroke", "#111");
+        line.setAttribute("stroke-width", "1.5");
+        svg.append(line);
+      }
+
+      for (const [label, field, x, labelY, valueY] of points) {
+        const labelText = document.createElementNS(namespace, "text");
+        labelText.textContent = label;
+        labelText.setAttribute("x", x);
+        labelText.setAttribute("y", labelY);
+        labelText.setAttribute("text-anchor", "middle");
+        labelText.setAttribute("font-size", "10");
+        labelText.setAttribute("font-weight", "700");
+        svg.append(labelText);
+
+        const valueText = document.createElementNS(namespace, "text");
+        valueText.textContent = values[field];
+        valueText.setAttribute("x", x);
+        valueText.setAttribute("y", valueY);
+        valueText.setAttribute("text-anchor", "middle");
+        valueText.setAttribute("font-size", "11");
+        svg.append(valueText);
+      }
+      return svg;
+    }
+
+    function makePreRoundsSheet(card) {
+      const sheet = document.createElement("article");
+      sheet.className = "pre-rounds-sheet";
+      const table = document.createElement("table");
+      table.setAttribute("border", "1");
+      table.setAttribute("cellpadding", "6");
+      table.setAttribute("cellspacing", "0");
+      table.style.width = "100%";
+      table.style.borderCollapse = "collapse";
+      table.style.tableLayout = "fixed";
+      table.style.fontFamily = "Arial, sans-serif";
+
+      let row = table.insertRow();
+      row.className = "pre-rounds-row-heading";
+      appendPreRoundsCell(row, "th", "Name:");
+      appendPreRoundsCell(row, "td", preRoundsFieldValue(card, "name"), 5);
+      appendPreRoundsCell(row, "th", "Rm#:");
+      appendPreRoundsCell(row, "td", preRoundsFieldValue(card, "room"), 2);
+      appendPreRoundsCell(row, "th", "Primary Dx:");
+      appendPreRoundsCell(row, "td", preRoundsFieldValue(card, "primary-dx"), 2);
+
+      row = table.insertRow();
+      row.className = "pre-rounds-row-subjective";
+      appendPreRoundsCell(row, "th", "Subj:");
+      appendPreRoundsCell(row, "td", preRoundsFieldValue(card, "subjective"), 11).classList.add("pre-rounds-handwrite--subjective");
+
+      row = table.insertRow();
+      row.className = "pre-rounds-row-vitals-heading";
+      appendPreRoundsCell(row, "th", "Obj:", 1, 2);
+      appendPreRoundsCell(row, "th", "Vitals", 2);
+      appendPreRoundsCell(row, "th", "Exam:", 9);
+
+      row = table.insertRow();
+      row.className = "pre-rounds-row-vitals";
+      const vitalsCell = appendPreRoundsCell(row, "td", "", 2);
+      const vitalsList = document.createElement("div");
+      vitalsList.className = "pre-rounds-vitals-list";
+      for (const [label, field] of preRoundsVitals) {
+        const item = document.createElement("div");
+        item.className = "pre-rounds-vital-item";
+        const name = document.createElement("strong");
+        name.textContent = `${label}:`;
+        const value = document.createElement("span");
+        value.textContent = preRoundsFieldValue(card, field) || "____";
+        item.append(name, value);
+        item.setAttribute("aria-label", `${label}: ${value.textContent}`);
+        vitalsList.append(item);
+      }
+      vitalsCell.append(vitalsList);
+      const examCell = appendPreRoundsCell(row, "td", "", 9);
+      makePreRoundsExamChecklist(examCell);
+
+      row = table.insertRow();
+      row.className = "pre-rounds-row-labs";
+      appendPreRoundsCell(row, "th", "Labs", 2);
+      const labCell = appendPreRoundsCell(row, "td", "", 10);
+      const values = Object.fromEntries(preRoundsLabFields.map(([label, field]) => [field, preRoundsFieldValue(card, field)]));
+      const labTable = document.createElement("table");
+      labTable.setAttribute("cellpadding", "0");
+      labTable.setAttribute("cellspacing", "0");
+      labTable.style.width = "100%";
+      labTable.style.borderCollapse = "collapse";
+      labTable.style.tableLayout = "fixed";
+      const diagramRow = labTable.insertRow();
+      const diagramDefinitions = [
+        {
+          title: "BMP",
+          width: "33.333%",
+          lines: [[12, 62, 182, 62], [54, 30, 54, 94], [108, 30, 108, 94], [182, 62, 220, 30], [182, 62, 220, 94]],
+          points: [["Na", "na", 31, 29, 48], ["K", "k", 31, 108, 91], ["Cl", "cl", 81, 29, 48], ["HCO3", "hco3", 81, 108, 91], ["BUN", "bun", 148, 29, 48], ["Cret", "cr", 148, 108, 91], ["Glucose", "gluc", 264, 57, 78]],
+          plainText: `Na ${values.na} | Cl ${values.cl} | BUN ${values.bun}\nK ${values.k} | HCO3 ${values.hco3} | Cret ${values.cr}\nGlucose ${values.gluc}`
+        },
+        {
+          title: "CBC",
+          width: "33.333%",
+          lines: [[68, 32, 100, 62], [68, 92, 100, 62], [100, 62, 205, 62], [205, 62, 238, 32], [205, 62, 238, 92]],
+          points: [["WBC", "wbc", 32, 56, 77], ["Hgb", "hgb", 153, 29, 46], ["Hct", "hct", 153, 110, 91], ["PLT", "plts", 266, 56, 77]],
+          plainText: `Hgb ${values.hgb} | WBC ${values.wbc} | Plts ${values.plts}\nHct ${values.hct}`
+        },
+        {
+          title: "Ca / Mg / PO4",
+          width: "33.333%",
+          lines: [[150, 18, 150, 62], [150, 62, 102, 94], [150, 62, 198, 94]],
+          points: [["Ca", "ca", 111, 40, 55], ["Mg", "mg", 189, 40, 55], ["PO4", "po4", 150, 101, 117]],
+          plainText: `Ca ${values.ca} | Mg ${values.mg} | PO4 ${values.po4}`
+        }
+      ];
+      for (const definition of diagramDefinitions) {
+        const cell = diagramRow.insertCell();
+        cell.style.width = definition.width;
+        cell.style.padding = "0 3px";
+        cell.style.border = "0";
+        cell.append(makeFishboneDiagram(definition.title, values, definition.lines, definition.points, definition.plainText));
+      }
+      const additionalLabs = card._unrecognizedLabs || [];
+      if (additionalLabs.length) {
+        const additionalRow = labTable.insertRow();
+        const additionalCell = additionalRow.insertCell();
+        additionalCell.colSpan = 3;
+        additionalCell.style.border = "0";
+        additionalCell.style.borderTop = "1px solid #777";
+        additionalCell.style.padding = "5px 3px 2px";
+        additionalCell.style.fontSize = "10px";
+        const additionalHeading = document.createElement("strong");
+        additionalHeading.textContent = "Additional labs";
+        additionalCell.append(additionalHeading);
+        const additionalList = document.createElement("div");
+        additionalList.style.display = "grid";
+        additionalList.style.gridTemplateColumns = "repeat(2, minmax(0, 1fr))";
+        additionalList.style.gap = "2px 10px";
+        for (const lab of additionalLabs) {
+          const result = document.createElement("div");
+          const name = document.createElement("strong");
+          name.textContent = `${lab.name}: `;
+          result.append(name);
+          if (lab.value) result.append(document.createTextNode(lab.value));
+          if (lab.unit) result.append(document.createTextNode(` ${lab.unit}`));
+          if (lab.referenceRange) result.append(document.createTextNode(` ${lab.referenceRange}`));
+          additionalList.append(result);
+        }
+        additionalCell.append(additionalList);
+      }
+      labCell.replaceChildren(labTable);
+
+      row = table.insertRow();
+      row.className = "pre-rounds-row-imaging";
+      appendPreRoundsCell(row, "th", "Imaging/Micro", 2);
+      const imagingCell = appendPreRoundsCell(row, "td", "", 6);
+      const imagingReports = parseImagingMicro(preRoundsFieldValue(card, "imaging"));
+      for (const report of imagingReports) {
+        const item = document.createElement("div");
+        item.className = "pre-rounds-imaging-result";
+        const heading = document.createElement("strong");
+        heading.textContent = [report.title, report.date].filter(Boolean).join(" · ") || "Imaging / Micro result";
+        item.append(heading);
+        if (report.summary) {
+          const summary = document.createElement("div");
+          summary.textContent = report.summary;
+          item.append(summary);
+        }
+        if (!report.recognized) {
+          const notice = document.createElement("div");
+          notice.textContent = "No impression or key result detected; review the pasted report.";
+          item.append(notice);
+        }
+        imagingCell.append(item);
+      }
+      appendPreRoundsCell(row, "th", "To Dos:", 1, 2);
+      const todosCell = appendPreRoundsCell(row, "td", "", 3, 2);
+      todosCell.classList.add("pre-rounds-handwrite--todos");
+      const todos = preRoundsFieldValue(card, "todos").split(/\r?\n/).map((todo) => todo.trim()).filter(Boolean);
+      if (todos.length) {
+        const todoList = document.createElement("div");
+        todoList.className = "pre-rounds-todo-list";
+        for (const todo of todos) {
+          const item = document.createElement("div");
+          item.className = "pre-rounds-todo-item";
+          const checkbox = document.createElement("span");
+          checkbox.className = "pre-rounds-todo-checkbox";
+          checkbox.setAttribute("aria-hidden", "true");
+          checkbox.textContent = "□";
+          const text = document.createElement("span");
+          text.textContent = todo;
+          item.append(checkbox, text);
+          todoList.append(item);
+        }
+        todosCell.append(todoList);
+      }
+
+      row = table.insertRow();
+      row.className = "pre-rounds-row-assessment";
+      appendPreRoundsCell(row, "th", "A&P:", 2);
+      appendPreRoundsCell(row, "td", preRoundsFieldValue(card, "assessment"), 6).classList.add("pre-rounds-handwrite--assessment");
+
+      sheet.append(table);
+      return sheet;
+    }
+
+    function renderPreRounds() {
+      const cards = [...preRoundsPatients.querySelectorAll(".pre-rounds-patient-form")];
+      if (!cards.some((card) => card.dataset.patientId === selectedPreRoundsPatientId)) {
+        selectedPreRoundsPatientId = cards[0]?.dataset.patientId || "";
+      }
+      while (preRoundsPatientTabs.children.length < cards.length) {
+        const tab = document.createElement("button");
+        tab.className = "pre-rounds-patient-tab";
+        tab.type = "button";
+        tab.role = "tab";
+        preRoundsPatientTabs.append(tab);
+      }
+      while (preRoundsPatientTabs.children.length > cards.length) {
+        preRoundsPatientTabs.lastElementChild.remove();
+      }
+      preRoundsPreviewList.replaceChildren();
+      cards.forEach((card, index) => {
+        const patientId = card.dataset.patientId;
+        const patientNumber = index + 1;
+        const selected = patientId === selectedPreRoundsPatientId;
+        const patientName = preRoundsFieldValue(card, "name");
+        const room = preRoundsFieldValue(card, "room");
+        const tab = preRoundsPatientTabs.children[index];
+        const patientLabel = `Patient ${patientNumber}`;
+        tab.id = `${patientId}-tab`;
+        tab.dataset.patientId = patientId;
+        tab.setAttribute("aria-controls", patientId);
+        tab.setAttribute("aria-selected", String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+        tab.textContent = patientName || room ? `${patientLabel} · ${patientName || `Room ${room}`}` : patientLabel;
+        card.id = patientId;
+        card.setAttribute("role", "tabpanel");
+        card.setAttribute("aria-labelledby", `${patientId}-tab`);
+        card.setAttribute("aria-label", `Patient ${patientNumber} information`);
+        card.hidden = !selected;
+        card.querySelector("h3").textContent = patientLabel;
+        card.querySelector("[data-remove-patient]").disabled = false;
+        const wrapper = document.createElement("div");
+        wrapper.className = "pre-rounds-sheet-wrap";
+        const actions = document.createElement("div");
+        actions.className = "pre-rounds-sheet-actions";
+        const copyButton = document.createElement("button");
+        copyButton.className = "quiet-button";
+        copyButton.type = "button";
+        copyButton.dataset.copyPatient = String(index);
+        copyButton.textContent = `Copy patient ${index + 1}`;
+        actions.append(copyButton);
+        wrapper.append(actions, makePreRoundsSheet(card));
+        preRoundsPreviewList.append(wrapper);
+      });
+      preRoundsStatus.textContent = "";
+    }
+
+    function plainTextForSheets(sheets) {
+      return sheets.map((sheet) => {
+        const body = sheet.innerText.trim();
+        const fishbones = [...sheet.querySelectorAll("svg[data-plain-text]")].map((diagram) => diagram.dataset.plainText);
+        return [body, ...fishbones].filter(Boolean).join("\n\n");
+      }).join("\n\n");
+    }
+
+    async function copyPreRoundsSheets(sheets, successMessage) {
+      if (!sheets.length) {
+        preRoundsStatus.textContent = "Add a patient sheet before copying.";
+        return;
+      }
+      const plainText = plainTextForSheets(sheets);
+      const html = sheets.map((sheet) => sheet.outerHTML).join('<br style="page-break-before: always;">');
+      try {
+        if (navigator.clipboard && window.isSecureContext && window.ClipboardItem) {
+          const item = new ClipboardItem({
+            "text/html": new Blob([html], { type: "text/html" }),
+            "text/plain": new Blob([plainText], { type: "text/plain" })
+          });
+          await navigator.clipboard.write([item]);
+        } else if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(plainText);
+        } else {
+          const temporary = document.createElement("textarea");
+          temporary.value = plainText;
+          temporary.setAttribute("readonly", "");
+          temporary.style.position = "fixed";
+          temporary.style.opacity = "0";
+          document.body.append(temporary);
+          temporary.select();
+          const copied = document.execCommand("copy");
+          temporary.remove();
+          if (!copied) throw new Error("Clipboard copy was not available");
+        }
+        preRoundsStatus.textContent = successMessage;
+      } catch (error) {
+        preRoundsStatus.textContent = "Copy unavailable. Select the preview sheet and copy it manually.";
+      }
+    }
+
+    preRoundsPatients.addEventListener("input", (event) => {
+      const card = event.target.closest(".pre-rounds-patient-form");
+      if (event.target.matches("[data-emr-labs]")) {
+        applyEmrLabs(card);
+        return;
+      }
+      renderPreRounds();
+    });
+    preRoundsPatients.addEventListener("click", (event) => {
+      const removeButton = event.target.closest("[data-remove-patient]");
+      if (!removeButton) return;
+      const card = removeButton.closest(".pre-rounds-patient-form");
+      if (preRoundsPatients.children.length === 1) {
+        card.querySelectorAll("input, textarea").forEach((field) => {
+          field.value = "";
+        });
+        card.querySelector("[data-lab-status]").textContent = "";
+        card._unrecognizedLabs = [];
+        renderPreRounds();
+        return;
+      }
+      if (card.dataset.patientId === selectedPreRoundsPatientId) {
+        const cards = [...preRoundsPatients.querySelectorAll(".pre-rounds-patient-form")];
+        const removedIndex = cards.indexOf(card);
+        selectedPreRoundsPatientId = cards[removedIndex - 1]?.dataset.patientId
+          || cards[removedIndex + 1]?.dataset.patientId
+          || "";
+      }
+      card.remove();
+      renderPreRounds();
+    });
+    preRoundsPatientTabs.addEventListener("click", (event) => {
+      const tab = event.target.closest("[role='tab']");
+      if (!tab || !preRoundsPatientTabs.contains(tab)) return;
+      selectedPreRoundsPatientId = tab.dataset.patientId;
+      renderPreRounds();
+    });
+    preRoundsPatientTabs.addEventListener("keydown", (event) => {
+      const tab = event.target.closest("[role='tab']");
+      if (!tab || !preRoundsPatientTabs.contains(tab)) return;
+      const tabs = [...preRoundsPatientTabs.children];
+      const index = tabs.indexOf(tab);
+      let nextIndex;
+      if (event.key === "ArrowRight") nextIndex = (index + 1) % tabs.length;
+      else if (event.key === "ArrowLeft") nextIndex = (index - 1 + tabs.length) % tabs.length;
+      else if (event.key === "Home") nextIndex = 0;
+      else if (event.key === "End") nextIndex = tabs.length - 1;
+      else return;
+      event.preventDefault();
+      selectedPreRoundsPatientId = tabs[nextIndex].dataset.patientId;
+      renderPreRounds();
+      preRoundsPatientTabs.children[nextIndex].focus();
+    });
+    document.getElementById("add-pre-rounds-patient").addEventListener("click", () => {
+      const patient = document.getElementById("pre-rounds-patient-template").content.cloneNode(true);
+      const patientCard = patient.querySelector(".pre-rounds-patient-form");
+      patientCard.dataset.patientId = `pre-rounds-patient-${++preRoundsPatientCount}`;
+      selectedPreRoundsPatientId = patientCard.dataset.patientId;
+      preRoundsPatients.append(patient);
+      renderPreRounds();
+      preRoundsPatients.lastElementChild.querySelector('[data-field="name"]').focus();
+    });
+    preRoundsPreviewList.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-copy-patient]");
+      if (!button) return;
+      const sheet = preRoundsPreviewList.querySelectorAll(".pre-rounds-sheet")[Number(button.dataset.copyPatient)];
+      copyPreRoundsSheets(sheet ? [sheet] : [], `Patient ${Number(button.dataset.copyPatient) + 1} copied.`);
+    });
+    document.getElementById("copy-all-pre-rounds").addEventListener("click", () => {
+      copyPreRoundsSheets([...preRoundsPreviewList.querySelectorAll(".pre-rounds-sheet")], "All patient sheets copied.");
+    });
+    document.getElementById("print-pre-rounds").addEventListener("click", () => window.print());
+    const firstPreRoundsPatient = document.getElementById("pre-rounds-patient-template").content.cloneNode(true);
+    firstPreRoundsPatient.querySelector(".pre-rounds-patient-form").dataset.patientId = `pre-rounds-patient-${++preRoundsPatientCount}`;
+    selectedPreRoundsPatientId = firstPreRoundsPatient.querySelector(".pre-rounds-patient-form").dataset.patientId;
+    preRoundsPatients.append(firstPreRoundsPatient);
+    renderPreRounds();
+
     const finding = (group, id, label, affirmative, negative, normalWhen) => ({ group, id, label, affirmative, negative, normalWhen });
     const systems = [
       { id: "general", label: "General", icon: "GN", normal: "Well-developed, well-nourished, in no acute distress (NAD).", findings: [
@@ -951,12 +1930,12 @@
         finding("Inspection / Palpation", "abdomen-soft", "Soft", "Abdomen soft.", "Abdomen not soft.", "affirmative"),
         finding("Inspection / Palpation", "abdomen-nontender", "Non-Tender", "Abdomen non-tender.", "Abdominal tenderness present.", "affirmative"),
         finding("Inspection / Palpation", "abdomen-nondistended", "Non-Distended", "Abdomen non-distended.", "Abdominal distension present.", "affirmative"),
-        finding("Tenderness by Region", "tender-ruq", "Tender to Palpation - RUQ", "Tender to palpation in RUQ.", "No RUQ tenderness.", "negative"),
-        finding("Tenderness by Region", "tender-luq", "Tender to Palpation - LUQ", "Tender to palpation in LUQ.", "No LUQ tenderness.", "negative"),
-        finding("Tenderness by Region", "tender-rlq", "Tender to Palpation - RLQ", "Tender to palpation in RLQ.", "No RLQ tenderness.", "negative"),
-        finding("Tenderness by Region", "tender-llq", "Tender to Palpation - LLQ", "Tender to palpation in LLQ.", "No LLQ tenderness.", "negative"),
-        finding("Tenderness by Region", "tender-epigastric", "Tender to Palpation - Epigastric", "Epigastric tenderness to palpation.", "No epigastric tenderness.", "negative"),
-        finding("Tenderness by Region", "tender-suprapubic", "Tender to Palpation - Suprapubic", "Suprapubic tenderness to palpation.", "No suprapubic tenderness.", "negative"),
+        finding("Tenderness by Region", "tender-ruq", "RUQ", "Tender to palpation in RUQ.", "No RUQ tenderness.", "negative"),
+        finding("Tenderness by Region", "tender-luq", "LUQ", "Tender to palpation in LUQ.", "No LUQ tenderness.", "negative"),
+        finding("Tenderness by Region", "tender-rlq", "RLQ", "Tender to palpation in RLQ.", "No RLQ tenderness.", "negative"),
+        finding("Tenderness by Region", "tender-llq", "LLQ", "Tender to palpation in LLQ.", "No LLQ tenderness.", "negative"),
+        finding("Tenderness by Region", "tender-epigastric", "Epigastric", "Epigastric tenderness to palpation.", "No epigastric tenderness.", "negative"),
+        finding("Tenderness by Region", "tender-suprapubic", "Suprapubic", "Suprapubic tenderness to palpation.", "No suprapubic tenderness.", "negative"),
         finding("Peritoneal Signs", "no-guarding-rebound", "No Guarding / Rebound", "No guarding or rebound tenderness.", "Guarding or rebound tenderness present.", "affirmative"),
         finding("Peritoneal Signs", "guarding-present", "Guarding Present", "Abdominal guarding present.", "No guarding.", "negative"),
         finding("Peritoneal Signs", "rebound-tenderness", "Rebound Tenderness", "Rebound tenderness present.", "No rebound tenderness.", "negative"),
@@ -1082,7 +2061,12 @@
       ["ctab", "decreased-breath-sounds"],
       ["ctab", "stridor"],
       ["abdomen-soft", "rigid-abdomen"],
-      ["abdomen-nontender", "tender-ruq", "tender-luq", "tender-rlq", "tender-llq", "tender-epigastric", "tender-suprapubic"],
+      ["abdomen-nontender", "tender-ruq"],
+      ["abdomen-nontender", "tender-luq"],
+      ["abdomen-nontender", "tender-rlq"],
+      ["abdomen-nontender", "tender-llq"],
+      ["abdomen-nontender", "tender-epigastric"],
+      ["abdomen-nontender", "tender-suprapubic"],
       ["no-guarding-rebound", "guarding-present"],
       ["no-guarding-rebound", "rebound-tenderness"],
       ["normal-bowel-sounds", "hyperactive-bowel-sounds", "hypoactive-bowel-sounds", "absent-bowel-sounds"],
@@ -1132,8 +2116,86 @@
     const copyButton = $("#copy-button");
     const copyStatus = $("#copy-status");
     const form = $("#exam-form");
+    const preview = $(".preview");
+    const previewCollapse = $("#preview-collapse");
+    let hoveredFinding = null;
+    let activeFindingEditor = null;
+    let findingEditorOriginalDetail = "";
+    let findingDetailEditor;
+    let findingDetailInput;
 
     function initialize() {
+      findingDetailEditor = document.createElement("div");
+      findingDetailEditor.className = "finding-detail-editor";
+      findingDetailEditor.setAttribute("role", "dialog");
+      findingDetailEditor.setAttribute("aria-label", "Specify exam finding");
+      findingDetailEditor.hidden = true;
+      const editorLabel = document.createElement("label");
+      editorLabel.htmlFor = "finding-detail-input";
+      editorLabel.textContent = "Specify this finding";
+      findingDetailInput = document.createElement("textarea");
+      findingDetailInput.id = "finding-detail-input";
+      findingDetailInput.setAttribute("aria-label", "Additional details for this exam finding");
+      findingDetailInput.placeholder = "Add details for this finding";
+      const editorActions = document.createElement("div");
+      editorActions.className = "finding-detail-actions";
+      const rejectButton = document.createElement("button");
+      rejectButton.type = "button";
+      rejectButton.className = "finding-detail-reject";
+      rejectButton.setAttribute("aria-label", "Reject typed details");
+      rejectButton.title = "Reject";
+      rejectButton.textContent = "×";
+      const acceptButton = document.createElement("button");
+      acceptButton.type = "button";
+      acceptButton.className = "finding-detail-accept";
+      acceptButton.setAttribute("aria-label", "Accept typed details");
+      acceptButton.title = "Accept";
+      acceptButton.textContent = "✓";
+      editorActions.append(rejectButton, acceptButton);
+      findingDetailEditor.append(editorLabel, findingDetailInput, editorActions);
+      document.body.append(findingDetailEditor);
+
+      rejectButton.addEventListener("pointerdown", (event) => event.preventDefault());
+      acceptButton.addEventListener("pointerdown", (event) => event.preventDefault());
+      rejectButton.addEventListener("click", rejectFindingDetail);
+      acceptButton.addEventListener("click", acceptFindingDetail);
+      findingDetailInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          acceptFindingDetail();
+        } else if (event.key === "Escape") {
+          event.preventDefault();
+          rejectFindingDetail();
+        }
+      });
+      findingDetailEditor.addEventListener("focusout", () => {
+        window.setTimeout(() => {
+          if (activeFindingEditor && !findingDetailEditor.contains(document.activeElement)) acceptFindingDetail();
+        }, 0);
+      });
+      document.addEventListener("pointerdown", (event) => {
+        if (activeFindingEditor && !findingDetailEditor.contains(event.target)) acceptFindingDetail();
+      });
+      window.addEventListener("blur", acceptFindingDetail);
+      document.addEventListener("keydown", (event) => {
+        if (activeFindingEditor || event.key.length !== 1 || event.ctrlKey || event.metaKey || event.altKey) return;
+        const focusedChoice = document.activeElement.closest?.(".finding-choice");
+        const choice = focusedChoice || hoveredFinding;
+        if (!choice || !choice.isConnected) return;
+        event.preventDefault();
+        openFindingDetailEditor(choice, event.key);
+      });
+      systemFields.addEventListener("pointerover", (event) => {
+        const choice = event.target.closest(".finding-choice");
+        if (!choice) return;
+        if (activeFindingEditor && activeFindingEditor !== choice) acceptFindingDetail();
+        hoveredFinding = choice;
+      });
+      systemFields.addEventListener("pointerout", (event) => {
+        const choice = event.target.closest(".finding-choice");
+        if (choice && !choice.contains(event.relatedTarget) && hoveredFinding === choice) hoveredFinding = null;
+      });
+
       for (const system of systems) {
         const link = document.createElement("button");
         link.className = "system-link";
@@ -1142,6 +2204,7 @@
         link.innerHTML = `<span class="system-icon" aria-hidden="true">${system.icon}</span><span>${system.label}</span><span class="system-state" aria-hidden="true"></span>`;
         link.addEventListener("click", () => {
           const target = document.getElementById(system.id);
+          target.open = true;
           target.scrollIntoView({ behavior: "smooth", block: "start" });
           setActiveSystem(system.id);
         });
@@ -1155,7 +2218,7 @@
         const groupedChoices = groups.map((group) => {
           const choices = system.findings
             .filter((finding) => finding.group === group)
-            .map((finding) => `<button class="finding-choice" type="button" data-finding-id="${finding.id}" data-state="clear" aria-pressed="false" aria-label="${finding.label}. Not selected. Click or press Enter for affirmative; right-click or press Shift+Enter for negative; repeat to clear." title="Left-click: affirmative. Right-click: negative. Repeat the same action to clear.">${finding.label}</button>`)
+            .map((finding) => `<button class="finding-choice" type="button" data-finding-id="${finding.id}" data-state="clear" aria-pressed="false" aria-label="${finding.label}. Not selected. Click or press Enter for affirmative; right-click or press Shift+Enter for negative; hover and type to add details; repeat to clear." title="Left-click: affirmative. Right-click: negative. Repeat to clear. Hover and type to add details.">${finding.label}</button>`)
             .join("");
           return `<div class="finding-group"><span class="finding-group-label">${group}</span><div class="finding-options" role="group" aria-label="${system.label}: ${group}">${choices}</div></div>`;
         }).join("");
@@ -1198,6 +2261,14 @@
       form.addEventListener("change", updateNote);
       $("#clear-button").addEventListener("click", clearExam);
       copyButton.addEventListener("click", copyNote);
+      previewCollapse.addEventListener("click", () => {
+        const collapsed = preview.dataset.collapsed !== "true";
+        preview.dataset.collapsed = String(collapsed);
+        previewCollapse.setAttribute("aria-expanded", String(!collapsed));
+        previewCollapse.setAttribute("aria-label", `${collapsed ? "Expand" : "Minimize"} note preview`);
+        previewCollapse.title = `${collapsed ? "Expand" : "Minimize"} note preview`;
+        previewCollapse.textContent = collapsed ? "+" : "−";
+      });
       updateNote();
     }
 
@@ -1215,11 +2286,79 @@
       return lines.join("\n");
     }
 
+    function positionFindingDetailEditor(button) {
+      const rect = button.getBoundingClientRect();
+      const editorRect = findingDetailEditor.getBoundingClientRect();
+      const left = Math.max(12, Math.min(rect.left, window.innerWidth - editorRect.width - 12));
+      const below = rect.bottom + 8;
+      const top = below + editorRect.height <= window.innerHeight - 12
+        ? below
+        : Math.max(12, rect.top - editorRect.height - 8);
+      findingDetailEditor.style.left = `${left}px`;
+      findingDetailEditor.style.top = `${top}px`;
+    }
+
+    function ensureFindingPositive(button) {
+      const system = systems.find((item) => item.id === button.closest(".system-section").id);
+      const otherFindings = $(`#finding-${system.id}`);
+      if (otherFindings.value.trim() === system.normal) otherFindings.value = "";
+      const conflictingIds = new Set(mutuallyExclusiveAffirmative
+        .filter((set) => set.includes(button.dataset.findingId))
+        .flat());
+      for (const id of conflictingIds) {
+        if (id === button.dataset.findingId) continue;
+        const conflictingButton = systemFields.querySelector(`.finding-choice[data-finding-id="${id}"]`);
+        if (conflictingButton?.dataset.state === "affirmative") setFindingState(conflictingButton, "clear");
+      }
+      setFindingState(button, "affirmative");
+      updateNote();
+    }
+
+    function openFindingDetailEditor(button, initialCharacter) {
+      if (activeFindingEditor) acceptFindingDetail();
+      activeFindingEditor = button;
+      findingEditorOriginalDetail = button.dataset.detail || "";
+      ensureFindingPositive(button);
+      findingDetailInput.value = findingEditorOriginalDetail;
+      findingDetailEditor.hidden = false;
+      positionFindingDetailEditor(button);
+      if (initialCharacter) {
+        findingDetailInput.value += initialCharacter;
+      }
+      findingDetailInput.focus();
+      findingDetailInput.setSelectionRange(findingDetailInput.value.length, findingDetailInput.value.length);
+    }
+
+    function acceptFindingDetail() {
+      if (!activeFindingEditor) return;
+      const button = activeFindingEditor;
+      const detail = findingDetailInput.value.trim();
+      if (detail) button.dataset.detail = detail;
+      else delete button.dataset.detail;
+      activeFindingEditor = null;
+      findingDetailEditor.hidden = true;
+      updateNote();
+    }
+
+    function rejectFindingDetail() {
+      if (!activeFindingEditor) return;
+      const button = activeFindingEditor;
+      if (findingEditorOriginalDetail) button.dataset.detail = findingEditorOriginalDetail;
+      else delete button.dataset.detail;
+      activeFindingEditor = null;
+      findingDetailEditor.hidden = true;
+      updateNote();
+    }
+
     function getSystemFindings(system) {
       const section = document.getElementById(system.id);
       const selected = [...section.querySelectorAll(".finding-choice")].flatMap((button) => {
         const finding = system.findings.find((item) => item.id === button.dataset.findingId);
-        if (button.dataset.state === "affirmative") return [finding.affirmative];
+        if (button.dataset.state === "affirmative") {
+          const detail = button.dataset.detail?.trim();
+          const text = finding.affirmative.replace(/\.$/, "");
+          return [`${text}${detail ? ` (${detail})` : ""}.`];
+        }
         if (button.dataset.state === "negative") return [finding.negative];
         return [];
       });
@@ -1232,6 +2371,7 @@
       button.setAttribute("aria-pressed", String(state !== "clear"));
       const system = systems.find((item) => item.id === button.closest(".system-section").id);
       const finding = system.findings.find((item) => item.id === button.dataset.findingId);
+      if (state !== "affirmative") delete button.dataset.detail;
       if (state === "clear") delete button.dataset.normality;
       else button.dataset.normality = state === finding.normalWhen ? "normal" : "abnormal";
       const status = state === "clear" ? "not selected" : `${button.dataset.normality}, ${state} selected`;
@@ -1310,6 +2450,7 @@
 
     function clearExam() {
       if (!window.confirm("Clear all exam findings?")) return;
+      if (activeFindingEditor) rejectFindingDetail();
       form.reset();
       for (const choice of systemFields.querySelectorAll(".finding-choice")) setFindingState(choice, "clear");
       setActiveSystem("");
@@ -1317,6 +2458,325 @@
     }
 
     initialize();
+
+    const rosFinding = (id, label, positive, negative) => ({ id, label, positive, negative });
+    const rosSystems = [
+      { id: "ros-constitutional", label: "Constitutional", icon: "CO", normal: "Negative for fever, chills, fatigue, night sweats, and unexpected weight change.", findings: [
+        rosFinding("ros-fever", "Fever", "Reports fever.", "Denies fever."),
+        rosFinding("ros-chills", "Chills", "Reports chills.", "Denies chills."),
+        rosFinding("ros-fatigue", "Fatigue", "Reports fatigue.", "Denies fatigue."),
+        rosFinding("ros-night-sweats", "Night sweats", "Reports night sweats.", "Denies night sweats."),
+        rosFinding("ros-weight-loss", "Weight loss", "Reports unintentional weight loss.", "Denies unintentional weight loss."),
+        rosFinding("ros-weight-gain", "Weight gain", "Reports weight gain.", "Denies weight gain."),
+        rosFinding("ros-appetite-change", "Appetite change", "Reports appetite change.", "Denies appetite change.")
+      ] },
+      { id: "ros-eyes", label: "Eyes", icon: "EY", normal: "Negative for vision changes, eye pain, redness, or discharge.", findings: [
+        rosFinding("ros-vision-change", "Vision change", "Reports vision changes.", "Denies vision changes."),
+        rosFinding("ros-blurred-vision", "Blurred vision", "Reports blurred vision.", "Denies blurred vision."),
+        rosFinding("ros-diplopia", "Diplopia", "Reports diplopia.", "Denies diplopia."),
+        rosFinding("ros-eye-pain", "Eye pain", "Reports eye pain.", "Denies eye pain."),
+        rosFinding("ros-eye-redness", "Redness", "Reports eye redness.", "Denies eye redness."),
+        rosFinding("ros-eye-discharge", "Discharge", "Reports eye discharge.", "Denies eye discharge."),
+        rosFinding("ros-photophobia", "Photophobia", "Reports photophobia.", "Denies photophobia.")
+      ] },
+      { id: "ros-ent", label: "Ears, Nose & Throat", icon: "EN", normal: "Negative for hearing loss, ear pain, congestion, sore throat, or dysphagia.", findings: [
+        rosFinding("ros-hearing-loss", "Hearing loss", "Reports hearing loss.", "Denies hearing loss."),
+        rosFinding("ros-ear-pain", "Ear pain", "Reports ear pain.", "Denies ear pain."),
+        rosFinding("ros-tinnitus", "Tinnitus", "Reports tinnitus.", "Denies tinnitus."),
+        rosFinding("ros-congestion", "Congestion", "Reports nasal congestion.", "Denies nasal congestion."),
+        rosFinding("ros-rhinorrhea", "Rhinorrhea", "Reports rhinorrhea.", "Denies rhinorrhea."),
+        rosFinding("ros-sore-throat", "Sore throat", "Reports sore throat.", "Denies sore throat."),
+        rosFinding("ros-hoarseness", "Hoarseness", "Reports hoarseness.", "Denies hoarseness."),
+        rosFinding("ros-dysphagia", "Dysphagia", "Reports dysphagia.", "Denies dysphagia.")
+      ] },
+      { id: "ros-cardiovascular", label: "Cardiovascular", icon: "CV", normal: "Negative for chest pain, palpitations, orthopnea, or peripheral edema.", findings: [
+        rosFinding("ros-chest-pain", "Chest pain", "Reports chest pain.", "Denies chest pain."),
+        rosFinding("ros-palpitations", "Palpitations", "Reports palpitations.", "Denies palpitations."),
+        rosFinding("ros-orthopnea", "Orthopnea", "Reports orthopnea.", "Denies orthopnea."),
+        rosFinding("ros-pnd", "PND", "Reports paroxysmal nocturnal dyspnea.", "Denies paroxysmal nocturnal dyspnea."),
+        rosFinding("ros-edema", "Peripheral edema", "Reports peripheral edema.", "Denies peripheral edema."),
+        rosFinding("ros-syncope", "Syncope", "Reports syncope.", "Denies syncope.")
+      ] },
+      { id: "ros-respiratory", label: "Respiratory", icon: "RS", normal: "Negative for cough, dyspnea, wheezing, or hemoptysis.", findings: [
+        rosFinding("ros-cough", "Cough", "Reports cough.", "Denies cough."),
+        rosFinding("ros-dyspnea", "Dyspnea", "Reports dyspnea.", "Denies dyspnea."),
+        rosFinding("ros-wheezing", "Wheezing", "Reports wheezing.", "Denies wheezing."),
+        rosFinding("ros-hemoptysis", "Hemoptysis", "Reports hemoptysis.", "Denies hemoptysis."),
+        rosFinding("ros-sputum", "Sputum", "Reports sputum production.", "Denies sputum production.")
+      ] },
+      { id: "ros-gastrointestinal", label: "Gastrointestinal", icon: "GI", normal: "Negative for abdominal pain, nausea, vomiting, diarrhea, or constipation.", findings: [
+        rosFinding("ros-abdominal-pain", "Abdominal pain", "Reports abdominal pain.", "Denies abdominal pain."),
+        rosFinding("ros-nausea", "Nausea", "Reports nausea.", "Denies nausea."),
+        rosFinding("ros-vomiting", "Vomiting", "Reports vomiting.", "Denies vomiting."),
+        rosFinding("ros-diarrhea", "Diarrhea", "Reports diarrhea.", "Denies diarrhea."),
+        rosFinding("ros-constipation", "Constipation", "Reports constipation.", "Denies constipation."),
+        rosFinding("ros-melena", "Melena", "Reports melena.", "Denies melena."),
+        rosFinding("ros-hematochezia", "Hematochezia", "Reports hematochezia.", "Denies hematochezia."),
+        rosFinding("ros-heartburn", "Heartburn", "Reports heartburn.", "Denies heartburn.")
+      ] },
+      { id: "ros-genitourinary", label: "Genitourinary", icon: "GU", normal: "Negative for dysuria, frequency, urgency, or hematuria.", findings: [
+        rosFinding("ros-dysuria", "Dysuria", "Reports dysuria.", "Denies dysuria."),
+        rosFinding("ros-frequency", "Frequency", "Reports urinary frequency.", "Denies urinary frequency."),
+        rosFinding("ros-urgency", "Urgency", "Reports urinary urgency.", "Denies urinary urgency."),
+        rosFinding("ros-hematuria", "Hematuria", "Reports hematuria.", "Denies hematuria."),
+        rosFinding("ros-flank-pain", "Flank pain", "Reports flank pain.", "Denies flank pain."),
+        rosFinding("ros-incontinence", "Incontinence", "Reports urinary incontinence.", "Denies urinary incontinence."),
+        rosFinding("ros-discharge", "Discharge", "Reports genitourinary discharge.", "Denies genitourinary discharge.")
+      ] },
+      { id: "ros-musculoskeletal", label: "Musculoskeletal", icon: "MS", normal: "Negative for myalgias, arthralgias, back pain, or joint swelling.", findings: [
+        rosFinding("ros-myalgia", "Myalgias", "Reports myalgias.", "Denies myalgias."),
+        rosFinding("ros-arthralgia", "Arthralgias", "Reports arthralgias.", "Denies arthralgias."),
+        rosFinding("ros-back-pain", "Back pain", "Reports back pain.", "Denies back pain."),
+        rosFinding("ros-joint-swelling", "Joint swelling", "Reports joint swelling.", "Denies joint swelling."),
+        rosFinding("ros-joint-stiffness", "Joint stiffness", "Reports joint stiffness.", "Denies joint stiffness."),
+        rosFinding("ros-neck-pain", "Neck pain", "Reports neck pain.", "Denies neck pain.")
+      ] },
+      { id: "ros-skin", label: "Skin", icon: "SK", normal: "Negative for rash, pruritus, or skin lesions.", findings: [
+        rosFinding("ros-rash", "Rash", "Reports rash.", "Denies rash."),
+        rosFinding("ros-pruritus", "Pruritus", "Reports pruritus.", "Denies pruritus."),
+        rosFinding("ros-skin-lesions", "Skin lesions", "Reports skin lesions.", "Denies skin lesions."),
+        rosFinding("ros-color-change", "Color change", "Reports skin color change.", "Denies skin color change.")
+      ] },
+      { id: "ros-neurologic", label: "Neurologic", icon: "NE", normal: "Negative for headache, dizziness, weakness, numbness, or paresthesias.", findings: [
+        rosFinding("ros-headache", "Headache", "Reports headache.", "Denies headache."),
+        rosFinding("ros-dizziness", "Dizziness", "Reports dizziness.", "Denies dizziness."),
+        rosFinding("ros-weakness", "Weakness", "Reports weakness.", "Denies weakness."),
+        rosFinding("ros-numbness", "Numbness", "Reports numbness.", "Denies numbness."),
+        rosFinding("ros-paresthesias", "Paresthesias", "Reports paresthesias.", "Denies paresthesias."),
+        rosFinding("ros-tremor", "Tremor", "Reports tremor.", "Denies tremor."),
+        rosFinding("ros-gait-change", "Gait change", "Reports gait changes.", "Denies gait changes.")
+      ] },
+      { id: "ros-psychiatric", label: "Psychiatric", icon: "PS", normal: "Negative for anxiety, depression, or sleep disturbance.", findings: [
+        rosFinding("ros-anxiety", "Anxiety", "Reports anxiety.", "Denies anxiety."),
+        rosFinding("ros-depression", "Depression", "Reports depression.", "Denies depression."),
+        rosFinding("ros-sleep", "Sleep disturbance", "Reports sleep disturbance.", "Denies sleep disturbance."),
+        rosFinding("ros-mood-change", "Mood change", "Reports mood changes.", "Denies mood changes."),
+        rosFinding("ros-confusion", "Confusion", "Reports confusion.", "Denies confusion.")
+      ] },
+      { id: "ros-endocrine", label: "Endocrine", icon: "ED", normal: "Negative for heat or cold intolerance, polydipsia, or polyuria.", findings: [
+        rosFinding("ros-heat-intolerance", "Heat intolerance", "Reports heat intolerance.", "Denies heat intolerance."),
+        rosFinding("ros-cold-intolerance", "Cold intolerance", "Reports cold intolerance.", "Denies cold intolerance."),
+        rosFinding("ros-polydipsia", "Polydipsia", "Reports polydipsia.", "Denies polydipsia."),
+        rosFinding("ros-polyuria", "Polyuria", "Reports polyuria.", "Denies polyuria."),
+        rosFinding("ros-polyphagia", "Polyphagia", "Reports polyphagia.", "Denies polyphagia.")
+      ] },
+      { id: "ros-hematologic", label: "Hematologic / Lymphatic", icon: "HM", normal: "Negative for easy bruising, bleeding, or lymphadenopathy.", findings: [
+        rosFinding("ros-bruising", "Easy bruising", "Reports easy bruising.", "Denies easy bruising."),
+        rosFinding("ros-bleeding", "Abnormal bleeding", "Reports abnormal bleeding.", "Denies abnormal bleeding."),
+        rosFinding("ros-lymphadenopathy", "Lymphadenopathy", "Reports swollen lymph nodes.", "Denies swollen lymph nodes.")
+      ] },
+      { id: "ros-allergic", label: "Allergic / Immunologic", icon: "AL", normal: "Negative for environmental allergies, urticaria, or recurrent infections.", findings: [
+        rosFinding("ros-allergies", "Environmental allergies", "Reports environmental allergies.", "Denies environmental allergies."),
+        rosFinding("ros-urticaria", "Urticaria", "Reports urticaria.", "Denies urticaria."),
+        rosFinding("ros-recurrent-infections", "Recurrent infections", "Reports recurrent infections.", "Denies recurrent infections.")
+      ] }
+    ];
+
+    function initializeRos() {
+      const nav = document.getElementById("ros-system-nav");
+      const fields = document.getElementById("ros-system-fields");
+      const output = document.getElementById("ros-note-output");
+      const copyButton = document.getElementById("ros-copy-button");
+      const copyStatus = document.getElementById("ros-copy-status");
+      const preview = document.getElementById("ros-preview");
+      const collapseButton = document.getElementById("ros-preview-collapse");
+      const rosForm = document.getElementById("ros-form");
+
+      for (const system of rosSystems) {
+        const link = document.createElement("button");
+        link.className = "system-link";
+        link.type = "button";
+        link.dataset.target = system.id;
+        link.innerHTML = `<span class="system-icon" aria-hidden="true">${system.icon}</span><span>${system.label}</span><span class="system-state" aria-hidden="true"></span>`;
+        link.addEventListener("click", () => {
+          const section = document.getElementById(system.id);
+          section.open = true;
+          section.scrollIntoView({ behavior: "smooth", block: "start" });
+          for (const item of nav.querySelectorAll(".system-link")) {
+            const active = item === link;
+            item.classList.toggle("active", active);
+            if (active) item.setAttribute("aria-current", "location");
+            else item.removeAttribute("aria-current");
+          }
+        });
+        nav.append(link);
+
+        const section = document.createElement("details");
+        section.className = "system-section";
+        section.id = system.id;
+        section.open = true;
+        const summary = document.createElement("summary");
+        summary.className = "system-summary";
+        const heading = document.createElement("h3");
+        heading.textContent = system.label;
+        const count = document.createElement("span");
+        count.className = "system-summary-count";
+        count.id = `${system.id}-summary-count`;
+        count.textContent = `${system.findings.length} options`;
+        summary.append(heading, count);
+
+        const content = document.createElement("div");
+        content.className = "system-content";
+        const options = document.createElement("div");
+        options.className = "finding-options";
+        options.setAttribute("role", "group");
+        options.setAttribute("aria-label", `${system.label} symptoms`);
+        for (const item of system.findings) {
+          const choice = document.createElement("button");
+          choice.className = "finding-choice ros-choice";
+          choice.type = "button";
+          choice.dataset.findingId = item.id;
+          choice.dataset.state = "clear";
+          choice.setAttribute("aria-pressed", "false");
+          choice.setAttribute("aria-label", `${item.label}. Not selected. Click for positive; right-click or Shift+Enter for negative; repeat to clear.`);
+          choice.title = "Left-click: positive. Right-click: negative. Repeat the same action to clear.";
+          choice.textContent = item.label;
+          options.append(choice);
+        }
+        const label = document.createElement("label");
+        label.className = "field-label";
+        label.htmlFor = `finding-${system.id}`;
+        label.textContent = "Other findings";
+        const other = document.createElement("textarea");
+        other.id = `finding-${system.id}`;
+        other.dataset.rosSystem = system.id;
+        other.placeholder = `Enter other ${system.label.toLowerCase()} symptoms`;
+        other.rows = 2;
+        const actions = document.createElement("div");
+        actions.className = "system-actions";
+        const normalButton = document.createElement("button");
+        normalButton.className = "normal-button";
+        normalButton.type = "button";
+        normalButton.dataset.rosNormal = system.id;
+        normalButton.title = "Insert a normal review for this system and clear selected symptoms";
+        normalButton.textContent = "Normal";
+        actions.append(normalButton);
+        content.append(options, label, other, actions);
+        section.append(summary, content);
+        fields.append(section);
+      }
+
+      const render = () => {
+        const lines = ["REVIEW OF SYSTEMS"];
+        let documented = 0;
+        for (const system of rosSystems) {
+          const section = document.getElementById(system.id);
+          const findings = [...section.querySelectorAll(".ros-choice")].flatMap((choice) => {
+            const item = system.findings.find((finding) => finding.id === choice.dataset.findingId);
+            if (choice.dataset.state === "affirmative") return [`(+) ${item.label}`];
+            if (choice.dataset.state === "negative") return [`(-) ${item.label}`];
+            return [];
+          });
+          const other = section.querySelector("textarea").value.trim();
+          const systemText = [...findings, other].filter(Boolean).join(" ");
+          if (systemText) {
+            lines.push(`${system.label}: ${systemText}`);
+            documented += 1;
+          }
+          const navItem = nav.querySelector(`[data-target="${system.id}"]`);
+          navItem.querySelector(".system-state").classList.toggle("done", Boolean(systemText));
+          const selectedCount = section.querySelectorAll('.ros-choice[data-state="affirmative"], .ros-choice[data-state="negative"]').length;
+          document.getElementById(`${system.id}-summary-count`).textContent = selectedCount
+            ? `${selectedCount} selected`
+            : other ? "Other findings" : `${system.findings.length} options`;
+        }
+        output.textContent = lines.join("\n");
+        copyButton.disabled = documented === 0;
+        document.getElementById("ros-completion").textContent = `${documented} of ${rosSystems.length} documented`;
+        document.getElementById("ros-note-count").textContent = `${output.textContent.length} characters`;
+        copyStatus.textContent = "";
+      };
+
+      fields.addEventListener("click", (event) => {
+        const choice = event.target.closest(".ros-choice");
+        if (choice) {
+          const system = rosSystems.find((item) => item.id === choice.closest(".system-section").id);
+          const other = choice.closest(".system-section").querySelector("textarea");
+          if (other.value.trim() === system.normal) other.value = "";
+          const state = choice.dataset.state === "affirmative" ? "clear" : "affirmative";
+          setRosChoice(choice, state);
+          render();
+          return;
+        }
+        const normalButton = event.target.closest("[data-ros-normal]");
+        if (normalButton) {
+          const system = rosSystems.find((item) => item.id === normalButton.dataset.rosNormal);
+          const section = document.getElementById(system.id);
+          for (const choiceItem of section.querySelectorAll(".ros-choice")) setRosChoice(choiceItem, "clear");
+          section.querySelector("textarea").value = system.normal;
+          render();
+        }
+      });
+      fields.addEventListener("contextmenu", (event) => {
+        const choice = event.target.closest(".ros-choice");
+        if (!choice) return;
+        event.preventDefault();
+        const system = rosSystems.find((item) => item.id === choice.closest(".system-section").id);
+        const other = choice.closest(".system-section").querySelector("textarea");
+        if (other.value.trim() === system.normal) other.value = "";
+        setRosChoice(choice, choice.dataset.state === "negative" ? "clear" : "negative");
+        render();
+      });
+      fields.addEventListener("keydown", (event) => {
+        const choice = event.target.closest(".ros-choice");
+        if (!choice || !event.shiftKey || (event.key !== "Enter" && event.key !== " ")) return;
+        event.preventDefault();
+        const system = rosSystems.find((item) => item.id === choice.closest(".system-section").id);
+        const other = choice.closest(".system-section").querySelector("textarea");
+        if (other.value.trim() === system.normal) other.value = "";
+        setRosChoice(choice, choice.dataset.state === "negative" ? "clear" : "negative");
+        render();
+      });
+      rosForm.addEventListener("input", render);
+      document.getElementById("ros-clear-button").addEventListener("click", () => {
+        if (!window.confirm("Clear all review-of-systems findings?")) return;
+        for (const choice of fields.querySelectorAll(".ros-choice")) setRosChoice(choice, "clear");
+        rosForm.reset();
+        render();
+      });
+      collapseButton.addEventListener("click", () => {
+        const collapsed = preview.dataset.collapsed !== "true";
+        preview.dataset.collapsed = String(collapsed);
+        collapseButton.setAttribute("aria-expanded", String(!collapsed));
+        collapseButton.setAttribute("aria-label", `${collapsed ? "Expand" : "Minimize"} note preview`);
+        collapseButton.title = `${collapsed ? "Expand" : "Minimize"} note preview`;
+        collapseButton.textContent = collapsed ? "+" : "−";
+      });
+      copyButton.addEventListener("click", async () => {
+        try {
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(output.textContent);
+          } else {
+            const temporary = document.createElement("textarea");
+            temporary.value = output.textContent;
+            temporary.setAttribute("readonly", "");
+            temporary.style.position = "fixed";
+            temporary.style.opacity = "0";
+            document.body.append(temporary);
+            temporary.select();
+            const copied = document.execCommand("copy");
+            temporary.remove();
+            if (!copied) throw new Error("Clipboard copy was not available");
+          }
+          copyStatus.textContent = "Copied";
+        } catch {
+          copyStatus.textContent = "Copy unavailable";
+        }
+      });
+      render();
+    }
+
+    function setRosChoice(button, state) {
+      button.dataset.state = state;
+      button.setAttribute("aria-pressed", String(state !== "clear"));
+      if (state === "clear") delete button.dataset.normality;
+      else button.dataset.normality = state === "negative" ? "normal" : "abnormal";
+      const item = rosSystems.flatMap((system) => system.findings).find((finding) => finding.id === button.dataset.findingId);
+      const status = state === "clear" ? "not selected" : `${state} selected`;
+      button.setAttribute("aria-label", `${item.label}. ${status}. Click for positive; right-click or Shift+Enter for negative; repeat to clear.`);
+    }
+
+    initializeRos();
   </script>
 </body>
 </html>
