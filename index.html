@@ -142,6 +142,18 @@
     .pre-rounds-sheet .pre-rounds-row-imaging > td,
     .pre-rounds-sheet .pre-rounds-row-assessment > td { background: #fff; }
     .pre-rounds-sheet .pre-rounds-imaging-result + .pre-rounds-imaging-result { margin-top: 4px; padding-top: 4px; border-top: 1px solid #aebdce; }
+    .pre-rounds-sheet .pre-rounds-susceptibility { margin-top: 3px; }
+    .pre-rounds-sheet .pre-rounds-susceptibility table { width: 100%; margin-top: 2px; border-collapse: collapse; table-layout: fixed; font-size: 9px; }
+    .pre-rounds-sheet .pre-rounds-susceptibility th,
+    .pre-rounds-sheet .pre-rounds-susceptibility td { padding: 2px 4px; border: 1px solid #c3cfdb; text-align: left; }
+    .pre-rounds-sheet .pre-rounds-susceptibility th { background: #f1f5f9; }
+    .pre-rounds-sheet .pre-rounds-susceptibility th:first-child,
+    .pre-rounds-sheet .pre-rounds-susceptibility td:first-child { width: 62%; }
+    .pre-rounds-sheet .pre-rounds-susceptibility th:nth-child(2),
+    .pre-rounds-sheet .pre-rounds-susceptibility td:nth-child(2) { width: 20%; white-space: nowrap; }
+    .pre-rounds-sheet .pre-rounds-susceptibility th:last-child,
+    .pre-rounds-sheet .pre-rounds-susceptibility td:last-child { width: 18%; white-space: nowrap; }
+    .pre-rounds-sheet .pre-rounds-susceptibility-legend { margin-top: 2px; font-size: 8px; color: #40546a; }
     .pre-rounds-sheet .pre-rounds-todo-list { display: grid; gap: 3px; }
     .pre-rounds-sheet .pre-rounds-todo-item { display: flex; gap: 4px; align-items: flex-start; }
     .pre-rounds-sheet .pre-rounds-todo-checkbox { flex: 0 0 auto; }
@@ -656,7 +668,7 @@
           <fieldset class="pre-rounds-labs">
             <legend>Labs</legend>
             <div class="pre-rounds-field pre-rounds-field--wide">
-              <label>Paste EMR labs<textarea data-emr-labs rows="4" placeholder="Paste lab results here; recognized results update automatically"></textarea></label>
+              <label>Paste EMR labs<textarea data-emr-labs rows="4" placeholder="Paste lab results in a table, CSV/TSV, or one result per line"></textarea></label>
               <span data-lab-status role="status"></span>
             </div>
             <div class="pre-rounds-lab-grid">
@@ -676,7 +688,7 @@
               <label>Plts<input data-field="plts" autocomplete="off"></label>
             </div>
           </fieldset>
-          <div class="pre-rounds-field pre-rounds-field--wide"><label>Imaging / Micro<textarea data-field="imaging" rows="3" placeholder="Paste reports; titles, dates, impressions, and key microbiology results appear in the worksheet"></textarea></label></div>
+          <div class="pre-rounds-field pre-rounds-field--wide"><label>Imaging / Micro<textarea data-field="imaging" rows="3" placeholder="Paste one or more reports; plain text, tables, and common EMR formats are supported"></textarea></label></div>
           <div class="pre-rounds-field pre-rounds-field--wide"><label>A&amp;P<textarea data-field="assessment" rows="4"></textarea></label></div>
           <div class="pre-rounds-field pre-rounds-field--wide"><label>To Dos<textarea data-field="todos" rows="3"></textarea></label></div>
         </div>
@@ -1225,8 +1237,8 @@
     }
 
     const emrLabAliases = new Map([
-      ["sodium", "na"], ["na", "na"],
-      ["potassium", "k"], ["k", "k"],
+      ["sodium", "na"], ["na", "na"], ["na+", "na"],
+      ["potassium", "k"], ["k", "k"], ["k+", "k"],
       ["chloride", "cl"], ["cl", "cl"],
       ["co2", "hco3"], ["carbon dioxide", "hco3"], ["bicarbonate", "hco3"], ["hco3", "hco3"],
       ["bun", "bun"], ["urea nitrogen", "bun"], ["blood urea nitrogen", "bun"],
@@ -1235,42 +1247,133 @@
       ["calcium", "ca"], ["ca", "ca"],
       ["magnesium", "mg"], ["mg", "mg"],
       ["phosphate", "po4"], ["phosphorus", "po4"], ["po4", "po4"],
-      ["white blood cell count", "wbc"], ["white blood cells", "wbc"], ["wbc", "wbc"],
-      ["hemoglobin", "hgb"], ["haemoglobin", "hgb"], ["hgb", "hgb"],
+      ["white blood cell count", "wbc"], ["white blood cell", "wbc"], ["white blood cells", "wbc"], ["leukocyte count", "wbc"], ["leukocytes", "wbc"], ["wbc count", "wbc"], ["wbc", "wbc"],
+      ["hemoglobin", "hgb"], ["haemoglobin", "hgb"], ["hgb", "hgb"], ["hb", "hgb"],
       ["hematocrit", "hct"], ["haematocrit", "hct"], ["hct", "hct"],
-      ["platelet count", "plts"], ["platelets", "plts"], ["platelet", "plts"], ["plt", "plts"], ["plts", "plts"]
+      ["platelet count", "plts"], ["platelets", "plts"], ["platelet", "plts"], ["plt count", "plts"], ["plt", "plts"], ["plts", "plts"]
     ].map(([name, field]) => [name.replace(/[^a-z0-9]/g, ""), field]));
 
     function parseEmrLabs(text) {
       const parsed = new Map();
       const unrecognized = [];
-      for (const line of text.split(/\r?\n/)) {
-        if (!line.trim()) continue;
-        const match = line.match(/^\s*([A-Za-z][A-Za-z0-9 /()+.-]*?)\s+([<>]?\s*\d+(?:\.\d+)?)(?=\s|$)/);
-        if (!match) {
-          unrecognized.push({ name: line.trim(), value: "", unit: "", referenceRange: "" });
-          continue;
-        }
-        const normalizedName = match[1].replace(/[^a-z0-9]/gi, "").toLocaleLowerCase();
+      const labNumberPattern = "(?:[<>]=?)?\\s*-?(?:\\d{1,3}(?:,\\d{3})+|\\d+)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?(?:\\s*(?:HH|LL|H|L|A|\\*))?";
+      const numericResult = new RegExp(`^${labNumberPattern}$`, "i");
+      const normalizeHeader = (value) => value.replace(/[^a-z0-9]/gi, "").toLocaleLowerCase();
+      const normalizeLabName = (value) => normalizeHeader(value
+        .replace(/\[[^\]]*\]/g, " ")
+        .replace(/\([^)]*\)/g, " ")
+        .replace(/\s+(?:in\s+)?(?:serum|plasma|blood|whole blood)(?:\s+or\s+(?:serum|plasma))?\s*$/i, "")
+        .replace(/\s+(?:count|calculated|automated|manual)\s*$/i, ""));
+      const normalizeLabValue = (value) => {
+        const normalized = value.trim().replace(/≤/g, "<=").replace(/≥/g, ">=");
+        const match = normalized.match(/^(?:[<>]=?)?\s*-?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?(?:[eE][+-]?\d+)?/);
+        return match ? match[0].replace(/[\s,]/g, "") : normalized.replace(/\s+/g, "");
+      };
+      const splitDelimited = (line, delimiter) => {
+        if (delimiter !== ",") return line.split(delimiter).map((column) => column.trim().replace(/^["']|["']$/g, ""));
+        return [...line.matchAll(/(?:^|,)(?:"((?:[^"]|"")*)"|([^,]*))/g)]
+          .map((match) => (match[1] ?? match[2] ?? "").replace(/""/g, '"').trim());
+      };
+      const addResult = (name, value, remainder, metadata = {}) => {
+        const normalizedName = normalizeLabName(name);
         const field = emrLabAliases.get(normalizedName);
-        if (!field) {
-          const remainder = line.slice(match[0].length).trim();
-          const referenceRange = remainder.match(/\([^)]*\)/)?.[0] || "";
-          const unit = remainder
-            .replace(/\([^)]*\)/g, " ")
-            .replace(/\b\d{1,2}\/\d{1,2}\/\d{2,4}\s+\d{1,2}:\d{2}(?::\d{2})?\b/g, " ")
-            .replace(/\b[HL]\b/g, " ")
-            .replace(/\s+/g, " ")
-            .trim();
-          unrecognized.push({
-            name: match[1].trim(),
-            value: match[2].replace(/\s+/g, ""),
-            unit,
-            referenceRange
-          });
+        const referenceRange = metadata.referenceRange || remainder.match(/\([^)]*\)/)?.[0] || "";
+        const unit = metadata.unit || remainder
+          .replace(/\([^)]*\)/g, " ")
+          .replace(/\b[HL]\b/g, " ")
+          .replace(/\s+/g, " ")
+          .trim();
+        if (field) {
+          parsed.set(field, normalizeLabValue(value));
+        } else {
+          unrecognized.push({ name: name.trim(), value: normalizeLabValue(value), unit, referenceRange });
+        }
+      };
+      const lines = text.replace(/\r\n?/g, "\n").split("\n").map((line) => line.replace(/≤/g, "<=").replace(/≥/g, ">="));
+      let tableColumns = null;
+      let pendingName = "";
+      for (const line of lines) {
+        if (!line.trim()) continue;
+        const delimiter = line.includes("\t") ? "\t" : line.includes("|") ? "|" : line.includes(";") ? ";" : line.includes(",") ? "," : "";
+        const columns = delimiter ? splitDelimited(line, delimiter) : [];
+        const normalizedColumns = columns.map(normalizeHeader);
+        const testNameColumn = normalizedColumns.findIndex((column) => ["testname", "test", "labname", "lab", "analyte", "parameter", "component"].includes(column));
+        const resultColumn = normalizedColumns.findIndex((column) => ["result", "value", "testresult", "measurement"].includes(column));
+        if (delimiter && testNameColumn >= 0 && resultColumn >= 0) {
+          tableColumns = {
+            delimiter,
+            testName: testNameColumn,
+            result: resultColumn,
+            unit: normalizedColumns.findIndex((column) => ["unit", "units"].includes(column)),
+            referenceRange: normalizedColumns.findIndex((column) => ["ref", "refrange", "range", "referencerange", "normalrange", "expectedrange", "referencelimits", "normalvalues"].includes(column))
+          };
+          pendingName = "";
           continue;
         }
-        parsed.set(field, match[2].replace(/\s+/g, ""));
+        if (/\btest\s+name\b/i.test(line) && /\bresult\b/i.test(line)) continue;
+        if (tableColumns) {
+          const rowColumns = splitDelimited(line, tableColumns.delimiter);
+          if (rowColumns.length > Math.max(tableColumns.testName, tableColumns.result)) {
+            const name = rowColumns[tableColumns.testName] || "";
+            const value = rowColumns[tableColumns.result] || "";
+            if (name && numericResult.test(value)) {
+              addResult(name, value, "", {
+                unit: tableColumns.unit >= 0 ? rowColumns[tableColumns.unit] || "" : "",
+                referenceRange: tableColumns.referenceRange >= 0 ? rowColumns[tableColumns.referenceRange] || "" : ""
+              });
+              pendingName = "";
+              continue;
+            }
+          }
+        } else if (delimiter && columns.length >= 2) {
+          const dated = /^(?:\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|\d{4}-\d{2}-\d{2})/.test(columns[0]);
+          const nameIndex = dated ? 1 : 0;
+          const resultIndex = columns.findIndex((column, index) => index > nameIndex && numericResult.test(column));
+          const name = columns[nameIndex] || "";
+          if (resultIndex > nameIndex && emrLabAliases.has(normalizeLabName(name))) {
+            const remainder = columns.slice(resultIndex + 1).join(" ").trim();
+            const referenceRange = remainder.match(/\([^)]*\)/)?.[0] || "";
+            const unit = referenceRange ? remainder.slice(0, remainder.indexOf(referenceRange)).trim() : remainder;
+            addResult(name, columns[resultIndex], remainder, { unit, referenceRange });
+            continue;
+          }
+        }
+        const normalizedLine = normalizeLabName(line.replace(/:$/, ""));
+        if (emrLabAliases.has(normalizedLine)) {
+          pendingName = line.replace(/:$/, "").trim();
+          continue;
+        }
+        if (pendingName) {
+          const valueMatch = line.match(new RegExp(`^\\s*(${labNumberPattern})(?:\\s+(.*))?$`, "i"));
+          if (valueMatch) {
+            addResult(pendingName, valueMatch[1], valueMatch[2] || "");
+            pendingName = "";
+            continue;
+          }
+          pendingName = "";
+        }
+        const datedRow = line.match(/^\s*(?:(?:\d{1,2}[/-]\d{1,2}[/-]\d{2,4})|(?:\d{4}-\d{2}-\d{2})|(?:[A-Za-z]{3,9}\s+\d{1,2},?\s+\d{4}))(?:[ T]+\d{1,2}:\d{2}(?::\d{2})?(?:\s*[AP]M)?)?\s+(.+)$/i);
+        if (datedRow) {
+          const resultMatch = datedRow[1].match(new RegExp(`^(.+?)\\s+(${labNumberPattern})(?=\\s|$)(.*)$`, "i"));
+          if (resultMatch) {
+            const remainder = resultMatch[3].trim();
+            const referenceRange = remainder.match(/\([^)]*\)/)?.[0] || "";
+            const unit = (referenceRange ? remainder.slice(0, remainder.indexOf(referenceRange)) : remainder)
+              .replace(/\b[HL]\b/g, " ")
+              .replace(/\s+/g, " ")
+              .trim();
+            addResult(resultMatch[1], resultMatch[2], remainder, { unit, referenceRange });
+            continue;
+          }
+        }
+        const match = line.match(new RegExp(`^\\s*([A-Za-z][A-Za-z0-9 /(),+.\\[\\]\\-]*?)\\s*(?::|=|\\s)\\s*(${labNumberPattern})(?=\\s|$)(.*)$`, "i"));
+        if (!match) {
+          if (!/^[=\-_*]{3,}$/.test(line.trim()) && !/^(?:collection|collected|received|accession|site|specimen|test name|result|units?|ref(?:erence)? range)\b/i.test(line.trim())) {
+            unrecognized.push({ name: line.trim(), value: "", unit: "", referenceRange: "" });
+          }
+          continue;
+        }
+        addResult(match[1].replace(/[:=]\s*$/, ""), match[2], match[3].trim());
       }
       return { parsed, unrecognized };
     }
@@ -1293,25 +1396,26 @@
 
     function isMicrobiologyTitle(title) {
       const normalized = title.replace(/[^a-z0-9]/gi, "").toLocaleUpperCase();
-      return /(?:CULTURE|CX$|BCX|UCX|SPUTUMCX|WOUNDCX|STOOLCX|AFBCX|FUNGALCX|CSFCX|GRAMSTAIN|MRSA|VRE|CDIFF|STOOLOP|OVAANDPARASITE|GIPANEL|GIPCR|GIPATHOGEN|RVP|RESPIRATORY.*PANEL|RESPIRATORYPCR|COVID|FLU|RSV|HPYLORI|LEGIONELLA|PNEUMONIAE|PCR|NAAT)/i.test(normalized);
+      return /(?:MICROBIOLOGY|ANTIMICROBIAL(?:SUSCEPTIBILITY|SENSITIVITY)|SENSITIVITY|ANTIBIOGRAM|CULTURE|CX$|BCX|UCX|SPUTUMCX|WOUNDCX|STOOLCX|AFBCX|FUNGALCX|CSFCX|GRAMSTAIN|MRSA|VRE|CDIFF|STOOLOP|OVAANDPARASITE|GIPANEL|GIPCR|GIPATHOGEN|RVP|RESPIRATORY.*PANEL|RESPIRATORYPCR|COVID|FLU|RSV|HPYLORI|LEGIONELLA|PNEUMONIAE|PCR|NAAT)/i.test(normalized);
     }
 
     function parseImagingMicro(text) {
       const datePattern = /\b(?:\d{4}-\d{2}-\d{2}(?:[ T]\d{2}:\d{2}(?::\d{2})?)?|\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+\d{1,2},?\s+\d{4})\b/i;
-      const metadataLine = /^(?:patient|mrn|accession|order|status|specimen|collection|collected|result\s+date|study\s+date|exam\s+date|performed\s+date|report\s+date|study|exam|performed|report|date|time|provider|location|indication|comparison|technique)\b\s*[:#-]/i;
-      const sectionHeader = /^(impression|conclusion|findings|culture result|result|interpretation|microbiology|culture|gram stain|organism(?:\s+\d+)?|susceptibility|antibiotic susceptibility)\s*:?\s*(.*)$/i;
-      const cleanLine = (line) => line.replace(/^\s*(?:[-*•]\s*)/, "").replace(/\s+/g, " ").trim();
-      const chunks = text.replace(/\r/g, "").split(/\n\s*\n+/).map((chunk) => chunk.split("\n").map(cleanLine).filter(Boolean)).filter((lines) => lines.length);
+      const metadataLine = /^(?:patient|mrn|accession|order|status|specimen|collection(?:\s+(?:sample|date(?:\/time)?))?|site\/specimen|collected|received|result\s+date|study\s+date|exam\s+date|performed\s+date|report\s+date|study|exam|performed|report|date|time|provider|location|indication|comparison|technique)\b\s*[:#-]/i;
+      const sectionHeader = /^(impression|conclusion|findings|culture results?|culture\s+(?:and|&)\s+(?:sensitivity|susceptibility)|result|interpretation|microbiology|gram stain|organism(?:\s+#?\d+)?|quantity|antimicrobial (?:susceptibility|sensitivity)|antibiotic (?:susceptibility|sensitivity)|antibiogram|susceptibility(?: results?| testing)?|sensitivity(?: results?)?)\s*:?\s*(.*)$/i;
+      const cleanLine = (line) => line.replace(/^\s*(?:[-*•]\s*)/, "").replace(/[ \u00a0]+/g, " ").trim();
+      const chunks = text.replace(/\r\n?/g, "\n").replace(/\f/g, "\n").split(/\n\s*\n+/).map((chunk) => chunk.split("\n").map(cleanLine).filter(Boolean)).filter((lines) => lines.length);
       const reports = [];
 
       for (const lines of chunks) {
         const titleLine = lines.map((line) => line.replace(datePattern, " ").replace(/\s+/g, " ").trim())
-          .find((line) => line && !metadataLine.test(line) && !/^culture result\b/i.test(line) && !sectionHeader.test(line));
-        const title = titleLine && titleLine.length <= 120 ? titleLine.replace(/\s+(?:result|study|exam)\s+date\s*:.*/i, "").trim() : "";
+          .find((line) => line && !/^[=\-_*]{3,}$/.test(line) && !metadataLine.test(line) && (!sectionHeader.test(line) || /^microbiology\s+test\s+report\b/i.test(line)));
+        const title = titleLine && titleLine.length <= 120 ? titleLine.replace(/\s+(?:result|study|exam)\s+date\s*:.*/i, "").replace(/:+$/, "").trim() : "";
         const dateLine = lines.find((line) => datePattern.test(line));
         const date = dateLine?.match(datePattern)?.[0] || "";
         const previous = reports[reports.length - 1];
         const hasReportTitle = title && (isImagingMicroTitle(title)
+          || isMicrobiologyTitle(title)
           || title === lines[0] && /^[A-Z0-9][A-Z0-9 /(),+.-]{2,}$/.test(title));
         const startsReport = hasReportTitle && previous && previous.lines.some((line) => sectionHeader.test(line) || /\b(?:impression|no growth|positive|negative|detected|not detected|organism|findings)\b/i.test(line));
         if (!previous || startsReport) {
@@ -1325,24 +1429,71 @@
 
       return reports.map((report) => {
         let activeSection = "";
+        let inSusceptibilitySection = false;
         const impressions = [];
         const findings = [];
         const microbiology = [];
         const pertinent = [];
+        const susceptibility = [];
         const isMicrobiologyReport = isMicrobiologyTitle(report.title)
-          || /\b(?:culture|microbiology|organism|gram stain|susceptibility|pcr|respiratory panel)\b/i.test(`${report.title} ${report.lines.join(" ")}`);
+          || /\b(?:culture|microbiology|organism|gram stain|susceptibility|sensitivity|antibiogram|pcr|respiratory panel)\b/i.test(`${report.title} ${report.lines.join(" ")}`);
+        const parseSusceptibility = (line) => {
+          const clean = line.replace(/^[|;,]+|[|;,]+$/g, "").trim();
+          if (!clean || /^(?:antibiotic|antimicrobial|drug|organism|interpretation|mic|minimum inhibitory concentration)\b/i.test(clean)) return null;
+          const delimited = /[\t|;,]/.test(clean)
+            ? clean.split(/[\t|;,]/).map((column) => column.trim()).filter(Boolean)
+            : [];
+          const interpretations = new Map([
+            ["s", "S"], ["susceptible", "S"], ["sensitive", "S"],
+            ["i", "I"], ["intermediate", "I"],
+            ["r", "R"], ["resistant", "R"],
+            ["sdd", "SDD"], ["susceptible dose dependent", "SDD"], ["susceptible dose-dependent", "SDD"]
+          ]);
+          const normalizeInterpretation = (value) => interpretations.get(value.toLocaleLowerCase().replace(/\s+/g, " ").trim());
+          if (delimited.length >= 2) {
+            const interpretationIndex = delimited.findIndex((column) => normalizeInterpretation(column));
+            if (interpretationIndex > 0) {
+              const antibiotic = delimited[0].replace(/:$/, "").trim();
+              const mic = delimited.slice(1, interpretationIndex).find((column) => /[<>]?\s*-?\d/.test(column)) || "";
+              if (antibiotic && !/^(?:antibiotic|drug|organism)$/i.test(antibiotic)) {
+                return { antibiotic, mic, interpretation: normalizeInterpretation(delimited[interpretationIndex]) };
+              }
+            }
+          }
+          const interpretationMatch = clean.match(/\b(SDD|S|I|R|susceptible(?:\s+dose[- ]+dependent)?|sensitive|intermediate|resistant)\s*$/i);
+          if (!interpretationMatch) return null;
+          const prefix = clean.slice(0, interpretationMatch.index).trim().replace(/[:=|,;]+$/, "").trim();
+          if (!prefix) return null;
+          const micMatch = prefix.match(/^(.+?)\s+((?:<=|>=|<|>)?\s*-?\d+(?:\.\d+)?(?:\s*[A-Za-zµμ/]+)?)$/);
+          const antibiotic = (micMatch ? micMatch[1] : prefix).replace(/:$/, "").trim();
+          if (!antibiotic || /^(?:antibiotic|antimicrobial|drug|organism|interpretation|mic)$/i.test(antibiotic)) return null;
+          return {
+            antibiotic,
+            mic: micMatch ? micMatch[2].replace(/\s+/g, " ").trim() : "",
+            interpretation: normalizeInterpretation(interpretationMatch[1])
+          };
+        };
         const keyFindingPattern = /\b(?:acute|chronic|mass|lesion|nodule|fracture|effusion|opacity|consolidation|atelectasis|hemorrhage|infarct|obstruction|dilatation|stone|pneumothorax|edema|thrombus|embol|no evidence|no acute|without acute|normal|clear|stable|unchanged|interval|positive|negative|detected|not detected|no growth|organism|growth|grew|isolat|susceptib|resistant|sensitive|gram stain|colony count|cfu)\b/i;
         for (const line of report.lines) {
           if (metadataLine.test(line) || datePattern.test(line) && /^(?:date|time|study|exam|result|collection|collected|performed|report)\b/i.test(line)) continue;
+          if (/^microbiology\s+test\s+report\b/i.test(line)) continue;
+          if (/^interpretation\s+code\b/i.test(line)) continue;
           const section = line.match(sectionHeader);
           if (section) {
             activeSection = section[1].toLocaleLowerCase();
+            if (/susceptibility|sensitivity|antibiogram/.test(activeSection)) inSusceptibilitySection = true;
+            else if (!/^organism/.test(activeSection)) inSusceptibilitySection = false;
             const sectionText = cleanLine(section[2]);
             if (sectionText) {
               if (activeSection === "impression" || activeSection === "conclusion") impressions.push(sectionText);
               else if (activeSection === "findings") findings.push(sectionText);
-              else if (/microbiology|culture|gram stain|organism|susceptibility/.test(activeSection) || activeSection === "result" && isMicrobiologyReport) microbiology.push(sectionText);
+              else if (/microbiology|culture|gram stain|organism|quantity|susceptibility|sensitivity|antibiogram/.test(activeSection) || activeSection === "result" && isMicrobiologyReport) microbiology.push(sectionText);
             }
+            continue;
+          }
+          if (inSusceptibilitySection && !/^[=\-_*]{3,}$/.test(line)) {
+            const result = parseSusceptibility(line);
+            if (result) susceptibility.push(result);
             continue;
           }
           const isMicrobiology = /\b(?:culture|microbiology|organism|gram stain|susceptib|resistant|sensitive|colony count|cfu|pcr|viral panel)\b/i.test(`${report.title} ${line}`);
@@ -1354,7 +1505,7 @@
         const selected = isMicrobiologyReport
           ? [...new Set(microbiology.length ? microbiology : pertinent)]
           : [...new Set(impressions.length ? impressions : findings.length ? findings.filter((line) => keyFindingPattern.test(line)) : pertinent)];
-        return { title: report.title, date: report.date, summary: selected.join(" "), recognized: selected.length > 0 };
+        return { title: report.title, date: report.date, summary: selected.join(" "), susceptibility, recognized: selected.length > 0 || susceptibility.length > 0 };
       }).filter((report) => report.title || report.date || report.summary);
     }
 
@@ -1630,6 +1781,31 @@
           const summary = document.createElement("div");
           summary.textContent = report.summary;
           item.append(summary);
+        }
+        if (report.susceptibility.length) {
+          const susceptibility = document.createElement("div");
+          susceptibility.className = "pre-rounds-susceptibility";
+          const heading = document.createElement("strong");
+          heading.textContent = "Antimicrobial susceptibility";
+          const results = document.createElement("table");
+          const header = results.insertRow();
+          for (const label of ["Antibiotic", "MIC", "Result"]) {
+            const cell = document.createElement("th");
+            cell.textContent = label;
+            header.append(cell);
+          }
+          for (const result of report.susceptibility) {
+            const row = results.insertRow();
+            for (const value of [result.antibiotic, result.mic, result.interpretation]) {
+              const cell = row.insertCell();
+              cell.textContent = value;
+            }
+          }
+          const legend = document.createElement("div");
+          legend.className = "pre-rounds-susceptibility-legend";
+          legend.textContent = "S = Susceptible · I = Intermediate · R = Resistant";
+          susceptibility.append(heading, results, legend);
+          item.append(susceptibility);
         }
         if (!report.recognized) {
           const notice = document.createElement("div");
