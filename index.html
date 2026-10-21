@@ -143,6 +143,9 @@
     .pre-rounds-sheet .pre-rounds-row-vitals > td,
     .pre-rounds-sheet .pre-rounds-row-imaging > td,
     .pre-rounds-sheet .pre-rounds-row-assessment > td { background: #fff; }
+    .pre-rounds-sheet .pre-rounds-subjective-checklist { display: grid; gap: 5px; }
+    .pre-rounds-sheet .pre-rounds-subjective-checklist-item { display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+    .pre-rounds-sheet .pre-rounds-subjective-checkbox { flex: 0 0 auto; font-size: 14px; line-height: 1; }
     .pre-rounds-sheet .pre-rounds-imaging-result + .pre-rounds-imaging-result { margin-top: 4px; padding-top: 4px; border-top: 1px solid #aebdce; }
     .pre-rounds-sheet .pre-rounds-susceptibility { margin-top: 3px; }
     .pre-rounds-sheet .pre-rounds-susceptibility table { width: 100%; margin-top: 2px; border-collapse: collapse; table-layout: fixed; font-size: 9px; }
@@ -470,6 +473,9 @@
       .pre-rounds-lab-diagram { width: 100%; height: auto !important; max-height: 0.82in; }
       .pre-rounds-sheet .pre-rounds-vital-item,
       .pre-rounds-sheet .pre-rounds-exam-choice { white-space: normal; }
+      .pre-rounds-sheet .pre-rounds-subjective-checklist { gap: 3pt; }
+      .pre-rounds-sheet .pre-rounds-subjective-checklist-item { gap: 2pt; white-space: normal; }
+      .pre-rounds-sheet .pre-rounds-subjective-checkbox { font-size: 9pt; }
       .pre-rounds-sheet .pre-rounds-susceptibility table { width: 100%; max-width: 100%; table-layout: fixed; font-size: 6pt; }
       .pre-rounds-sheet .pre-rounds-susceptibility th,
       .pre-rounds-sheet .pre-rounds-susceptibility td { min-width: 0; max-width: none; padding: 1pt 2pt; white-space: normal; overflow-wrap: anywhere; }
@@ -1778,7 +1784,23 @@
       row = table.insertRow();
       row.className = "pre-rounds-row-subjective";
       appendPreRoundsCell(row, "th", "Subj:");
-      appendPreRoundsCell(row, "td", preRoundsFieldValue(card, "subjective"), 11).classList.add("pre-rounds-handwrite--subjective");
+      appendPreRoundsCell(row, "td", preRoundsFieldValue(card, "subjective"), 8).classList.add("pre-rounds-handwrite--subjective");
+      const checklistCell = appendPreRoundsCell(row, "td", "", 3);
+      const checklist = document.createElement("div");
+      checklist.className = "pre-rounds-subjective-checklist";
+      for (const label of ["Evaluate", "Note", "AM Labs"]) {
+        const item = document.createElement("div");
+        item.className = "pre-rounds-subjective-checklist-item";
+        const checkbox = document.createElement("span");
+        checkbox.className = "pre-rounds-subjective-checkbox";
+        checkbox.setAttribute("aria-hidden", "true");
+        checkbox.textContent = "□";
+        const text = document.createElement("span");
+        text.textContent = label;
+        item.append(checkbox, text);
+        checklist.append(item);
+      }
+      checklistCell.append(checklist);
 
       row = table.insertRow();
       row.className = "pre-rounds-row-vitals-heading";
