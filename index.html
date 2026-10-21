@@ -130,6 +130,8 @@
     .pre-rounds-sheet table { width: 100%; border-collapse: collapse; table-layout: fixed; font-family: Arial, sans-serif; font-size: 11px; }
     .pre-rounds-sheet th, .pre-rounds-sheet td { padding: 5px 6px; border: 1px solid #aebdce; vertical-align: top; text-align: left; overflow-wrap: anywhere; }
     .pre-rounds-sheet th { color: #23384e; font-weight: 700; background: #edf3f8; }
+    .pre-rounds-sheet .pre-rounds-row-heading > th,
+    .pre-rounds-sheet .pre-rounds-row-heading > td { padding-top: 2px; padding-bottom: 2px; line-height: 1.1; }
     .pre-rounds-sheet > table > tbody > tr:first-child th { color: #fff; background: #344b63; border-color: #344b63; }
     .pre-rounds-sheet > table > tbody > tr:first-child td { background: #f8fafc; font-weight: 600; }
     .pre-rounds-sheet .pre-rounds-row-subjective th,
@@ -423,6 +425,8 @@
       .pre-rounds-sheet > table { width: 100%; height: 5.2in; font-size: 7pt; break-inside: avoid-page; page-break-inside: avoid; }
       .pre-rounds-sheet tr { break-inside: avoid-page; page-break-inside: avoid; }
       .pre-rounds-sheet th, .pre-rounds-sheet td { padding: 2pt; color: #000; border-color: #333; line-height: 1.05; }
+      .pre-rounds-sheet .pre-rounds-row-heading > th,
+      .pre-rounds-sheet .pre-rounds-row-heading > td { padding: 1pt 2pt; line-height: 1; }
       .pre-rounds-sheet th { background: #e8e8e8; }
       .pre-rounds-sheet > table > tbody > tr:first-child th { color: #000; background: #e8e8e8; border-color: #333; }
       .pre-rounds-sheet > table > tbody > tr:first-child td,
@@ -435,7 +439,7 @@
       .pre-rounds-sheet .pre-rounds-row-labs > th,
       .pre-rounds-sheet .pre-rounds-row-imaging > th,
       .pre-rounds-sheet .pre-rounds-row-assessment > th { background: #e8e8e8; }
-      .pre-rounds-sheet .pre-rounds-row-heading { height: 7%; }
+      .pre-rounds-sheet .pre-rounds-row-heading { height: 0.22in; }
       .pre-rounds-sheet .pre-rounds-row-subjective { height: 12%; }
       .pre-rounds-sheet .pre-rounds-row-vitals-heading { height: 6%; }
       .pre-rounds-sheet .pre-rounds-row-vitals { height: 15%; }
@@ -1402,14 +1406,15 @@
     function parseImagingMicro(text) {
       const datePattern = /\b(?:\d{4}-\d{2}-\d{2}(?:[ T]\d{2}:\d{2}(?::\d{2})?)?|\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+\d{1,2},?\s+\d{4})\b/i;
       const metadataLine = /^(?:patient|mrn|accession|order|status|specimen|collection(?:\s+(?:sample|date(?:\/time)?))?|site\/specimen|collected|received|result\s+date|study\s+date|exam\s+date|performed\s+date|report\s+date|study|exam|performed|report|date|time|provider|location|indication|comparison|technique)\b\s*[:#-]/i;
-      const sectionHeader = /^(impression|conclusion|findings|culture results?|culture\s+(?:and|&)\s+(?:sensitivity|susceptibility)|result|interpretation|microbiology|gram stain|organism(?:\s+#?\d+)?|quantity|antimicrobial (?:susceptibility|sensitivity)|antibiotic (?:susceptibility|sensitivity)|antibiogram|susceptibility(?: results?| testing)?|sensitivity(?: results?)?)\s*:?\s*(.*)$/i;
+      const sectionHeader = /^(impression|conclusion|findings|culture results?|culture\s+(?:and|&)\s+(?:sensitivities?|susceptibilities?)|result|interpretation|microbiology|gram stain|organism(?:\s+#?\d+)?|quantity|antimicrobial (?:susceptibilities?|sensitivities?)|antibiotics? (?:susceptibilities?|sensitivities?)|drug susceptibilities?|antibiogram|ast|susceptibilities?(?: results?| testing| profile| panel)?|sensitivities?(?: results?| testing| profile| panel)?|sens|susc)(?:\s*[\[(][^)\]]*[\])])?\s*:?\s*(.*)$/i;
       const cleanLine = (line) => line.replace(/^\s*(?:[-*•]\s*)/, "").replace(/[ \u00a0]+/g, " ").trim();
-      const chunks = text.replace(/\r\n?/g, "\n").replace(/\f/g, "\n").split(/\n\s*\n+/).map((chunk) => chunk.split("\n").map(cleanLine).filter(Boolean)).filter((lines) => lines.length);
+      const isFormattingDivider = (line) => /^[=\-_*~+#]{3,}$/.test(line.replace(/\s/g, ""));
+      const chunks = text.replace(/\r\n?/g, "\n").replace(/\f/g, "\n").split(/\n\s*\n+/).map((chunk) => chunk.split("\n").map(cleanLine).filter((line) => line && !isFormattingDivider(line))).filter((lines) => lines.length);
       const reports = [];
 
       for (const lines of chunks) {
         const titleLine = lines.map((line) => line.replace(datePattern, " ").replace(/\s+/g, " ").trim())
-          .find((line) => line && !/^[=\-_*]{3,}$/.test(line) && !metadataLine.test(line) && (!sectionHeader.test(line) || /^microbiology\s+test\s+report\b/i.test(line)));
+          .find((line) => line && !isFormattingDivider(line) && !metadataLine.test(line) && (!sectionHeader.test(line) || /^microbiology\s+test\s+report\b/i.test(line)));
         const title = titleLine && titleLine.length <= 120 ? titleLine.replace(/\s+(?:result|study|exam)\s+date\s*:.*/i, "").replace(/:+$/, "").trim() : "";
         const dateLine = lines.find((line) => datePattern.test(line));
         const date = dateLine?.match(datePattern)?.[0] || "";
@@ -1435,67 +1440,143 @@
         const microbiology = [];
         const pertinent = [];
         const susceptibility = [];
+        const susceptibilityLines = new Set();
+        const reportContentLines = [];
+        let currentOrganism = "";
         const isMicrobiologyReport = isMicrobiologyTitle(report.title)
-          || /\b(?:culture|microbiology|organism|gram stain|susceptibility|sensitivity|antibiogram|pcr|respiratory panel)\b/i.test(`${report.title} ${report.lines.join(" ")}`);
+          || /\b(?:culture|microbiology|organism|gram stain|susceptib\w*|sensitiv\w*|antibiogram|ast|pcr|respiratory panel)\b/i.test(`${report.title} ${report.lines.join(" ")}`);
+        const normalizeInterpretation = (value) => {
+          const normalized = value.toLocaleLowerCase().replace(/[()[\]]/g, " ").replace(/[.,]+$/g, "").replace(/\s+/g, " ").trim();
+          return new Map([
+            ["s", "S"], ["sus", "S"], ["susc", "S"], ["susceptible", "S"], ["sensitive", "S"],
+            ["i", "I"], ["inter", "I"], ["intermediate", "I"],
+            ["r", "R"], ["res", "R"], ["resistant", "R"],
+            ["sdd", "SDD"], ["susceptible dose dependent", "SDD"], ["susceptible dose-dependent", "SDD"], ["dose dependent", "SDD"],
+            ["ns", "NS"], ["non susceptible", "NS"], ["nonsusceptible", "NS"], ["not susceptible", "NS"]
+          ]).get(normalized);
+        };
+        const micPattern = /(?:(?:<=|>=|<|>|≤|≥)\s*)?-?\d+(?:[.,]\d+)?(?:\s*[/–-]\s*\d+(?:[.,]\d+)?)?(?:\s*(?:mcg\/?m?l|µg\/?m?l|μg\/?m?l|ug\/?m?l|mg\/?l|mg\/?ml|mmol\/?l|g\/?l))?/i;
+        const getMicValue = (value) => {
+          const clean = value.replace(/^(?:mic|minimum inhibitory concentration)\s*[:=]?\s*/i, "").trim();
+          const match = clean.match(micPattern);
+          return match && !clean.slice(match.index + match[0].length).trim() ? match[0].trim() : "";
+        };
+        const isSusceptibilityHeader = (line) => {
+          const columns = line.split(/[\t|,;]+|\s{2,}/).map((column) => column.replace(/[:()[\]]/g, "").trim().toLocaleLowerCase());
+          const headerTerms = columns.map((column) => column.replace(/[^a-z/]/g, ""));
+          const hasDrug = headerTerms.some((column) => /^(?:antibiotic|antimicrobial|drug|agent|name)$/.test(column));
+          const hasInterpretation = headerTerms.some((column) => /^(?:result|interpretation|susc|sir|sensitive|susceptible|resistant|s\/i\/r)$/.test(column));
+          const hasMic = headerTerms.some((column) => /^(?:mic|minimuminhibitoryconcentration|concentration)$/.test(column));
+          return hasDrug && (hasInterpretation || hasMic) || /^(?:antibiotic|antimicrobial|drug|agent).*(?:mic|interpretation|susceptibility|s\/i\/r|sir)/i.test(line);
+        };
+        const interpretationPattern = /\b(susceptible\s+dose[- ]+dependent|dose[- ]+dependent|non[- ]?susceptible|not\s+susceptible|susceptible|sensitive|intermediate|resistant|sdd|sus|susc|inter|res|ns|[SIR])\b/i;
         const parseSusceptibility = (line) => {
-          const clean = line.replace(/^[|;,]+|[|;,]+$/g, "").trim();
-          if (!clean || /^(?:antibiotic|antimicrobial|drug|organism|interpretation|mic|minimum inhibitory concentration)\b/i.test(clean)) return null;
+          const clean = line.replace(/^[|;,]+|[|;,]+$/g, "").replace(/\s+/g, " ").trim();
+          if (!clean || isSusceptibilityHeader(clean) || /^(?:antibiotic|antimicrobial|drug|organism|interpretation|mic|minimum inhibitory concentration)\b/i.test(clean)) return null;
           const delimited = /[\t|;,]/.test(clean)
             ? clean.split(/[\t|;,]/).map((column) => column.trim()).filter(Boolean)
             : [];
-          const interpretations = new Map([
-            ["s", "S"], ["susceptible", "S"], ["sensitive", "S"],
-            ["i", "I"], ["intermediate", "I"],
-            ["r", "R"], ["resistant", "R"],
-            ["sdd", "SDD"], ["susceptible dose dependent", "SDD"], ["susceptible dose-dependent", "SDD"]
-          ]);
-          const normalizeInterpretation = (value) => interpretations.get(value.toLocaleLowerCase().replace(/\s+/g, " ").trim());
           if (delimited.length >= 2) {
             const interpretationIndex = delimited.findIndex((column) => normalizeInterpretation(column));
             if (interpretationIndex > 0) {
-              const antibiotic = delimited[0].replace(/:$/, "").trim();
-              const mic = delimited.slice(1, interpretationIndex).find((column) => /[<>]?\s*-?\d/.test(column)) || "";
+              const antibiotic = delimited.slice(0, interpretationIndex).find((column) => column && !/^(?:antibiotic|antimicrobial|drug|agent|organism|isolate)\b/i.test(column));
+              const mic = delimited.slice(interpretationIndex + 1).map(getMicValue).find(Boolean)
+                || delimited.slice(1, interpretationIndex).map(getMicValue).find(Boolean)
+                || "";
               if (antibiotic && !/^(?:antibiotic|drug|organism)$/i.test(antibiotic)) {
-                return { antibiotic, mic, interpretation: normalizeInterpretation(delimited[interpretationIndex]) };
+                return { antibiotic: antibiotic.replace(/:$/, ""), mic, interpretation: normalizeInterpretation(delimited[interpretationIndex]), organism: currentOrganism };
               }
             }
           }
-          const interpretationMatch = clean.match(/\b(SDD|S|I|R|susceptible(?:\s+dose[- ]+dependent)?|sensitive|intermediate|resistant)\s*$/i);
+          const matches = [...clean.matchAll(new RegExp(interpretationPattern.source, "gi"))];
+          const interpretationMatch = matches.find((match) => normalizeInterpretation(match[1]));
           if (!interpretationMatch) return null;
-          const prefix = clean.slice(0, interpretationMatch.index).trim().replace(/[:=|,;]+$/, "").trim();
-          if (!prefix) return null;
-          const micMatch = prefix.match(/^(.+?)\s+((?:<=|>=|<|>)?\s*-?\d+(?:\.\d+)?(?:\s*[A-Za-zµμ/]+)?)$/);
-          const antibiotic = (micMatch ? micMatch[1] : prefix).replace(/:$/, "").trim();
+          const interpretation = normalizeInterpretation(interpretationMatch[1]);
+          if (!interpretation) return null;
+          const remainder = `${clean.slice(0, interpretationMatch.index)} ${clean.slice(interpretationMatch.index + interpretationMatch[0].length)}`
+            .replace(/\b(?:mic|result|interpretation|zone(?:\s+diameter)?)\b\s*[:=]?\s*/gi, " ")
+            .replace(/[()[\]]/g, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+          const micMatch = remainder.match(new RegExp(`(^|\\s)(${micPattern.source})(?=\\s|$)`, "i"));
+          const mic = micMatch?.[2] || "";
+          const antibiotic = remainder
+            .replace(micMatch?.[0] || "", " ")
+            .replace(/\b(?:susceptible\s+dose[- ]+dependent|dose[- ]+dependent|non[- ]?susceptible|not\s+susceptible|susceptible|sensitive|intermediate|resistant|sdd|sus|susc|inter|res|ns|[SIR])\b/gi, " ")
+            .replace(/^[\s:;,|=-]+|[\s:;,|=-]+$/g, "")
+            .trim();
           if (!antibiotic || /^(?:antibiotic|antimicrobial|drug|organism|interpretation|mic)$/i.test(antibiotic)) return null;
-          return {
-            antibiotic,
-            mic: micMatch ? micMatch[2].replace(/\s+/g, " ").trim() : "",
-            interpretation: normalizeInterpretation(interpretationMatch[1])
-          };
+          return { antibiotic, mic, interpretation, organism: currentOrganism };
         };
         const keyFindingPattern = /\b(?:acute|chronic|mass|lesion|nodule|fracture|effusion|opacity|consolidation|atelectasis|hemorrhage|infarct|obstruction|dilatation|stone|pneumothorax|edema|thrombus|embol|no evidence|no acute|without acute|normal|clear|stable|unchanged|interval|positive|negative|detected|not detected|no growth|organism|growth|grew|isolat|susceptib|resistant|sensitive|gram stain|colony count|cfu)\b/i;
         for (const line of report.lines) {
           if (metadataLine.test(line) || datePattern.test(line) && /^(?:date|time|study|exam|result|collection|collected|performed|report)\b/i.test(line)) continue;
           if (/^microbiology\s+test\s+report\b/i.test(line)) continue;
+          if (report.title && line.toLocaleLowerCase() === report.title.toLocaleLowerCase()) continue;
           if (/^interpretation\s+code\b/i.test(line)) continue;
+          if (/^organism\s*#?\d+\s*[:=-]/i.test(line)) {
+            currentOrganism = line.replace(/^organism\s*#?\d+\s*[:=-]\s*/i, "").trim();
+            inSusceptibilitySection = true;
+            activeSection = "organism";
+            continue;
+          }
+          if (isSusceptibilityHeader(line)) {
+            activeSection = "susceptibility";
+            inSusceptibilitySection = true;
+            continue;
+          }
+          if (!inSusceptibilitySection) {
+            const result = parseSusceptibility(line);
+            if (result && (result.mic || /[\t|;,]/.test(line))) {
+              susceptibility.push(result);
+              susceptibilityLines.add(line);
+              continue;
+            }
+          }
+          if (/^ast(?:\s+results?)?\s*[:=-]/i.test(line)) {
+            activeSection = "ast";
+            inSusceptibilitySection = true;
+            const result = parseSusceptibility(line.replace(/^ast(?:\s+results?)?\s*[:=-]\s*/i, ""));
+            if (result) {
+              susceptibility.push(result);
+              susceptibilityLines.add(line);
+              continue;
+            }
+          }
           const section = line.match(sectionHeader);
           if (section) {
             activeSection = section[1].toLocaleLowerCase();
-            if (/susceptibility|sensitivity|antibiogram/.test(activeSection)) inSusceptibilitySection = true;
+            if (/susceptib|sensitiv|antibiogram|^susc?$|^ast$/.test(activeSection)) inSusceptibilitySection = true;
             else if (!/^organism/.test(activeSection)) inSusceptibilitySection = false;
-            const sectionText = cleanLine(section[2]);
+            const sectionText = cleanLine(section[2]).replace(/^[:=]\s*/, "");
+            if (/^organism/.test(activeSection) && sectionText) {
+              currentOrganism = sectionText.replace(/^#?\d+\s*[:=-]?\s*/, "").trim();
+              if (/^organism\b/i.test(currentOrganism)) currentOrganism = "";
+            }
+            if (inSusceptibilitySection && sectionText) {
+              const result = parseSusceptibility(sectionText);
+              if (result) {
+                susceptibility.push(result);
+                susceptibilityLines.add(line);
+                continue;
+              }
+            }
             if (sectionText) {
               if (activeSection === "impression" || activeSection === "conclusion") impressions.push(sectionText);
               else if (activeSection === "findings") findings.push(sectionText);
-              else if (/microbiology|culture|gram stain|organism|quantity|susceptibility|sensitivity|antibiogram/.test(activeSection) || activeSection === "result" && isMicrobiologyReport) microbiology.push(sectionText);
+              else if (/microbiology|culture|gram stain|organism|quantity|susceptib|sensitiv|antibiogram|^susc$|^ast$/.test(activeSection) || activeSection === "result" && isMicrobiologyReport) microbiology.push(sectionText);
             }
             continue;
           }
-          if (inSusceptibilitySection && !/^[=\-_*]{3,}$/.test(line)) {
+          if (inSusceptibilitySection && !isFormattingDivider(line)) {
             const result = parseSusceptibility(line);
-            if (result) susceptibility.push(result);
+            if (result) {
+              susceptibility.push(result);
+              susceptibilityLines.add(line);
+            }
             continue;
           }
+          reportContentLines.push(line);
           const isMicrobiology = /\b(?:culture|microbiology|organism|gram stain|susceptib|resistant|sensitive|colony count|cfu|pcr|viral panel)\b/i.test(`${report.title} ${line}`);
           if (activeSection === "impression" || activeSection === "conclusion") impressions.push(line);
           else if (activeSection === "findings") findings.push(line);
@@ -1505,7 +1586,18 @@
         const selected = isMicrobiologyReport
           ? [...new Set(microbiology.length ? microbiology : pertinent)]
           : [...new Set(impressions.length ? impressions : findings.length ? findings.filter((line) => keyFindingPattern.test(line)) : pertinent)];
-        return { title: report.title, date: report.date, summary: selected.join(" "), susceptibility, recognized: selected.length > 0 || susceptibility.length > 0 };
+        const additionalText = reportContentLines.filter((line) => !selected.includes(line) && !susceptibilityLines.has(line));
+        const summary = [selected.join(" "), additionalText.join("\n")].filter(Boolean).join("\n");
+        const rawText = report.lines.filter((line) => !isFormattingDivider(line)).join("\n");
+        return {
+          title: report.title,
+          date: report.date,
+          summary: summary || rawText,
+          susceptibility,
+          usedRawFallback: !summary && Boolean(rawText),
+          includedUnparsedText: additionalText.length > 0 || !summary && Boolean(rawText),
+          recognized: selected.length > 0 || susceptibility.length > 0
+        };
       }).filter((report) => report.title || report.date || report.summary);
     }
 
@@ -1540,7 +1632,7 @@
       if (rowspan > 1) cell.rowSpan = rowspan;
       cell.textContent = text;
       cell.style.border = "1px solid #333";
-      cell.style.padding = "6px";
+      cell.style.padding = row.classList.contains("pre-rounds-row-heading") ? "" : "6px";
       cell.style.verticalAlign = "top";
       cell.style.textAlign = "left";
       cell.style.whiteSpace = "pre-wrap";
@@ -1779,6 +1871,7 @@
         item.append(heading);
         if (report.summary) {
           const summary = document.createElement("div");
+          if (report.includedUnparsedText || report.usedRawFallback) summary.style.whiteSpace = "pre-wrap";
           summary.textContent = report.summary;
           item.append(summary);
         }
@@ -1787,29 +1880,44 @@
           susceptibility.className = "pre-rounds-susceptibility";
           const heading = document.createElement("strong");
           heading.textContent = "Antimicrobial susceptibility";
-          const results = document.createElement("table");
-          const header = results.insertRow();
-          for (const label of ["Antibiotic", "MIC", "Result"]) {
-            const cell = document.createElement("th");
-            cell.textContent = label;
-            header.append(cell);
-          }
-          for (const result of report.susceptibility) {
-            const row = results.insertRow();
-            for (const value of [result.antibiotic, result.mic, result.interpretation]) {
-              const cell = row.insertCell();
-              cell.textContent = value;
+          const susceptibilityGroups = report.susceptibility.reduce((groups, result) => {
+            const organism = result.organism || "";
+            groups.set(organism, [...(groups.get(organism) || []), result]);
+            return groups;
+          }, new Map());
+          susceptibility.append(heading);
+          for (const [organism, resultsForOrganism] of susceptibilityGroups) {
+            if (organism) {
+              const organismHeading = document.createElement("div");
+              organismHeading.style.marginTop = "2px";
+              organismHeading.textContent = organism;
+              susceptibility.append(organismHeading);
             }
+            const results = document.createElement("table");
+            const header = results.insertRow();
+            for (const label of ["Antibiotic", "MIC", "Result"]) {
+              const cell = document.createElement("th");
+              cell.textContent = label;
+              header.append(cell);
+            }
+            for (const result of resultsForOrganism) {
+              const row = results.insertRow();
+              for (const value of [result.antibiotic, result.mic, result.interpretation]) {
+                const cell = row.insertCell();
+                cell.textContent = value;
+              }
+            }
+            susceptibility.append(results);
           }
           const legend = document.createElement("div");
           legend.className = "pre-rounds-susceptibility-legend";
-          legend.textContent = "S = Susceptible · I = Intermediate · R = Resistant";
-          susceptibility.append(heading, results, legend);
+          legend.textContent = "S = Susceptible · I = Intermediate · R = Resistant · SDD = Susceptible dose-dependent · NS = Nonsusceptible";
+          susceptibility.append(legend);
           item.append(susceptibility);
         }
-        if (!report.recognized) {
+        if (report.includedUnparsedText) {
           const notice = document.createElement("div");
-          notice.textContent = "No impression or key result detected; review the pasted report.";
+          notice.textContent = "Additional pasted text is included; review abbreviations and findings.";
           item.append(notice);
         }
         imagingCell.append(item);
@@ -1874,13 +1982,13 @@
         tab.setAttribute("aria-controls", patientId);
         tab.setAttribute("aria-selected", String(selected));
         tab.tabIndex = selected ? 0 : -1;
-        tab.textContent = patientName || room ? `${patientLabel} · ${patientName || `Room ${room}`}` : patientLabel;
+        tab.textContent = patientName || (room ? `${patientLabel} · Room ${room}` : patientLabel);
         card.id = patientId;
         card.setAttribute("role", "tabpanel");
         card.setAttribute("aria-labelledby", `${patientId}-tab`);
         card.setAttribute("aria-label", `Patient ${patientNumber} information`);
         card.hidden = !selected;
-        card.querySelector("h3").textContent = patientLabel;
+        card.querySelector("h3").textContent = patientName || patientLabel;
         card.querySelector("[data-remove-patient]").disabled = false;
         const wrapper = document.createElement("div");
         wrapper.className = "pre-rounds-sheet-wrap";
