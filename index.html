@@ -234,6 +234,9 @@
     #exam-note-panel .finding-choice { min-height: 23px; padding: 2px 4px 2px 6px; font-size: 10px; }
     #exam-note-panel .system-section textarea { min-height: 34px; padding: 5px 7px; font-size: 11px; line-height: 1.3; }
     #exam-note-panel .system-section textarea::placeholder { font-size: 10px; }
+    #exam-note-panel #mental-status { grid-column: 1 / -1; }
+    #exam-note-panel .mse-component + .mse-component { margin-top: 6px; }
+    #exam-note-panel .mse-text-input { display: block; width: 100%; min-height: 43px; padding: 5px 7px; color: var(--ink); background: #fafbfd; border: 1px solid #d5dae2; border-radius: 5px; font-size: 11px; line-height: 1.35; resize: vertical; }
     #exam-note-panel .preview { position: fixed; z-index: 50; right: 14px; bottom: 14px; top: auto; display: flex; width: min(400px, calc(100vw - 28px)); max-width: none; max-height: min(55vh, 520px); flex-direction: column; border-color: #b8c5d4; border-radius: 8px; box-shadow: 0 12px 34px rgba(15, 23, 42, .22); }
     #exam-note-panel .preview-head { flex: 0 0 auto; padding: 9px 11px; }
     #exam-note-panel .preview-actions { display: flex; align-items: center; gap: 7px; }
@@ -387,6 +390,7 @@
       .rail-heading p, .rail-foot { display: none; }
       .editor, .preview { width: 100%; max-width: none; justify-self: stretch; }
       #system-fields { grid-template-columns: 1fr; }
+      #exam-note-panel .mse-fields { grid-template-columns: 1fr; }
       #exam-note-panel .preview { position: fixed; right: 8px; bottom: 8px; width: calc(100vw - 16px); max-height: 50vh; }
       #ros-panel .preview { position: fixed; right: 8px; bottom: 8px; width: calc(100vw - 16px); max-height: 50vh; }
       #ros-panel #ros-system-fields { grid-template-columns: 1fr; }
@@ -1396,6 +1400,11 @@
             continue;
           }
         }
+        const labeledText = line.match(/^\s*([A-Za-z][^:=]*?)\s*[:=]\s*(\S.*)$/);
+        if (labeledText && isImagingMicroTitle(labeledText[1])) {
+          unrecognized.push({ name: labeledText[1].trim(), value: labeledText[2].trim(), unit: "", referenceRange: "" });
+          continue;
+        }
         const match = line.match(new RegExp(`^\\s*([A-Za-z][A-Za-z0-9 /(),+.\\[\\]\\-]*?)\\s*(?::|=|\\s)\\s*(${labNumberPattern})(?=\\s|$)(.*)$`, "i"));
         if (!match) {
           if (!/^[=\-_*]{3,}$/.test(line.trim()) && !/^(?:collection|collected|received|accession|site|specimen|test name|result|units?|ref(?:erence)? range)\b/i.test(line.trim())) {
@@ -1421,7 +1430,8 @@
 
     function isImagingMicroTitle(title) {
       const normalized = title.replace(/[^a-z0-9]/gi, "").toLocaleUpperCase();
-      return imagingTitlePrefixes.some((alias) => normalized.startsWith(alias));
+      return imagingTitlePrefixes.some((alias) => normalized.startsWith(alias))
+        || /\b(?:computed tomography|magnetic resonance(?: imaging)?|radiograph(?:y)?|x[ -]?ray|ultrasound|ultrasonography|sonograph(?:y|ic)|sonogram|echocardiograph(?:y|ic|am)?|electrocardiogram|mammograph(?:y|ic)|mammogram|fluoroscop(?:y|ic)|dexa|dxa|bone density|bone scan|nuclear medicine|angiograph(?:y|ic|am)|myelogram|arthrogram|venogram|ct|cta|ctv|mri|mra|mrv|mrcp|xr|xry|usg|us|echo|tte|tee|ekg|ecg|pet|nm|vq)\b/i.test(title);
     }
 
     function isMicrobiologyTitle(title) {
@@ -1435,26 +1445,50 @@
       const sectionHeader = /^(impression|conclusion|findings|culture results?|culture\s+(?:and|&)\s+(?:sensitivities?|susceptibilities?)|result|interpretation|microbiology|gram stain|organism(?:\s+#?\d+)?|quantity|antimicrobial (?:susceptibilities?|sensitivities?)|antibiotics? (?:susceptibilities?|sensitivities?)|drug susceptibilities?|antibiogram|ast|susceptibilities?(?: results?| testing| profile| panel)?|sensitivities?(?: results?| testing| profile| panel)?|sens|susc)(?:\s*[\[(][^)\]]*[\])])?\s*:?\s*(.*)$/i;
       const cleanLine = (line) => line.replace(/^\s*(?:[-*•]\s*)/, "").replace(/[ \u00a0]+/g, " ").trim();
       const isFormattingDivider = (line) => /^[=\-_*~+#]{3,}$/.test(line.replace(/\s/g, ""));
-      const chunks = text.replace(/\r\n?/g, "\n").replace(/\f/g, "\n").split(/\n\s*\n+/).map((chunk) => chunk.split("\n").map(cleanLine).filter((line) => line && !isFormattingDivider(line))).filter((lines) => lines.length);
+      const chunks = text.replace(/\r\n?/g, "\n").replace(/\f/g, "\n")
+        .split(/\n\s*\n+/)
+        .map((chunk) => chunk.split("\n").map(cleanLine).filter((line) => line && !isFormattingDivider(line)))
+        .filter((lines) => lines.length)
+        .flatMap((lines) => {
+          const reportsInChunk = [];
+          for (const line of lines) {
+            const inlineTitle = line.match(/^\s*(.+?)\s*[:=]\s*(\S.*)$/);
+            const startsReport = inlineTitle
+              && (isImagingMicroTitle(inlineTitle[1]) || isMicrobiologyTitle(inlineTitle[1]));
+            if (!reportsInChunk.length || startsReport && reportsInChunk[reportsInChunk.length - 1].length) {
+              reportsInChunk.push([]);
+            }
+            reportsInChunk[reportsInChunk.length - 1].push(line);
+          }
+          return reportsInChunk;
+        });
       const reports = [];
 
       for (const lines of chunks) {
-        const titleLine = lines.map((line) => line.replace(datePattern, " ").replace(/\s+/g, " ").trim())
+        const inlineTitle = lines[0]?.match(/^\s*(.+?)\s*[:=]\s*(\S.*)$/);
+        const inlineTitleName = inlineTitle && isImagingMicroTitle(inlineTitle[1])
+          ? inlineTitle[1].trim()
+          : "";
+        const titleLine = inlineTitleName || lines.map((line) => line.replace(datePattern, " ").replace(/\s+/g, " ").trim())
           .find((line) => line && !isFormattingDivider(line) && !metadataLine.test(line) && (!sectionHeader.test(line) || /^microbiology\s+test\s+report\b/i.test(line)));
         const title = titleLine && titleLine.length <= 120 ? titleLine.replace(/\s+(?:result|study|exam)\s+date\s*:.*/i, "").replace(/:+$/, "").trim() : "";
+        const reportLines = inlineTitleName
+          ? [inlineTitle[2].trim(), ...lines.slice(1)]
+          : lines;
         const dateLine = lines.find((line) => datePattern.test(line));
         const date = dateLine?.match(datePattern)?.[0] || "";
         const previous = reports[reports.length - 1];
         const hasReportTitle = title && (isImagingMicroTitle(title)
           || isMicrobiologyTitle(title)
           || title === lines[0] && /^[A-Z0-9][A-Z0-9 /(),+.-]{2,}$/.test(title));
-        const startsReport = hasReportTitle && previous && previous.lines.some((line) => sectionHeader.test(line) || /\b(?:impression|no growth|positive|negative|detected|not detected|organism|findings)\b/i.test(line));
+        const startsReport = hasReportTitle && previous && (previous.title
+          || previous.lines.some((line) => sectionHeader.test(line) || /\b(?:impression|no growth|positive|negative|detected|not detected|organism|findings)\b/i.test(line)));
         if (!previous || startsReport) {
-          reports.push({ title: hasReportTitle ? title : "", date, lines: [...lines] });
+          reports.push({ title: hasReportTitle ? title : "", date, lines: [...reportLines] });
         } else {
           if (!previous.title && hasReportTitle) previous.title = title;
           if (!previous.date && date) previous.date = date;
-          previous.lines.push(...lines);
+          previous.lines.push(...reportLines);
         }
       }
 
@@ -2169,6 +2203,68 @@
     renderPreRounds();
 
     const finding = (group, id, label, affirmative, negative, normalWhen) => ({ group, id, label, affirmative, negative, normalWhen });
+    const mseComponents = [
+      { id: "appearance", label: "Appearance", findings: [
+        finding("Appearance", "mse-appears-stated-age", "Appears stated age", "Appears stated age.", "Appears older or younger than stated age.", "affirmative"),
+        finding("Appearance", "mse-well-groomed", "Well-groomed", "Well-groomed with appropriate hygiene.", "Disheveled with poor hygiene.", "affirmative"),
+        finding("Appearance", "mse-appropriate-dress", "Appropriately dressed", "Dressed appropriately for the setting.", "Dress inappropriate for the setting.", "affirmative"),
+        finding("Appearance", "mse-eye-contact-appropriate", "Appropriate eye contact", "Eye contact appropriate.", "Eye contact limited or avoidant.", "affirmative"),
+        finding("Appearance", "mse-abnormal-markings", "Abnormalities / markings", "Physical abnormalities or markings noted.", "No visible physical abnormalities or notable markings.", "negative")
+      ] },
+      { id: "behavior", label: "Behavior", findings: [
+        finding("Behavior", "mse-cooperative", "Cooperative", "Cooperative and engaged.", "Uncooperative or disengaged.", "affirmative"),
+        finding("Behavior", "mse-normal-psychomotor", "Psychomotor activity", "Psychomotor activity within normal limits.", "Psychomotor retardation or agitation present.", "affirmative"),
+        finding("Behavior", "mse-tics", "Tics / abnormal movements", "Tics or abnormal movements noted.", "No tics or abnormal movements noted.", "negative"),
+        finding("Behavior", "mse-gait-posture-normal", "Posture / gait unremarkable", "Posture and gait unremarkable.", "Posture or gait abnormal.", "affirmative")
+      ] },
+      { id: "speech", label: "Speech", findings: [
+        finding("Speech", "mse-speech-normal", "Normal", "Speech normal in rate, volume, tone, fluency, and quantity.", "Speech abnormal in rate, volume, tone, fluency, or quantity.", "affirmative"),
+        finding("Speech", "mse-pressured", "Pressured", "Speech pressured.", "Speech not pressured.", "negative"),
+        finding("Speech", "mse-slow", "Slow", "Speech slow.", "Speech not slow.", "negative"),
+        finding("Speech", "mse-soft", "Soft", "Speech soft in volume.", "Speech not soft in volume.", "negative"),
+        finding("Speech", "mse-loud", "Loud", "Speech loud in volume.", "Speech not loud in volume.", "negative"),
+        finding("Speech", "mse-slurred", "Slurred", "Speech slurred.", "Speech not slurred.", "negative")
+      ] },
+      { id: "mood", label: "Mood", freeText: true, findings: [] },
+      { id: "affect", label: "Affect", findings: [
+        finding("Affect", "mse-affect-full-congruent", "Full, mood-congruent", "Affect full-range and congruent with stated mood.", "Affect restricted or incongruent with stated mood.", "affirmative"),
+        finding("Affect", "mse-flat-affect", "Flat", "Affect flat.", "Affect not flat.", "negative"),
+        finding("Affect", "mse-blunted-affect", "Blunted", "Affect blunted.", "Affect not blunted.", "negative"),
+        finding("Affect", "mse-constricted-affect", "Constricted", "Affect constricted.", "Affect not constricted.", "negative"),
+        finding("Affect", "mse-labile-affect", "Labile", "Affect labile.", "Affect not labile.", "negative"),
+        finding("Affect", "mse-incongruent-affect", "Incongruent", "Affect incongruent with stated mood.", "Affect congruent with stated mood.", "negative")
+      ] },
+      { id: "thought-process", label: "Thought Process", findings: [
+        finding("Thought Process", "mse-linear-thought", "Linear / logical", "Thought process linear, logical, and goal-directed.", "Thought process disorganized or not goal-directed.", "affirmative"),
+        finding("Thought Process", "mse-circumstantial", "Circumstantial", "Thought process circumstantial.", "Thought process not circumstantial.", "negative"),
+        finding("Thought Process", "mse-tangential", "Tangential", "Thought process tangential.", "Thought process not tangential.", "negative"),
+        finding("Thought Process", "mse-flight-ideas", "Flight of ideas", "Flight of ideas present.", "No flight of ideas.", "negative"),
+        finding("Thought Process", "mse-loose-associations", "Loose associations", "Loose associations present.", "No loose associations.", "negative")
+      ] },
+      { id: "thought-content", label: "Thought Content", findings: [
+        finding("Thought Content", "mse-delusions", "Delusions", "Delusions present or elicited.", "No delusions elicited.", "negative"),
+        finding("Thought Content", "mse-obsessions-phobias", "Obsessions / phobias", "Obsessions or phobias reported.", "No obsessions or phobias reported.", "negative"),
+        finding("Thought Content", "mse-si", "Suicidal ideation", "Suicidal ideation present.", "Denies suicidal ideation.", "negative"),
+        finding("Thought Content", "mse-hi", "Homicidal ideation", "Homicidal ideation present.", "Denies homicidal ideation.", "negative")
+      ] },
+      { id: "perception", label: "Perception", findings: [
+        finding("Perception", "mse-auditory-hallucinations", "Auditory hallucinations", "Auditory hallucinations reported.", "Auditory hallucinations denied.", "negative"),
+        finding("Perception", "mse-visual-hallucinations", "Visual hallucinations", "Visual hallucinations reported.", "Visual hallucinations denied.", "negative"),
+        finding("Perception", "mse-other-hallucinations", "Other hallucinations", "Other hallucinations reported.", "Other hallucinations denied.", "negative"),
+        finding("Perception", "mse-illusions", "Illusions", "Illusions reported.", "Illusions denied.", "negative")
+      ] },
+      { id: "cognition", label: "Cognition", findings: [
+        finding("Cognition", "mse-alert-oriented", "Alert, oriented x4", "Alert and oriented to person, place, time, and situation.", "Altered level of consciousness or disoriented.", "affirmative"),
+        finding("Cognition", "mse-attention-intact", "Attention / concentration", "Attention and concentration intact.", "Attention or concentration impaired.", "affirmative"),
+        finding("Cognition", "mse-memory-intact", "Memory", "Immediate, short-term, and long-term memory grossly intact.", "Memory impairment noted.", "affirmative"),
+        finding("Cognition", "mse-abstraction-intact", "Abstract reasoning", "Abstract reasoning intact.", "Abstract reasoning impaired.", "affirmative")
+      ] },
+      { id: "insight-judgment", label: "Insight & Judgment", findings: [
+        finding("Insight & Judgment", "mse-insight", "Understands illness and need for treatment", "Demonstrates awareness and understanding of their illness and need for treatment.", "Insight limited; demonstrates limited awareness or understanding of their illness or need for treatment.", "affirmative"),
+        finding("Insight & Judgment", "mse-judgment", "Makes sound, safe decisions", "Demonstrates sound judgment and makes safe, realistic decisions.", "Judgment impaired; decisions may be unsafe or unrealistic.", "affirmative")
+      ] }
+    ];
+    const mseNormal = "Appearance appropriate; behavior cooperative with normal psychomotor activity; speech normal; mood euthymic with congruent affect; thought process linear and goal-directed; no delusions, obsessions, phobias, or suicidal/homicidal ideation; no perceptual disturbance; alert and oriented with attention, concentration, memory, and abstract reasoning intact; insight and judgment intact.";
     const systems = [
       { id: "general", label: "General", icon: "GN", normal: "Well-developed, well-nourished, in no acute distress (NAD).", findings: [
         finding("Mental status", "alert-oriented", "Alert & Oriented", "Alert and oriented.", "Not alert and oriented.", "affirmative"),
@@ -2293,7 +2389,7 @@
         finding("Temperature / Moisture", "warm-dry", "Warm & Dry", "Skin warm and dry.", "Skin cool or moist.", "affirmative"),
         finding("Temperature / Moisture", "cool-clammy", "Cool / Clammy", "Skin cool or clammy.", "Skin not cool or clammy.", "negative"),
         finding("Temperature / Moisture", "diaphoretic", "Diaphoretic", "Diaphoretic.", "Not diaphoretic.", "negative"),
-        finding("Color", "normal-color", "Normal Color", "Skin color normal.", "Skin color abnormal.", "affirmative"),
+        finding("Color", "normal-color", "Normal Color", "Normal in color.", "Abnormal in color.", "affirmative"),
         finding("Color", "pallor", "Pallor", "Pallor present.", "No pallor.", "negative"),
         finding("Color", "cyanosis", "Cyanosis", "Cyanosis present.", "No cyanosis.", "negative"),
         finding("Color", "jaundice", "Jaundice", "Jaundice present.", "No jaundice.", "negative"),
@@ -2432,7 +2528,22 @@
       ["no-lymphadenopathy", "tender-nodes"],
       ["no-lymphadenopathy", "fixed-matted-nodes"],
       ["normal-male-genitalia", "testicular-tenderness"],
-      ["normal-male-genitalia", "testicular-masses"]
+      ["normal-male-genitalia", "testicular-masses"],
+      ["mse-speech-normal", "mse-pressured"],
+      ["mse-speech-normal", "mse-slow"],
+      ["mse-speech-normal", "mse-soft"],
+      ["mse-speech-normal", "mse-loud"],
+      ["mse-speech-normal", "mse-slurred"],
+      ["mse-euthymic", "mse-anxious-mood", "mse-depressed-mood", "mse-irritable-mood", "mse-elevated-mood"],
+      ["mse-affect-full-congruent", "mse-flat-affect"],
+      ["mse-affect-full-congruent", "mse-blunted-affect"],
+      ["mse-affect-full-congruent", "mse-constricted-affect"],
+      ["mse-affect-full-congruent", "mse-labile-affect"],
+      ["mse-affect-full-congruent", "mse-incongruent-affect"],
+      ["mse-linear-thought", "mse-circumstantial"],
+      ["mse-linear-thought", "mse-tangential"],
+      ["mse-linear-thought", "mse-flight-ideas"],
+      ["mse-linear-thought", "mse-loose-associations"],
     ];
 
     const $ = (selector) => document.querySelector(selector);
@@ -2539,7 +2650,7 @@
         const section = document.createElement("details");
         section.className = "system-section";
         section.id = system.id;
-        section.open = true;
+        section.open = !["genitourinary", "lymphatic", "psychiatric"].includes(system.id);
         const groups = [...new Set(system.findings.map((finding) => finding.group))];
         const groupedChoices = groups.map((group) => {
           const choices = system.findings
@@ -2552,6 +2663,35 @@
         systemFields.append(section);
       }
 
+      const mseLink = document.createElement("button");
+      mseLink.className = "system-link";
+      mseLink.type = "button";
+      mseLink.dataset.target = "mental-status";
+      mseLink.innerHTML = '<span class="system-icon" aria-hidden="true">MS</span><span>Mental Status Exam</span><span class="system-state" aria-hidden="true"></span>';
+      mseLink.addEventListener("click", () => {
+        const target = document.getElementById("mental-status");
+        target.open = true;
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+        setActiveSystem("mental-status");
+      });
+      systemNav.append(mseLink);
+
+      const mseSection = document.createElement("details");
+      mseSection.className = "system-section mse-section";
+      mseSection.id = "mental-status";
+      mseSection.open = false;
+      const mseGroups = mseComponents.map((component) => {
+        if (component.freeText) {
+          return `<div class="mse-component"><label class="finding-group-label" for="mse-${component.id}">${component.label}</label><textarea class="mse-text-input" id="mse-${component.id}" data-mse-text="${component.id}" aria-label="${component.label}" placeholder="Enter the patient's mood in their own words" rows="2"></textarea></div>`;
+        }
+        const choices = component.findings.map((item) =>
+          `<button class="finding-choice" type="button" data-finding-id="${item.id}" data-mse-component="${component.id}" data-state="clear" aria-pressed="false" aria-label="${item.label}. Not selected. Click or press Enter for affirmative; right-click or press Shift+Enter for negative; hover and type to add details; repeat to clear." title="Left-click: affirmative. Right-click: negative. Repeat to clear. Hover and type to add details.">${item.label}</button>`
+        ).join("");
+        return `<div class="mse-component"><span class="finding-group-label">${component.label}</span><div class="finding-options" role="group" aria-label="Mental status ${component.label} presets">${choices}</div></div>`;
+      }).join("");
+      mseSection.innerHTML = `<summary class="system-summary"><h3>Mental Status Exam</h3><span class="system-summary-count" id="mental-status-summary-count">${mseComponents.length} components</span></summary><div class="system-content">${mseGroups}<label class="field-label" for="finding-mental-status">Other findings</label><textarea id="finding-mental-status" data-system="mental-status" placeholder="Enter additional observed mental status findings" rows="2"></textarea><div class="system-actions"><button class="normal-button" type="button" data-mse-normal title="Insert a normal mental status summary and clear selected presets">WNL</button></div></div>`;
+      systemFields.append(mseSection);
+
       systemFields.addEventListener("click", (event) => {
         const choice = event.target.closest(".finding-choice");
         if (choice) {
@@ -2559,14 +2699,25 @@
           return;
         }
         const button = event.target.closest("[data-normal]");
-        if (!button) return;
-        const system = systems.find((item) => item.id === button.dataset.normal);
-        const section = document.getElementById(system.id);
-        for (const choice of section.querySelectorAll(".finding-choice")) setFindingState(choice, "clear");
-        const input = document.getElementById(`finding-${button.dataset.normal}`);
-        input.value = system.normal;
-        updateNote();
-        input.focus();
+        if (button?.dataset.normal) {
+          const system = systems.find((item) => item.id === button.dataset.normal);
+          const section = document.getElementById(system.id);
+          for (const choice of section.querySelectorAll(".finding-choice")) setFindingState(choice, "clear");
+          const input = document.getElementById(`finding-${button.dataset.normal}`);
+          input.value = system.normal;
+          updateNote();
+          input.focus();
+          return;
+        }
+        if (event.target.closest("[data-mse-normal]")) {
+          const section = document.getElementById("mental-status");
+          for (const choice of section.querySelectorAll(".finding-choice")) setFindingState(choice, "clear");
+          const input = document.getElementById("finding-mental-status");
+          input.value = mseNormal;
+          updateNote();
+          input.focus();
+          return;
+        }
       });
 
       systemFields.addEventListener("contextmenu", (event) => {
@@ -2609,6 +2760,15 @@
       if (findings.length) {
         for (const finding of findings) lines.push(`${finding.label}: ${finding.value}`);
       }
+      const mentalStatusFindings = mseComponents
+        .map((component) => ({ label: component.label, value: getMseComponentFindings(component) }))
+        .filter((field) => field.value);
+      const otherMentalStatusFindings = $("#finding-mental-status").value.trim();
+      if (otherMentalStatusFindings) mentalStatusFindings.push({ label: "Other findings", value: otherMentalStatusFindings });
+      if (mentalStatusFindings.length) {
+        lines.push("", "MENTAL STATUS EXAMINATION");
+        for (const finding of mentalStatusFindings) lines.push(`${finding.label}: ${finding.value}`);
+      }
       return lines.join("\n");
     }
 
@@ -2624,8 +2784,17 @@
       findingDetailEditor.style.top = `${top}px`;
     }
 
+    function getFindingContext(button) {
+      const section = button.closest(".system-section");
+      if (section.id === "mental-status") {
+        const component = mseComponents.find((item) => item.id === button.dataset.mseComponent);
+        return { id: "mental-status", normal: mseNormal, findings: component.findings };
+      }
+      return systems.find((item) => item.id === section.id);
+    }
+
     function ensureFindingPositive(button) {
-      const system = systems.find((item) => item.id === button.closest(".system-section").id);
+      const system = getFindingContext(button);
       const otherFindings = $(`#finding-${system.id}`);
       if (otherFindings.value.trim() === system.normal) otherFindings.value = "";
       const conflictingIds = new Set(mutuallyExclusiveAffirmative
@@ -2688,14 +2857,109 @@
         if (button.dataset.state === "negative") return [finding.negative];
         return [];
       });
+      const selectedButtons = [...section.querySelectorAll(".finding-choice")]
+        .filter((button) => button.dataset.state !== "clear");
+      const abdominalBaseFindings = new Set(["abdomen-soft", "abdomen-nontender", "abdomen-nondistended"]);
+      const isAbdominalBaseGroup = system.id === "gastrointestinal"
+        && selectedButtons.length > 1
+        && selectedButtons.every((button) => abdominalBaseFindings.has(button.dataset.findingId));
+      const abdominalClauses = system.id === "gastrointestinal"
+        ? selected.map((text) => text.replace(/^abdomen\s+/i, "").trim())
+        : selected;
+      const sentences = isAbdominalBaseGroup
+        ? joinFindingList(abdominalClauses)
+        : system.id === "gastrointestinal"
+          ? abdominalClauses.map((text) => `${text.charAt(0).toLocaleUpperCase()}${text.slice(1)}`).join(" ")
+          : joinFindingProse(selected);
       const other = $(`#finding-${system.id}`).value.trim();
-      return [...selected, other].filter(Boolean).join(" ");
+      return [sentences, other].filter(Boolean).join(" ");
+    }
+
+    function joinFindingList(findings) {
+      const items = findings.map((finding) => finding.trim().replace(/[.!?]+$/, ""));
+      const coordinated = items.length === 2
+        ? `${items[0]} and ${items[1]}`
+        : `${items.slice(0, -1).join(", ")}, and ${items[items.length - 1]}`;
+      return `${coordinated.charAt(0).toLocaleUpperCase()}${coordinated.slice(1)}.`;
+    }
+
+    function joinFindingProse(findings) {
+      const clauses = findings.map((finding) => finding.trim().replace(/[.!?]+$/, ""));
+      const groups = [];
+      for (const clause of clauses) {
+        const current = groups[groups.length - 1];
+        if (!current) {
+          groups.push({ clauses: [clause], prefix: clause.match(/^[A-Za-z]+(?:\s+[A-Za-z]+)*/)?.[0] || "" });
+          continue;
+        }
+        const words = current.prefix.split(/\s+/).filter(Boolean);
+        const nextWords = clause.match(/^[A-Za-z]+(?:\s+[A-Za-z]+)*/)?.[0].split(/\s+/) || [];
+        let sharedCount = 0;
+        while (sharedCount < words.length && sharedCount < nextWords.length
+          && words[sharedCount].toLocaleLowerCase() === nextWords[sharedCount].toLocaleLowerCase()) {
+          sharedCount += 1;
+        }
+        if (sharedCount < 2 || current.clauses.some((item) => item === clause)) {
+          groups.push({ clauses: [clause], prefix: clause.match(/^[A-Za-z]+(?:\s+[A-Za-z]+)*/)?.[0] || "" });
+          continue;
+        }
+        current.prefix = words.slice(0, sharedCount).join(" ");
+        current.clauses.push(clause);
+      }
+
+      return groups.map(({ clauses: grouped, prefix }) => {
+        if (grouped.length < 2 || !prefix) return `${grouped[0]}.`;
+        const fragments = grouped.map((clause) => {
+          const fragment = clause.slice(prefix.length).trim();
+          return fragment ? `${fragment.charAt(0).toLocaleLowerCase()}${fragment.slice(1)}` : "";
+        });
+        if (fragments.some((fragment) => !fragment)) return `${grouped.join(". ")}.`;
+        const coordinated = fragments.length === 2
+          ? `${fragments[0]} and ${fragments[1]}`
+          : `${fragments.slice(0, -1).join(", ")}, and ${fragments[fragments.length - 1]}`;
+        return `${prefix} ${coordinated}.`;
+      }).join(" ");
+    }
+
+    function getMseComponentFindings(component) {
+      if (component.freeText) {
+        const value = $(`#mse-${component.id}`).value.trim();
+        return value ? `"${value}"` : "";
+      }
+      const selected = [...document.querySelectorAll(`#mental-status .finding-choice[data-mse-component="${component.id}"]`)]
+        .flatMap((button) => {
+          const finding = component.findings.find((item) => item.id === button.dataset.findingId);
+          if (button.dataset.state === "affirmative") {
+            const detail = button.dataset.detail?.trim();
+            return [`${finding.affirmative.replace(/\.$/, "")}${detail ? ` (${detail})` : ""}`];
+          }
+          if (button.dataset.state === "negative") return [finding.negative.replace(/\.$/, "")];
+          return [];
+        });
+      if (!selected.length) return "";
+      const subjectPrefixes = {
+        speech: /^speech\s+/i,
+        affect: /^affect\s+/i,
+        "thought-process": /^thought process\s+/i,
+        "insight-judgment": /^insight and judgment\s+/i
+      };
+      const prefix = subjectPrefixes[component.id];
+      const clauses = selected.map((text, index) => {
+        const clause = prefix ? text.replace(prefix, "") : text;
+        return index ? `${clause.charAt(0).toLocaleLowerCase()}${clause.slice(1)}` : clause;
+      });
+      const coordinated = clauses.length === 1
+        ? clauses[0]
+        : clauses.length === 2
+          ? `${clauses[0]} and ${clauses[1]}`
+          : `${clauses.slice(0, -1).join(", ")}, and ${clauses[clauses.length - 1]}`;
+      return `${coordinated.charAt(0).toLocaleUpperCase()}${coordinated.slice(1)}.`;
     }
 
     function setFindingState(button, state) {
       button.dataset.state = state;
       button.setAttribute("aria-pressed", String(state !== "clear"));
-      const system = systems.find((item) => item.id === button.closest(".system-section").id);
+      const system = getFindingContext(button);
       const finding = system.findings.find((item) => item.id === button.dataset.findingId);
       if (state !== "affirmative") delete button.dataset.detail;
       if (state === "clear") delete button.dataset.normality;
@@ -2705,7 +2969,7 @@
     }
 
     function toggleFinding(button, requestedState) {
-      const system = systems.find((item) => item.id === button.closest(".system-section").id);
+      const system = getFindingContext(button);
       const otherFindings = $(`#finding-${system.id}`);
       if (otherFindings.value.trim() === system.normal) otherFindings.value = "";
       const state = button.dataset.state === requestedState ? "clear" : requestedState;
@@ -2725,10 +2989,14 @@
 
     function updateNote() {
       const note = buildNote();
-      const documented = systems.filter((system) => getSystemFindings(system)).length;
+      const mseChoices = document.querySelectorAll('#mental-status .finding-choice[data-state="affirmative"], #mental-status .finding-choice[data-state="negative"]');
+      const hasMseFindings = mseChoices.length > 0
+        || Boolean($("#finding-mental-status").value.trim())
+        || mseComponents.some((component) => component.freeText && getMseComponentFindings(component));
+      const documented = systems.filter((system) => getSystemFindings(system)).length + Number(hasMseFindings);
       noteOutput.textContent = note;
       copyButton.disabled = !note.trim();
-      $("#completion").textContent = `${documented} of ${systems.length} documented`;
+      $("#completion").textContent = `${documented} of ${systems.length + 1} documented`;
       $("#note-count").textContent = `${note.length} characters`;
       for (const system of systems) {
         const navLink = systemNav.querySelector(`[data-target="${system.id}"]`);
@@ -2739,6 +3007,13 @@
         navLink.querySelector(".system-state").classList.toggle("done", hasFindings);
         $(`#${system.id}-summary-count`).textContent = selectedCount ? `${selectedCount} selected` : hasOther ? "Other findings" : `${system.findings.length} options`;
       }
+      const mseNavLink = systemNav.querySelector('[data-target="mental-status"]');
+      mseNavLink.querySelector(".system-state").classList.toggle("done", hasMseFindings);
+      $("#mental-status-summary-count").textContent = mseChoices.length
+        ? `${mseChoices.length} selected`
+        : mseComponents.some((component) => component.freeText && getMseComponentFindings(component))
+          ? "Mood entered"
+          : hasMseFindings ? "Other findings" : `${mseComponents.length} components`;
       copyStatus.textContent = "";
     }
 
