@@ -911,10 +911,7 @@
       @keyframes arrive { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     }
   </style>
-<script>
-/* Apply saved/system theme before first paint (prevents a light flash in dark mode) */
-(function(){try{var t=localStorage.getItem("bellmd-theme");if(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)t="dark";if(t)document.documentElement.dataset.theme=t;}catch(e){}})();
-</script>
+<script>(function(){try{var t=localStorage.getItem("bellmd-theme");if(!t&&matchMedia("(prefers-color-scheme: dark)").matches)t="dark";if(t)document.documentElement.dataset.theme=t;}catch(e){}})();</script>
 <style id="upgrade-styles">
 /* =====================================================================
    VA-TOOLS upgrade styles - loaded AFTER the original <style> block
@@ -1103,6 +1100,80 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus
 @media (min-width: 1400px) {
   #exam-note-panel .preview, #ros-panel .preview { box-shadow: none; border-color: var(--line); }
 }
+
+
+/* ---------- Epic-style structured exam ---------- */
+#exam-note-panel.epic-on #exam-form,
+#exam-note-panel.epic-on .quick-bar,
+#exam-note-panel.epic-on #system-nav { display: none !important; }
+#exam-note-panel:not(.epic-on) .epic-exam,
+#exam-note-panel:not(.epic-on) .epic-nav { display: none; }
+#exam-note-panel [hidden] { display: none !important; }
+
+.epic-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 10px 12px 0; padding: 9px 12px; border: 1px solid var(--line); background: var(--surface-head, rgba(148,163,184,.08)); }
+.epic-bar input[type="search"] { flex: 1 1 200px; min-width: 150px; padding: 6px 10px; color: var(--ink); background: var(--field-bg); border: 1px solid var(--line); }
+.epic-wild { padding: 3px 10px; border: 1px solid var(--line); color: var(--muted); font-size: 12px; font-weight: 700; }
+.epic-wild.has { color: #92400e; background: #fef3c7; border-color: #f59e0b; }
+html[data-theme="dark"] .epic-wild.has { color: #fcd34d; background: rgba(245,158,11,.16); border-color: rgba(245,158,11,.55); }
+.epic-body { padding: 10px 12px 16px; display: grid; gap: 12px; }
+
+.epic-sys { border: 1px solid var(--line); background: var(--surface-solid, #fff); scroll-margin-top: calc(var(--tabs-h, 64px) + 16px); }
+.epic-sys > summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; cursor: pointer; background: var(--surface-head, #f1f5f9); border-bottom: 1px solid var(--line); list-style: none; }
+.epic-sys > summary::-webkit-details-marker { display: none; }
+.epic-sys > summary h3 { margin: 0; font-size: 15px; }
+.epic-sys > summary::before { content: "▸"; color: var(--muted); margin-right: 4px; }
+.epic-sys[open] > summary::before { content: "▾"; }
+.epic-sys > summary h3 { flex: 1; }
+.epic-count { color: var(--muted); font-size: 12px; font-weight: 600; }
+.epic-sys-tools { display: flex; gap: 8px; padding: 8px 14px 0; }
+
+.epic-el { padding: 10px 14px; border-bottom: 1px solid var(--line); border-left: 4px solid transparent; }
+.epic-el:last-child { border-bottom: 0; }
+.epic-el[data-state="normal"] { border-left-color: var(--brand-green, #16a34a); }
+.epic-el[data-state="abnormal"] { border-left-color: #dc2626; }
+.epic-el[data-state="note"] { border-left-color: var(--accent); }
+.epic-el-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.epic-el-head h4 { margin: 0; font-size: 13px; flex: 1; }
+.epic-normal { padding: 4px 14px; font-size: 12px; font-weight: 700; color: var(--ink); background: var(--surface-solid, #fff); border: 1px solid var(--line); cursor: pointer; }
+.epic-normal:hover { border-color: var(--brand-green, #16a34a); }
+.epic-normal[aria-pressed="true"] { color: #fff; background: #15803d; border-color: #15803d; }
+
+.epic-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.epic-chip { padding: 4px 10px; font-size: 12px; color: var(--ink); background: var(--surface-solid, #fff); border: 1px solid var(--line); cursor: pointer; }
+.epic-chip:hover { background: var(--surface-head, #f1f5f9); border-color: var(--accent); }
+.epic-chip[aria-pressed="true"] { color: #991b1b; background: #fee2e2; border-color: #dc2626; font-weight: 700; box-shadow: inset 3px 0 0 #dc2626; }
+html[data-theme="dark"] .epic-chip { background: rgba(30,41,59,.85); }
+html[data-theme="dark"] .epic-chip[aria-pressed="true"] { color: #fca5a5; background: rgba(239,68,68,.16); border-color: rgba(239,68,68,.55); }
+html[data-theme="dark"] .epic-normal[aria-pressed="true"] { background: #166534; border-color: #22c55e; }
+
+.epic-card { margin-top: 8px; padding: 8px 10px; border: 1px solid var(--line); border-left: 3px solid #dc2626; background: var(--surface-head, #f8fafc); }
+.epic-card-head { display: flex; justify-content: space-between; align-items: center; font-size: 13px; margin-bottom: 4px; }
+.epic-remove { border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; padding: 0 7px; line-height: 20px; }
+.epic-remove:hover { color: #dc2626; border-color: #dc2626; }
+.epic-spec { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; padding: 4px 6px; margin: 2px 0; border-left: 3px solid transparent; }
+.epic-spec.unres { border-left-color: #f59e0b; background: rgba(245,158,11,.10); }
+.epic-spec.flash { outline: 2px solid var(--accent); outline-offset: 1px; }
+.epic-spec-label { flex: 0 0 92px; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+.epic-pills { display: flex; flex-wrap: wrap; gap: 4px; flex: 1 1 200px; }
+.epic-pill { padding: 3px 9px; font-size: 12px; color: var(--ink); background: var(--surface-solid, #fff); border: 1px solid var(--line); cursor: pointer; }
+.epic-pill:hover { border-color: var(--accent); }
+.epic-pill[aria-pressed="true"] { color: #fff; background: var(--accent); border-color: var(--accent); font-weight: 700; }
+html[data-theme="dark"] .epic-pill { background: rgba(30,41,59,.85); }
+html[data-theme="dark"] .epic-pill[aria-pressed="true"] { color: #0f172a; }
+.epic-card-prose { margin: 6px 0 0; padding-top: 6px; border-top: 1px dashed var(--line); color: var(--muted); font-size: 12px; font-style: italic; }
+.epic-note { width: 100%; margin-top: 8px; padding: 5px 9px; font-size: 12px; color: var(--ink); background: var(--field-bg); border: 1px solid var(--line); }
+.epic-note:focus { border-color: var(--accent); }
+
+.epic-wild-mark { background: #fde68a; color: #78350f; font-weight: 800; padding: 0 2px; }
+html[data-theme="dark"] .epic-wild-mark { background: rgba(245,158,11,.35); color: #fde68a; }
+
+.epic-nav { display: grid; gap: 2px; }
+.epic-nav-btn { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; font-size: 13px; text-align: left; color: var(--ink); background: transparent; border: 1px solid transparent; cursor: pointer; }
+.epic-nav-btn:hover { background: var(--surface-head, #f1f5f9); border-color: var(--line); }
+.epic-nav-state { width: 9px; height: 9px; border: 1px solid var(--line); }
+.epic-nav-state.done { background: var(--brand-green, #16a34a); border-color: var(--brand-green, #16a34a); }
+@media (pointer: coarse) { .epic-chip, .epic-pill, .epic-normal { min-height: 38px; } }
+@media print { .epic-exam { display: none !important; } }
 
 /* ---------- Printing while in dark mode used to print a dark page ---------- */
 @media print {
@@ -4293,6 +4364,668 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus
       });
     }, true);
   }
+})();
+
+/* Exam finding library, part 1. DSL:
+   S(key,label,options,{req:0 optional, multi:1, f:'format with $'})
+   F(id,label,template,[specs])   template tokens {key} -> chosen value, or *** if required and empty
+   E(id,label,normalProse,[findings])
+   SYS(id,label,[elements]) */
+window.EXAM_LIB = (function () {
+  var S = function (k, l, o, x) { x = x || {}; return { k: k, l: l, o: o, req: x.req !== 0, multi: !!x.multi, f: x.f || '$' }; };
+  var F = function (id, l, t, s) { return { id: id, l: l, t: t, s: s || [] }; };
+  var E = function (id, l, n, f) { return { id: id, l: l, n: n, f: f }; };
+  var SYS = function (id, l, e) { return { id: id, l: l, e: e }; };
+
+  var LAT = S('lat', 'Side', ['right', 'left', 'bilateral']);
+  var LATo = S('lat', 'Side', ['right', 'left', 'bilateral'], { req: 0 });
+  var SEV = S('sev', 'Severity', ['mild', 'moderate', 'severe']);
+  var SEVo = S('sev', 'Severity', ['mild', 'moderate', 'severe'], { req: 0 });
+  var QUAD = S('quad', 'Location', ['right upper quadrant', 'left upper quadrant', 'right lower quadrant', 'left lower quadrant', 'epigastric region', 'periumbilical region', 'suprapubic region', 'diffusely'], { multi: 1 });
+  var UL = ['right', 'left', 'bilateral'];
+
+  var sys = [];
+
+  sys.push(SYS('general', 'General', [
+    E('appearance', 'Appearance', 'Well-developed, well-nourished, and in no acute distress.', [
+      F('distress', 'Distress', 'Appears to be in {sev} distress{cause}', [SEV, S('cause', 'Due to', ['pain', 'respiratory difficulty', 'nausea'], { req: 0, f: ' due to $' })]),
+      F('ill', 'Ill-appearing', 'Ill-appearing{tox}', [S('tox', 'Toxic', ['toxic'], { req: 0, f: ' and $-appearing' })]),
+      F('diaph', 'Diaphoretic', 'Diaphoretic', []),
+      F('pale', 'Pale', 'Pale in appearance', []),
+      F('cachexia', 'Cachectic', 'Cachectic in appearance', []),
+      F('obese', 'Obese', 'Obese body habitus', []),
+      F('frail', 'Frail', 'Frail in appearance', []),
+      F('dehyd', 'Dehydrated', 'Appears dehydrated', [])
+    ]),
+    E('mental', 'Alertness / Orientation', 'Alert and oriented to person, place, time, and situation.', [
+      F('disoriented', 'Disoriented', 'Disoriented to {to}', [S('to', 'Disoriented to', ['person', 'place', 'time', 'situation'], { multi: 1 })]),
+      F('somnolent', 'Somnolent', 'Somnolent, arousable to {stim}', [S('stim', 'Arousable to', ['voice', 'light touch', 'painful stimuli'])]),
+      F('lethargic', 'Lethargic', 'Lethargic', []),
+      F('obtunded', 'Obtunded', 'Obtunded', []),
+      F('unresp', 'Unresponsive', 'Unresponsive to {stim}', [S('stim', 'Unresponsive to', ['voice', 'tactile stimuli', 'painful stimuli'])]),
+      F('confused', 'Confused', 'Confused', [])
+    ])
+  ]));
+
+  sys.push(SYS('heent', 'HEENT', [
+    E('head', 'Head', 'Normocephalic and atraumatic.', [
+      F('headtrauma', 'Trauma', '{kind} noted over the {loc}', [S('kind', 'Finding', ['contusion', 'laceration', 'hematoma', 'abrasion']), S('loc', 'Location', ['frontal scalp', 'parietal scalp', 'occipital scalp', 'temporal scalp', 'forehead'])]),
+      F('scalptend', 'Scalp tenderness', 'Scalp tenderness to palpation{loc}', [S('loc', 'Location', ['frontal', 'temporal', 'parietal', 'occipital'], { req: 0, f: ' over the $ region' })]),
+      F('temporaltend', 'Temporal artery tenderness', 'Tenderness over the {lat} temporal artery', [LAT])
+    ]),
+    E('eyes', 'Eyes', 'Pupils equal, round, and reactive to light and accommodation. Extraocular movements intact. Conjunctivae and sclerae normal without discharge.', [
+      F('pupils', 'Abnormal pupils', 'Pupils {desc}', [S('desc', 'Pupil', ['dilated bilaterally', 'constricted bilaterally', 'unequal', 'sluggishly reactive', 'non-reactive to light', 'with right pupil larger', 'with left pupil larger'])]),
+      F('eomabn', 'EOM abnormal', 'Extraocular movements abnormal with {desc}', [S('desc', 'Finding', ['nystagmus', 'restricted gaze', 'diplopia on gaze', 'abduction deficit'], { multi: 1 })]),
+      F('injection', 'Conjunctival injection', 'Conjunctival injection of the {lat} eye{dis}', [S('lat', 'Side', ['right', 'left', 'both'], {}), S('dis', 'Discharge', ['clear', 'purulent', 'mucoid'], { req: 0, f: ' with $ discharge' })]),
+      F('icterus', 'Scleral icterus', 'Scleral icterus present', []),
+      F('subconj', 'Subconjunctival hemorrhage', 'Subconjunctival hemorrhage of the {lat} eye', [S('lat', 'Side', ['right', 'left', 'both'])]),
+      F('papill', 'Papilledema', 'Papilledema of the {lat} eye on fundoscopic examination', [S('lat', 'Side', ['right', 'left', 'both'])]),
+      F('vfd', 'Visual field deficit', 'Visual field deficit to confrontation: {d}', [S('d', 'Deficit', ['right homonymous hemianopia', 'left homonymous hemianopia', 'bitemporal hemianopia', 'right monocular deficit', 'left monocular deficit'])]),
+      F('ptosis', 'Ptosis', 'Ptosis of the {lat} eyelid', [LAT])
+    ]),
+    E('ears', 'Ears', 'External ears normal. Tympanic membranes pearly gray with normal landmarks and light reflex bilaterally. Canals clear.', [
+      F('tmerythema', 'TM erythema / bulging', '{lat} tympanic membrane {desc}', [S('lat', 'Side', ['Right', 'Left', 'Bilateral']), S('desc', 'Finding', ['erythematous', 'bulging', 'erythematous and bulging', 'retracted', 'perforated'])]),
+      F('effusion', 'Middle ear effusion', '{lat} middle ear effusion{type}', [S('lat', 'Side', ['Right', 'Left', 'Bilateral']), S('type', 'Type', ['serous', 'purulent'], { req: 0, f: ' ($)' })]),
+      F('canal', 'Canal abnormality', '{lat} external canal {desc}', [S('lat', 'Side', ['Right', 'Left', 'Bilateral']), S('desc', 'Finding', ['erythema and edema', 'cerumen impaction', 'purulent drainage', 'tenderness with tragal pressure'])]),
+      F('hearing', 'Hearing decreased', 'Decreased hearing to conversational voice, {lat}', [S('lat', 'Side', ['right', 'left', 'bilateral'])])
+    ]),
+    E('nose', 'Nose', 'Nares patent. Nasal mucosa pink and moist without discharge. Septum midline.', [
+      F('rhin', 'Rhinorrhea', '{type} rhinorrhea', [S('type', 'Type', ['Clear', 'Mucoid', 'Purulent'])]),
+      F('congest', 'Mucosal edema / congestion', 'Nasal mucosa {desc}', [S('desc', 'Finding', ['edematous and erythematous', 'pale and boggy', 'congested'])]),
+      F('septum', 'Septal deviation', 'Septal deviation to the {lat}', [S('lat', 'Side', ['right', 'left'])]),
+      F('epistaxis', 'Epistaxis', 'Active epistaxis from the {lat} naris', [S('lat', 'Side', ['right', 'left'])]),
+      F('sinus', 'Sinus tenderness', 'Tenderness to palpation over the {sinus} sinuses', [S('sinus', 'Sinus', ['maxillary', 'frontal', 'ethmoid'], { multi: 1 })])
+    ]),
+    E('throat', 'Oropharynx', 'Mucous membranes moist. Oropharynx clear without erythema, exudate, or tonsillar enlargement. Uvula midline.', [
+      F('dry', 'Dry mucous membranes', 'Mucous membranes dry', []),
+      F('pharyn', 'Pharyngeal erythema', 'Pharyngeal erythema{exud}', [S('exud', 'Exudate', ['with tonsillar exudate', 'without exudate'], { req: 0, f: ' $' })]),
+      F('tonsil', 'Tonsillar hypertrophy', 'Tonsillar hypertrophy ({grade})', [S('grade', 'Grade', ['1+', '2+', '3+', '4+'])]),
+      F('cobble', 'Cobblestoning', 'Posterior pharyngeal cobblestoning', []),
+      F('uvula', 'Uvular deviation', 'Uvula deviated to the {lat}', [S('lat', 'Side', ['right', 'left'])]),
+      F('oral', 'Oral lesion', '{kind} noted on the {loc}', [S('kind', 'Lesion', ['Ulcer', 'White plaques', 'Vesicles', 'Erythematous lesion']), S('loc', 'Location', ['buccal mucosa', 'tongue', 'palate', 'gingiva', 'lip'])]),
+      F('dentition', 'Poor dentition', 'Poor dentition with {d}', [S('d', 'Finding', ['dental caries', 'missing teeth', 'gingival erythema', 'dental abscess'], { multi: 1 })])
+    ])
+  ]));
+
+  sys.push(SYS('neck', 'Neck', [
+    E('neckgen', 'Neck', 'Supple with full range of motion. Trachea midline. No thyromegaly or masses.', [
+      F('stiff', 'Neck stiffness / meningismus', '{d}', [S('d', 'Finding', ['Nuchal rigidity present', 'Neck stiffness with flexion', 'Positive Kernig and Brudzinski signs'])]),
+      F('thyro', 'Thyromegaly', '{kind} thyromegaly', [S('kind', 'Type', ['Diffuse', 'Nodular', 'Right-sided', 'Left-sided'])]),
+      F('tmid', 'Tracheal deviation', 'Trachea deviated to the {lat}', [S('lat', 'Side', ['right', 'left'])]),
+      F('neckmass', 'Neck mass', '{size} mass palpated in the {lat} {loc}', [S('size', 'Size', ['Small', 'Moderate', 'Large']), S('lat', 'Side', ['right', 'left']), S('loc', 'Location', ['anterior triangle', 'posterior triangle', 'submandibular region', 'midline'])]),
+      F('rom', 'Limited ROM', 'Limited range of motion with {dir}', [S('dir', 'Limited', ['flexion', 'extension', 'rotation', 'lateral bending'], { multi: 1 })])
+    ]),
+    E('nodes', 'Lymph nodes', 'No cervical lymphadenopathy.', [
+      F('lad', 'Lymphadenopathy', '{tend}{lat} {loc} lymphadenopathy{size}', [S('tend', 'Quality', ['Tender', 'Non-tender'], { req: 0, f: '$, ' }), S('lat', 'Side', ['right', 'left', 'bilateral'], { f: '$' }), S('loc', 'Chain', ['anterior cervical', 'posterior cervical', 'submandibular', 'supraclavicular', 'axillary', 'inguinal']), S('size', 'Size', ['0.5 cm', '1 cm', '2 cm', '3 cm'], { req: 0, f: ', largest approximately $' })])
+    ]),
+    E('jvd', 'Vascular', 'No jugular venous distention. No carotid bruits.', [
+      F('jvdp', 'JVD', 'Jugular venous distention{lvl}', [S('lvl', 'Level', ['to the angle of the jaw', 'at 45 degrees', 'at 30 degrees'], { req: 0, f: ' $' })]),
+      F('bruit', 'Carotid bruit', '{lat} carotid bruit', [S('lat', 'Side', ['Right', 'Left', 'Bilateral'])])
+    ])
+  ]));
+
+  return { S: S, F: F, E: E, SYS: SYS, LAT: LAT, LATo: LATo, SEV: SEV, SEVo: SEVo, QUAD: QUAD, UL: UL, sys: sys };
+})();
+
+/* Exam finding library, part 2: cardiovascular, respiratory, abdomen */
+(function () {
+  var L = window.EXAM_LIB, S = L.S, F = L.F, E = L.E, SYS = L.SYS, LAT = L.LAT, LATo = L.LATo, SEV = L.SEV, QUAD = L.QUAD;
+
+  L.sys.push(SYS('cv', 'Cardiovascular', [
+    E('rhythm', 'Rate / Rhythm', 'Regular rate and rhythm.', [
+      F('tachy', 'Tachycardia', 'Tachycardic{rh}', [S('rh', 'Rhythm', ['regular rhythm', 'irregular rhythm'], { req: 0, f: ' with $' })]),
+      F('brady', 'Bradycardia', 'Bradycardic{rh}', [S('rh', 'Rhythm', ['regular rhythm', 'irregular rhythm'], { req: 0, f: ' with $' })]),
+      F('afib', 'Irregularly irregular', 'Irregularly irregular rhythm{rate}', [S('rate', 'Rate', ['normal rate', 'tachycardic rate', 'bradycardic rate'], { req: 0, f: ' with $' })]),
+      F('ectopy', 'Ectopic beats', 'Regular rate with occasional {kind}', [S('kind', 'Type', ['premature beats', 'extra beats'])])
+    ]),
+    E('sounds', 'Heart sounds', 'Normal S1 and S2. No murmurs, rubs, or gallops.', [
+      F('murmur', 'Murmur', '{grade} {timing} murmur heard best at the {loc}{rad}', [
+        S('grade', 'Grade', ['Grade I/VI', 'Grade II/VI', 'Grade III/VI', 'Grade IV/VI', 'Grade V/VI', 'Grade VI/VI']),
+        S('timing', 'Timing', ['systolic', 'diastolic', 'holosystolic', 'systolic ejection', 'early diastolic', 'continuous']),
+        S('loc', 'Location', ['aortic area', 'pulmonic area', 'tricuspid area', 'mitral area (apex)', 'left lower sternal border', 'left upper sternal border']),
+        S('rad', 'Radiation', ['the carotids', 'the axilla', 'the back', 'no radiation'], { req: 0, f: ', radiating to $' })
+      ]),
+      F('s3', 'S3 gallop', 'S3 gallop present', []),
+      F('s4', 'S4 gallop', 'S4 gallop present', []),
+      F('rub', 'Pericardial rub', 'Pericardial friction rub present', []),
+      F('s2split', 'Abnormal S2', '{d}', [S('d', 'Finding', ['Fixed split S2', 'Widely split S2', 'Loud P2', 'Diminished S2'])]),
+      F('muffled', 'Distant / muffled', 'Heart sounds distant', []),
+      F('click', 'Click', '{d} click heard', [S('d', 'Type', ['Systolic', 'Mid-systolic', 'Opening snap'])])
+    ]),
+    E('pulses', 'Peripheral pulses', 'Radial and dorsalis pedis pulses 2+ and symmetric bilaterally. Capillary refill less than 2 seconds.', [
+      F('pdim', 'Diminished pulses', '{grade} {pulse} pulse {lat}', [S('grade', 'Strength', ['Diminished', 'Weak', 'Thready']), S('pulse', 'Pulse', ['radial', 'brachial', 'femoral', 'popliteal', 'dorsalis pedis', 'posterior tibial']), S('lat', 'Side', ['on the right', 'on the left', 'bilaterally'])]),
+      F('pabs', 'Absent pulse', 'Absent {pulse} pulse {lat}', [S('pulse', 'Pulse', ['radial', 'femoral', 'popliteal', 'dorsalis pedis', 'posterior tibial'], { multi: 1 }), S('lat', 'Side', ['on the right', 'on the left', 'bilaterally'])]),
+      F('cap', 'Delayed cap refill', 'Capillary refill delayed to greater than {s} seconds', [S('s', 'Seconds', ['2', '3', '4'])]),
+      F('asym', 'Pulse asymmetry', 'Asymmetric pulses with {lat} {pulse} pulse diminished relative to the contralateral side', [S('lat', 'Side', ['right', 'left']), S('pulse', 'Pulse', ['radial', 'femoral', 'dorsalis pedis'])])
+    ]),
+    E('edema', 'Edema', 'No peripheral edema.', [
+      F('pit', 'Pitting edema', '{grade} pitting edema of the {lat} {site}', [S('grade', 'Grade', ['1+', '2+', '3+', '4+']), S('lat', 'Side', ['right', 'left', 'bilateral']), S('site', 'Site', ['lower extremity', 'lower extremities', 'ankle', 'pretibial region', 'foot', 'sacrum', 'upper extremity'])]),
+      F('nonpit', 'Non-pitting edema', 'Non-pitting edema of the {lat} {site}', [S('lat', 'Side', ['right', 'left', 'bilateral']), S('site', 'Site', ['lower extremity', 'ankle', 'foot', 'upper extremity'])]),
+      F('calf', 'Calf tenderness / swelling', '{lat} calf {d}', [S('lat', 'Side', ['Right', 'Left']), S('d', 'Finding', ['tenderness with swelling', 'tenderness', 'swelling and erythema'])])
+    ])
+  ]));
+
+  L.sys.push(SYS('resp', 'Respiratory', [
+    E('effort', 'Respiratory effort', 'Normal respiratory effort. No accessory muscle use or retractions.', [
+      F('tachypnea', 'Tachypnea', 'Tachypneic', []),
+      F('labored', 'Labored breathing', '{sev} respiratory distress with {d}', [SEV, S('d', 'Signs', ['accessory muscle use', 'intercostal retractions', 'nasal flaring', 'tripoding', 'abdominal breathing'], { multi: 1 })]),
+      F('speech', 'Speaks in short phrases', 'Able to speak in {d}', [S('d', 'Ability', ['short phrases only', 'single words only', 'full sentences with difficulty'])]),
+      F('cyan', 'Hypoxia / cyanosis', 'Cyanosis of the {d}', [S('d', 'Location', ['lips', 'nail beds', 'extremities'], { multi: 1 })])
+    ]),
+    E('breath', 'Breath sounds', 'Clear to auscultation bilaterally. No wheezes, rales, or rhonchi.', [
+      F('wheeze', 'Wheezing', '{ex} wheezing {loc}', [S('ex', 'Phase', ['Expiratory', 'Inspiratory', 'Inspiratory and expiratory', 'End-expiratory']), S('loc', 'Location', ['diffusely', 'in the right lung fields', 'in the left lung fields', 'bilaterally', 'in the bilateral bases', 'in the bilateral upper lung fields'])]),
+      F('crackles', 'Rales / crackles', '{type} {lat} {loc}', [S('type', 'Type', ['Fine crackles', 'Coarse crackles', 'Rales']), S('lat', 'Side', ['on the right', 'on the left', 'bilaterally']), S('loc', 'Location', ['at the bases', 'in the lower lung fields', 'in the mid lung fields', 'in the upper lung fields', 'throughout'])]),
+      F('rhonchi', 'Rhonchi', 'Rhonchi {lat}{loc}', [S('lat', 'Side', ['on the right', 'on the left', 'bilaterally']), S('loc', 'Location', ['lower lobe', 'upper lobe', 'diffusely'], { req: 0, f: ' in the $' })]),
+      F('dimin', 'Diminished breath sounds', 'Diminished breath sounds {lat} {loc}', [S('lat', 'Side', ['on the right', 'on the left', 'bilaterally']), S('loc', 'Location', ['at the base', 'at the apex', 'throughout', 'in the lower lung field'])]),
+      F('absent', 'Absent breath sounds', 'Absent breath sounds {lat} {loc}', [S('lat', 'Side', ['on the right', 'on the left']), S('loc', 'Location', ['at the base', 'throughout', 'at the apex'])]),
+      F('stridor', 'Stridor', '{ph} stridor', [S('ph', 'Phase', ['Inspiratory', 'Expiratory', 'Biphasic'])]),
+      F('prolong', 'Prolonged expiration', 'Prolonged expiratory phase', []),
+      F('pleural', 'Pleural friction rub', 'Pleural friction rub {lat}', [S('lat', 'Side', ['on the right', 'on the left'])]),
+      F('transmit', 'Transmitted upper airway sounds', 'Transmitted upper airway sounds', [])
+    ]),
+    E('chest', 'Chest wall / Percussion', 'Chest wall nontender with symmetric expansion. Resonant to percussion bilaterally.', [
+      F('dull', 'Dullness to percussion', 'Dullness to percussion {lat} {loc}', [S('lat', 'Side', ['on the right', 'on the left', 'bilaterally']), S('loc', 'Location', ['at the base', 'in the lower lung field', 'throughout'])]),
+      F('hyperres', 'Hyperresonance', 'Hyperresonance to percussion {lat}', [S('lat', 'Side', ['on the right', 'on the left', 'bilaterally'])]),
+      F('cwtend', 'Chest wall tenderness', 'Chest wall tenderness to palpation over the {loc}{rep}', [S('loc', 'Location', ['right anterior chest', 'left anterior chest', 'sternum', 'costochondral junctions', 'right lateral ribs', 'left lateral ribs']), S('rep', 'Reproduces', ['reproducing the patient\'s pain'], { req: 0, f: ', $' })]),
+      F('asymexp', 'Asymmetric expansion', 'Decreased chest wall expansion on the {lat}', [S('lat', 'Side', ['right', 'left'])]),
+      F('crep', 'Crepitus', 'Subcutaneous crepitus of the {loc}', [S('loc', 'Location', ['chest wall', 'neck', 'right chest', 'left chest'])])
+    ])
+  ]));
+
+  L.sys.push(SYS('abd', 'Abdomen', [
+    E('abdinsp', 'Inspection', 'Non-distended. No visible scars, masses, or pulsations.', [
+      F('distend', 'Distended', '{sev} abdominal distension', [S('sev', 'Degree', ['Mild', 'Moderate', 'Marked'])]),
+      F('ascites', 'Ascites', 'Abdomen distended with {d}', [S('d', 'Signs', ['shifting dullness', 'fluid wave', 'shifting dullness and fluid wave'])]),
+      F('scar', 'Surgical scar', '{d} noted', [S('d', 'Scar', ['Midline laparotomy scar', 'Right lower quadrant scar', 'Laparoscopic port-site scars', 'Healed surgical scar'])]),
+      F('bruise', 'Ecchymosis', 'Ecchymosis over the {loc}', [S('loc', 'Location', ['flank', 'periumbilical region', 'right abdomen', 'left abdomen', 'lower abdomen'])])
+    ]),
+    E('bowel', 'Bowel sounds', 'Normoactive bowel sounds in all four quadrants.', [
+      F('hyper', 'Hyperactive', 'Hyperactive bowel sounds', []),
+      F('hypo', 'Hypoactive', 'Hypoactive bowel sounds', []),
+      F('absentbs', 'Absent', 'Bowel sounds absent', []),
+      F('highpitch', 'High-pitched', 'High-pitched, tinkling bowel sounds', []),
+      F('abdbruit', 'Abdominal bruit', 'Abdominal bruit auscultated over the {loc}', [S('loc', 'Location', ['epigastrium', 'right renal region', 'left renal region', 'midline'])])
+    ]),
+    E('palp', 'Palpation', 'Soft and nontender. No guarding, rebound, or rigidity. No masses or organomegaly.', [
+      F('tender', 'Tenderness', '{sev} tenderness to palpation in the {quad}{quality}', [S('sev', 'Severity', ['Mild', 'Moderate', 'Severe'], { req: 0 }), QUAD, S('quality', 'Guarding', ['voluntary guarding', 'involuntary guarding'], { req: 0, f: ', with $' })]),
+      F('guard', 'Guarding', '{kind} guarding in the {quad}', [S('kind', 'Type', ['Voluntary', 'Involuntary']), QUAD]),
+      F('rebound', 'Rebound tenderness', 'Rebound tenderness in the {quad}', [QUAD]),
+      F('rigid', 'Rigidity', '{d} abdominal rigidity', [S('d', 'Pattern', ['Diffuse', 'Localized', 'Board-like'])]),
+      F('murphy', 'Murphy sign', 'Positive Murphy sign', []),
+      F('mcb', 'McBurney tenderness', 'Tenderness at McBurney point{rov}', [S('rov', 'Signs', ['with positive Rovsing sign', 'with positive psoas sign', 'with rebound'], { req: 0, f: ' $' })]),
+      F('hepato', 'Hepatomegaly', 'Hepatomegaly with liver edge palpable {cm} below the costal margin', [S('cm', 'Distance', ['2 cm', '4 cm', '6 cm', '8 cm', '10 cm'])]),
+      F('spleno', 'Splenomegaly', 'Splenomegaly with spleen tip palpable', []),
+      F('mass', 'Abdominal mass', '{size} {desc} mass palpated in the {quad}', [S('size', 'Size', ['Small', 'Moderate', 'Large']), S('desc', 'Quality', ['firm', 'soft', 'tender', 'pulsatile', 'mobile']), QUAD]),
+      F('hernia', 'Hernia', '{red} {type} hernia{lat}', [S('red', 'Reducibility', ['Reducible', 'Non-reducible', 'Incarcerated']), S('type', 'Type', ['umbilical', 'inguinal', 'incisional', 'ventral', 'femoral']), S('lat', 'Side', ['on the right', 'on the left', 'bilaterally'], { req: 0, f: ' $' })]),
+      F('cva', 'CVA tenderness', '{lat} costovertebral angle tenderness', [S('lat', 'Side', ['Right', 'Left', 'Bilateral'])])
+    ])
+  ]));
+})();
+
+/* Exam finding library, part 3: MSK, skin, neuro, psychiatric */
+(function () {
+  var L = window.EXAM_LIB, S = L.S, F = L.F, E = L.E, SYS = L.SYS, LAT = L.LAT, SEV = L.SEV;
+  var JOINT = S('joint', 'Joint', ['shoulder', 'elbow', 'wrist', 'hand', 'hip', 'knee', 'ankle', 'foot']);
+  var REG = S('reg', 'Region', ['cervical', 'thoracic', 'lumbar', 'sacral'], { multi: 1 });
+
+  L.sys.push(SYS('msk', 'Musculoskeletal', [
+    E('spine', 'Back / Spine', 'No midline spinal tenderness. Normal curvature and range of motion. No paraspinal tenderness.', [
+      F('midline', 'Midline tenderness', 'Midline tenderness to palpation over the {reg} spine', [REG]),
+      F('parasp', 'Paraspinal tenderness / spasm', '{lat} paraspinal {kind} in the {reg} region', [S('lat', 'Side', ['Right', 'Left', 'Bilateral']), S('kind', 'Finding', ['tenderness', 'muscle spasm', 'tenderness with muscle spasm']), REG]),
+      F('spinerom', 'Limited ROM', 'Limited range of motion of the {reg} spine with {dir}', [REG, S('dir', 'Motion', ['flexion', 'extension', 'rotation', 'lateral bending'], { multi: 1 })]),
+      F('slr', 'Positive straight leg raise', 'Positive straight leg raise on the {lat}', [LAT]),
+      F('scoli', 'Scoliosis / kyphosis', '{d} noted', [S('d', 'Deformity', ['Scoliosis', 'Kyphosis', 'Loss of lumbar lordosis'])])
+    ]),
+    E('joints', 'Joints / Extremities', 'Full range of motion of all joints without tenderness, swelling, erythema, or deformity.', [
+      F('jtend', 'Joint tenderness', '{lat} {joint} tenderness to palpation{rom}', [S('lat', 'Side', ['Right', 'Left', 'Bilateral']), JOINT, S('rom', 'ROM', ['with pain on range of motion', 'with limited range of motion'], { req: 0, f: ', $' })]),
+      F('jeff', 'Joint swelling / effusion', '{lat} {joint} {d}', [S('lat', 'Side', ['Right', 'Left', 'Bilateral']), JOINT, S('d', 'Finding', ['effusion', 'swelling', 'swelling with warmth and erythema'])]),
+      F('jrom', 'Decreased ROM', 'Decreased range of motion of the {lat} {joint}', [S('lat', 'Side', ['right', 'left', 'bilateral']), JOINT]),
+      F('crepit', 'Crepitus', 'Crepitus with range of motion of the {lat} {joint}', [S('lat', 'Side', ['right', 'left', 'bilateral']), JOINT]),
+      F('deform', 'Deformity', '{d} of the {lat} {joint}', [S('d', 'Deformity', ['Deformity', 'Angulation', 'Swelling and deformity']), S('lat', 'Side', ['right', 'left', 'bilateral']), JOINT]),
+      F('bonetend', 'Bony tenderness', 'Point tenderness over the {lat} {site}', [S('lat', 'Side', ['right', 'left']), S('site', 'Site', ['distal radius', 'clavicle', 'proximal humerus', 'femoral neck', 'distal fibula', 'medial malleolus', 'lateral malleolus', 'fifth metatarsal', 'tibial plateau'])]),
+      F('instab', 'Joint instability', 'Instability of the {lat} {joint} on stress testing', [S('lat', 'Side', ['right', 'left']), S('joint', 'Joint', ['shoulder', 'elbow', 'knee', 'ankle', 'wrist'])])
+    ]),
+    E('gait', 'Gait / Station', 'Normal gait and station.', [
+      F('antalgic', 'Antalgic gait', 'Antalgic gait favoring the {lat} {part}', [S('lat', 'Side', ['right', 'left']), S('part', 'Limb', ['lower extremity', 'hip', 'knee', 'ankle', 'foot'])]),
+      F('limp', 'Unable to bear weight', 'Unable to bear weight on the {lat} lower extremity', [S('lat', 'Side', ['right', 'left'])]),
+      F('assist', 'Uses assistive device', 'Ambulates with {d}', [S('d', 'Device', ['a cane', 'a walker', 'crutches', 'a wheelchair'])])
+    ])
+  ]));
+
+  L.sys.push(SYS('skin', 'Skin', [
+    E('skingen', 'Skin', 'Warm and dry with normal color and turgor. No rash, lesions, jaundice, or cyanosis.', [
+      F('rash', 'Rash', '{morph} rash {dist}{itch}', [S('morph', 'Morphology', ['Erythematous', 'Maculopapular', 'Papular', 'Vesicular', 'Urticarial', 'Petechial', 'Scaly', 'Blanching erythematous'], { multi: 1 }), S('dist', 'Location', ['on the face', 'on the trunk', 'on the upper extremities', 'on the lower extremities', 'on the hands and feet', 'in the axillae', 'in the groin', 'in a dermatomal distribution', 'diffusely'], { multi: 1 }), S('itch', 'Quality', ['pruritic', 'excoriated'], { req: 0, f: ', $' })]),
+      F('cellul', 'Cellulitis', 'Erythema, warmth, and induration of the {lat} {site}{border}', [S('lat', 'Side', ['right', 'left']), S('site', 'Site', ['forearm', 'hand', 'lower leg', 'thigh', 'foot', 'face', 'upper arm', 'trunk']), S('border', 'Margins', ['marked', 'unmarked'], { req: 0, f: ', with $ borders' })]),
+      F('abscess', 'Abscess', '{size} fluctuant, tender abscess of the {loc}', [S('size', 'Size', ['1 cm', '2 cm', '3 cm', '4 cm', '5 cm']), S('loc', 'Location', ['right axilla', 'left axilla', 'buttock', 'groin', 'thigh', 'forearm', 'neck'])]),
+      F('lac', 'Laceration', '{len} laceration of the {loc}{depth}', [S('len', 'Length', ['1 cm', '2 cm', '3 cm', '4 cm', '5 cm', '6 cm']), S('loc', 'Location', ['forehead', 'scalp', 'chin', 'hand', 'finger', 'forearm', 'lower leg', 'foot']), S('depth', 'Depth', ['superficial', 'through the dermis', 'with subcutaneous extension'], { req: 0, f: ', $' })]),
+      F('ecch', 'Ecchymosis / bruising', 'Ecchymosis of the {loc}', [S('loc', 'Location', ['face', 'chest wall', 'abdomen', 'right upper extremity', 'left upper extremity', 'right lower extremity', 'left lower extremity', 'flank'], { multi: 1 })]),
+      F('wound', 'Ulcer / wound', '{size} {kind} of the {loc}{base}', [S('size', 'Size', ['1 cm', '2 cm', '3 cm', '5 cm']), S('kind', 'Type', ['ulcer', 'pressure injury', 'wound', 'abrasion']), S('loc', 'Location', ['sacrum', 'heel', 'lower leg', 'foot', 'hip', 'buttock']), S('base', 'Base', ['clean base', 'purulent drainage', 'eschar', 'granulation tissue'], { req: 0, f: ' with $' })]),
+      F('jaund', 'Jaundice', 'Jaundice', []),
+      F('pallor', 'Pallor', 'Pallor', []),
+      F('cyanosis', 'Cyanosis', 'Cyanosis of the {loc}', [S('loc', 'Location', ['lips', 'nail beds', 'extremities'], { multi: 1 })]),
+      F('turgor', 'Decreased turgor', 'Decreased skin turgor', []),
+      F('skindiaph', 'Diaphoresis', 'Diaphoresis', []),
+      F('petech', 'Petechiae', 'Petechiae over the {loc}', [S('loc', 'Location', ['trunk', 'extremities', 'palate', 'lower extremities'], { multi: 1 })])
+    ])
+  ]));
+
+  var STR = S('str', 'Strength', ['0/5', '1/5', '2/5', '3/5', '4-/5', '4/5', '4+/5']);
+  L.sys.push(SYS('neuro', 'Neurologic', [
+    E('cn', 'Cranial nerves', 'Cranial nerves II through XII grossly intact. Face symmetric. Tongue midline.', [
+      F('facial', 'Facial droop', '{lat} facial droop{fh}', [S('lat', 'Side', ['Right', 'Left']), S('fh', 'Pattern', ['with forehead sparing', 'with forehead involvement'], { req: 0, f: ' $' })]),
+      F('dysarth', 'Dysarthria', 'Dysarthria{sev}', [S('sev', 'Severity', ['mild', 'moderate', 'severe'], { req: 0, f: ', $' })]),
+      F('aphasia', 'Aphasia', '{type} aphasia', [S('type', 'Type', ['Expressive', 'Receptive', 'Global', 'Anomic'])]),
+      F('tongue', 'Tongue deviation', 'Tongue deviates to the {lat}', [S('lat', 'Side', ['right', 'left'])]),
+      F('cnother', 'Other CN deficit', 'Cranial nerve {cn} deficit with {d}', [S('cn', 'Nerve', ['III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII']), S('d', 'Finding', ['decreased function', 'absent function'])])
+    ]),
+    E('motor', 'Motor', 'Normal strength (5/5) and tone in all extremities. No pronator drift.', [
+      F('weak', 'Weakness', '{str} strength in the {lat} {part}{sub}', [STR, S('lat', 'Side', ['right', 'left', 'bilateral']), S('part', 'Limb', ['upper extremity', 'lower extremity', 'hand grip', 'shoulder abduction', 'hip flexion', 'ankle dorsiflexion', 'knee extension']), S('sub', 'Distribution', ['proximally', 'distally'], { req: 0, f: ', worse $' })]),
+      F('drift', 'Pronator drift', 'Pronator drift of the {lat} upper extremity', [LAT]),
+      F('tone', 'Abnormal tone', '{d} tone in the {lat} {part}', [S('d', 'Tone', ['Increased', 'Decreased', 'Spastic', 'Rigid']), S('lat', 'Side', ['right', 'left', 'bilateral']), S('part', 'Limb', ['upper extremity', 'lower extremity', 'extremities'])]),
+      F('plegia', 'Paralysis', '{kind} with {lat} {part} movement absent', [S('kind', 'Type', ['Complete paralysis', 'Plegia']), S('lat', 'Side', ['right', 'left']), S('part', 'Limb', ['upper extremity', 'lower extremity', 'upper and lower extremities'])]),
+      F('atrophy', 'Muscle atrophy', 'Muscle atrophy of the {lat} {part}', [S('lat', 'Side', ['right', 'left', 'bilateral']), S('part', 'Limb', ['upper extremity', 'lower extremity', 'hand intrinsics', 'quadriceps'])])
+    ]),
+    E('sens', 'Sensation', 'Sensation intact to light touch and pinprick throughout.', [
+      F('hypoesth', 'Decreased sensation', 'Decreased sensation to {mod} in the {lat} {part}', [S('mod', 'Modality', ['light touch', 'pinprick', 'vibration', 'proprioception', 'light touch and pinprick'], { multi: 1 }), S('lat', 'Side', ['right', 'left', 'bilateral']), S('part', 'Region', ['upper extremity', 'lower extremity', 'hand', 'foot', 'C6 dermatome', 'L5 dermatome', 'S1 dermatome', 'stocking-glove distribution'])]),
+      F('paresth', 'Paresthesias', 'Paresthesias in the {lat} {part}', [S('lat', 'Side', ['right', 'left', 'bilateral']), S('part', 'Region', ['hand', 'foot', 'upper extremity', 'lower extremity'])]),
+      F('neglect', 'Sensory / visual neglect', 'Left-sided neglect noted', [])
+    ]),
+    E('reflex', 'Reflexes', 'Deep tendon reflexes 2+ and symmetric bilaterally. Plantar responses flexor.', [
+      F('hyper', 'Hyperreflexia', 'Hyperreflexia ({g}) of the {site}', [S('g', 'Grade', ['3+', '4+']), S('site', 'Site', ['bilateral lower extremities', 'bilateral upper extremities', 'right lower extremity', 'left lower extremity', 'diffusely'])]),
+      F('hypo', 'Hyporeflexia / areflexia', '{d} of the {site}', [S('d', 'Finding', ['Hyporeflexia (1+)', 'Areflexia (0)']), S('site', 'Site', ['bilateral ankles', 'bilateral knees', 'right ankle', 'left ankle', 'diffusely'])]),
+      F('babinski', 'Babinski present', 'Babinski sign present on the {lat}', [LAT]),
+      F('clonus', 'Clonus', '{n} at the {lat} ankle', [S('n', 'Clonus', ['Sustained clonus', '2-3 beats of clonus', '4-5 beats of clonus']), S('lat', 'Side', ['right', 'left', 'bilateral'])])
+    ]),
+    E('coord', 'Coordination / Gait', 'Finger-to-nose and heel-to-shin intact. Normal gait. Romberg negative.', [
+      F('dysmetria', 'Dysmetria', 'Dysmetria on {t} testing, {lat}', [S('t', 'Test', ['finger-to-nose', 'heel-to-shin', 'finger-to-nose and heel-to-shin'], {}), S('lat', 'Side', ['right', 'left', 'bilateral'])]),
+      F('ataxia', 'Ataxic gait', '{d} gait', [S('d', 'Type', ['Ataxic', 'Wide-based', 'Shuffling', 'Spastic', 'Steppage', 'Festinating'])]),
+      F('romberg', 'Positive Romberg', 'Positive Romberg sign', []),
+      F('tremor', 'Tremor', '{t} tremor of the {lat} {part}', [S('t', 'Type', ['Resting', 'Intention', 'Postural', 'Action']), S('lat', 'Side', ['right', 'left', 'bilateral']), S('part', 'Part', ['upper extremity', 'hand', 'lower extremity', 'head'])]),
+      F('nyst', 'Nystagmus', '{d} nystagmus', [S('d', 'Type', ['Horizontal', 'Vertical', 'Rotary', 'Gaze-evoked'])])
+    ])
+  ]));
+
+  L.sys.push(SYS('psych', 'Psychiatric', [
+    E('mood', 'Mood / Affect', 'Mood euthymic. Affect appropriate and congruent.', [
+      F('depressed', 'Depressed mood', 'Depressed mood with {aff} affect', [S('aff', 'Affect', ['constricted', 'flat', 'blunted', 'tearful', 'congruent'])]),
+      F('anxious', 'Anxious', 'Anxious mood with {aff} affect', [S('aff', 'Affect', ['anxious', 'constricted', 'congruent'])]),
+      F('irritable', 'Irritable', 'Irritable mood', []),
+      F('elevated', 'Elevated / Euphoric', 'Elevated mood with expansive affect', []),
+      F('labile', 'Labile affect', 'Labile affect', [])
+    ]),
+    E('behavior', 'Behavior', 'Calm, cooperative, and appropriate with good eye contact. Normal speech.', [
+      F('agit', 'Agitated', '{lvl} psychomotor agitation', [S('lvl', 'Degree', ['Mild', 'Moderate', 'Severe'])]),
+      F('retard', 'Psychomotor retardation', 'Psychomotor retardation', []),
+      F('uncoop', 'Uncooperative / guarded', '{d}', [S('d', 'Behavior', ['Uncooperative', 'Guarded', 'Hostile', 'Withdrawn'])]),
+      F('eye', 'Poor eye contact', 'Poor eye contact', []),
+      F('speech', 'Abnormal speech', 'Speech is {d}', [S('d', 'Speech', ['pressured', 'slowed', 'soft', 'rapid', 'tangential', 'slurred'], { multi: 1 })])
+    ]),
+    E('thought', 'Thought / Perception', 'Linear and goal-directed thought process. No hallucinations, delusions, suicidal ideation, or homicidal ideation.', [
+      F('si', 'Suicidal ideation', '{type} suicidal ideation{plan}', [S('type', 'Type', ['Passive', 'Active']), S('plan', 'Plan / intent', ['with plan and intent', 'with plan, without intent', 'without plan or intent'], { req: 0, f: ' $' })]),
+      F('hi', 'Homicidal ideation', 'Homicidal ideation{tgt}', [S('tgt', 'Target', ['toward a specific person', 'without a specific target'], { req: 0, f: ' $' })]),
+      F('hall', 'Hallucinations', '{type} hallucinations{resp}', [S('type', 'Type', ['Auditory', 'Visual', 'Auditory and visual', 'Tactile']), S('resp', 'Behavior', ['appearing to respond to internal stimuli'], { req: 0, f: ', $' })]),
+      F('delus', 'Delusions', '{type} delusions', [S('type', 'Type', ['Paranoid', 'Grandiose', 'Persecutory', 'Somatic', 'Religious'])]),
+      F('disorg', 'Disorganized thought', '{d} thought process', [S('d', 'Type', ['Disorganized', 'Tangential', 'Circumstantial', 'Loosened'])])
+    ]),
+    E('insight', 'Insight / Judgment', 'Insight and judgment intact.', [
+      F('impins', 'Impaired insight', 'Insight is {d}', [S('d', 'Degree', ['limited', 'poor'])]),
+      F('impjud', 'Impaired judgment', 'Judgment is {d}', [S('d', 'Degree', ['limited', 'impaired', 'poor'])])
+    ])
+  ]));
+})();
+
+/* Epic-style exam engine: Normal buttons, finding chips, specifier pills, *** wildcards, F2 navigation, formal prose */
+(function () {
+  'use strict';
+  var L = window.EXAM_LIB;
+  var panel = document.getElementById('exam-note-panel');
+  var out = document.getElementById('note-output');
+  var copyBtn = document.getElementById('copy-button');
+  var editor = panel && panel.querySelector('.editor');
+  var form = document.getElementById('exam-form');
+  if (!L || !panel || !out || !editor || !form) return;
+
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var make = function (tag, cls, text) { var n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
+  var HEADER = 'PHYSICAL EXAMINATION';
+
+  /* ---------- state ---------- */
+  var state = {};
+  var key = function (s, e) { return s.id + '.' + e.id; };
+  var st = function (s, e) { return state[key(s, e)] || (state[key(s, e)] = { normal: false, sel: {}, note: '' }); };
+  var findSys = function (id) { return L.sys.filter(function (s) { return s.id === id; })[0]; };
+  var findEl = function (s, id) { return s.e.filter(function (e) { return e.id === id; })[0]; };
+  var findF = function (e, id) { return e.f.filter(function (f) { return f.id === id; })[0]; };
+
+  /* ---------- prose ---------- */
+  function joinList(a) {
+    if (a.length < 3) return a.join(' and ');
+    return a.slice(0, -1).join(', ') + ', and ' + a[a.length - 1];
+  }
+  function tidy(s) {
+    s = s.replace(/\s+/g, ' ').replace(/\s+([,.;])/g, '$1').replace(/,\s*,/g, ',').replace(/^[\s,;]+/, '').trim();
+    if (!s) return '';
+    s = s.charAt(0).toUpperCase() + s.slice(1);
+    return /[.!?]$/.test(s) ? s : s + '.';
+  }
+  function fill(f, vals) {
+    var txt = f.t.replace(/\{(\w+)\}/g, function (m, k) {
+      var spec = f.s.filter(function (x) { return x.k === k; })[0];
+      if (!spec) return '';
+      var arr = vals[k] || [];
+      if (!arr.length) return spec.req ? spec.f.replace('$', '***') : '';
+      return spec.f.replace('$', spec.multi ? joinList(arr) : arr[0]);
+    });
+    return tidy(txt);
+  }
+  function elementText(e, s) {
+    var x = st(s, e), parts = [];
+    if (x.normal) parts.push(e.n);
+    e.f.forEach(function (f) { if (x.sel[f.id]) parts.push(fill(f, x.sel[f.id])); });
+    var n = tidy(x.note || '');
+    if (n) parts.push(n);
+    return parts.join(' ');
+  }
+  function systemText(s) { return s.e.map(function (e) { return elementText(e, s); }).filter(Boolean).join(' '); }
+  function blocks() {
+    return L.sys.map(function (s) { var t = systemText(s); return t ? { label: s.l, text: t } : null; }).filter(Boolean);
+  }
+  function getText() {
+    var b = blocks();
+    if (!b.length) return '';
+    return HEADER + '\n\n' + b.map(function (x) { return x.label + ': ' + x.text; }).join('\n\n');
+  }
+  var wildCount = function (t) { return (t.match(/\*\*\*/g) || []).length; };
+
+  /* ---------- rendering ---------- */
+  var root = make('div', 'epic-exam'); root.id = 'epic-exam';
+  var bar = make('div', 'epic-bar');
+  var search = make('input'); search.type = 'search'; search.placeholder = 'Filter findings (e.g. murmur)'; search.setAttribute('aria-label', 'Filter exam findings'); search.autocomplete = 'off';
+  var expandB = make('button', 'quiet-button quick-btn', 'Expand all');
+  var collapseB = make('button', 'quiet-button quick-btn', 'Collapse all');
+  var nextB = make('button', 'quiet-button quick-btn epic-next', 'Next *** (F2)');
+  var wildPill = make('span', 'epic-wild', ''); wildPill.setAttribute('role', 'status');
+  [expandB, collapseB, nextB].forEach(function (b) { b.type = 'button'; });
+  var hint = make('p', 'quick-hint', 'Normal inserts the standard statement for that element. Choosing an abnormal finding replaces it and opens specifiers; anything required but unchosen is written as *** in the note. Press F2 to jump to the next ***.');
+  bar.append(search, nextB, wildPill, expandB, collapseB, hint);
+  var body = make('div', 'epic-body'); body.id = 'epic-body';
+  root.append(bar, body);
+  form.parentNode.insertBefore(root, form);
+  panel.classList.add('epic-on');
+
+  var tools = panel.querySelector('.editor-tools');
+  var allNormalB = make('button', 'quiet-button', 'Normal exam'); allNormalB.type = 'button'; allNormalB.id = 'epic-allnormal';
+  allNormalB.title = 'Mark every untouched element normal';
+  var toggleB = make('button', 'quiet-button', 'Classic view'); toggleB.type = 'button'; toggleB.id = 'epic-toggle';
+  toggleB.title = 'Switch between the structured exam and the original chip view';
+  tools.insertBefore(toggleB, tools.firstChild); tools.insertBefore(allNormalB, tools.firstChild);
+
+  var rail = panel.querySelector('.rail');
+  var nav = make('nav', 'epic-nav'); nav.id = 'epic-nav'; nav.setAttribute('aria-label', 'Physical exam systems');
+  rail.insertBefore(nav, document.getElementById('system-nav').nextSibling);
+
+  function buildSpec(s, e, f, spec, vals) {
+    var chosen = vals[spec.k] || [];
+    var g = make('div', 'epic-spec' + (spec.req && !chosen.length ? ' unres' : ''));
+    g.setAttribute('role', 'group'); g.setAttribute('aria-label', spec.l);
+    g.append(make('span', 'epic-spec-label', spec.l + (spec.req ? '' : ' (optional)')));
+    var row = make('span', 'epic-pills');
+    spec.o.forEach(function (o) {
+      var b = make('button', 'epic-pill', o); b.type = 'button';
+      b.dataset.act = 'pill'; b.dataset.s = s.id; b.dataset.e = e.id; b.dataset.f = f.id; b.dataset.k = spec.k; b.dataset.v = o;
+      b.setAttribute('aria-pressed', String(chosen.indexOf(o) !== -1));
+      row.append(b);
+    });
+    g.append(row);
+    return g;
+  }
+  function buildEl(s, e) {
+    var x = st(s, e);
+    var abn = e.f.some(function (f) { return x.sel[f.id]; });
+    var wrap = make('div', 'epic-el'); wrap.dataset.s = s.id; wrap.dataset.e = e.id;
+    wrap.dataset.state = x.normal ? 'normal' : abn ? 'abnormal' : x.note ? 'note' : 'empty';
+    var head = make('div', 'epic-el-head');
+    head.append(make('h4', '', e.l));
+    var nb = make('button', 'epic-normal', 'Normal'); nb.type = 'button';
+    nb.dataset.act = 'normal'; nb.dataset.s = s.id; nb.dataset.e = e.id;
+    nb.setAttribute('aria-pressed', String(x.normal)); nb.title = e.n;
+    head.append(nb);
+    wrap.append(head);
+    var chips = make('div', 'epic-chips');
+    e.f.forEach(function (f) {
+      var c = make('button', 'epic-chip', f.l); c.type = 'button';
+      c.dataset.act = 'chip'; c.dataset.s = s.id; c.dataset.e = e.id; c.dataset.f = f.id;
+      c.setAttribute('aria-pressed', String(!!x.sel[f.id]));
+      chips.append(c);
+    });
+    wrap.append(chips);
+    e.f.forEach(function (f) {
+      if (!x.sel[f.id]) return;
+      var card = make('div', 'epic-card');
+      var ch = make('div', 'epic-card-head'); ch.append(make('strong', '', f.l));
+      var rm = make('button', 'epic-remove', '✕'); rm.type = 'button'; rm.setAttribute('aria-label', 'Remove ' + f.l);
+      rm.dataset.act = 'remove'; rm.dataset.s = s.id; rm.dataset.e = e.id; rm.dataset.f = f.id;
+      ch.append(rm); card.append(ch);
+      f.s.forEach(function (spec) { card.append(buildSpec(s, e, f, spec, x.sel[f.id])); });
+      var pv = make('p', 'epic-card-prose'); pv.textContent = fill(f, x.sel[f.id]);
+      card.append(pv);
+      wrap.append(card);
+    });
+    var note = make('input', 'epic-note'); note.type = 'text'; note.placeholder = 'Additional ' + e.l.toLowerCase() + ' findings (free text)';
+    note.setAttribute('aria-label', 'Additional ' + e.l + ' findings'); note.value = x.note || '';
+    note.dataset.act = 'note'; note.dataset.s = s.id; note.dataset.e = e.id;
+    wrap.append(note);
+    return wrap;
+  }
+  function buildSys(s) {
+    var d = make('details', 'epic-sys'); d.id = 'epic-' + s.id; d.open = true; d.dataset.s = s.id;
+    var sum = make('summary'); sum.append(make('h3', '', s.l));
+    var cnt = make('span', 'epic-count', ''); cnt.dataset.count = s.id; sum.append(cnt);
+    d.append(sum);
+    var tb = make('div', 'epic-sys-tools');
+    [['sysnormal', 'All normal'], ['sysclear', 'Clear ' + s.l]].forEach(function (p) {
+      var b = make('button', 'quiet-button quick-btn', p[1]); b.type = 'button'; b.dataset.act = p[0]; b.dataset.s = s.id; tb.append(b);
+    });
+    d.append(tb);
+    s.e.forEach(function (e) { d.append(buildEl(s, e)); });
+    return d;
+  }
+  L.sys.forEach(function (s) {
+    body.append(buildSys(s));
+    var nb = make('button', 'epic-nav-btn'); nb.type = 'button'; nb.dataset.target = s.id;
+    nb.append(make('span', '', s.l), make('span', 'epic-nav-state'));
+    nav.append(nb);
+  });
+
+  /* ---------- update ---------- */
+  function refresh() {
+    var b = blocks(), text = getText(), wild = wildCount(text);
+    out.replaceChildren();
+    if (!text) {
+      out.append(make('span', 'preview-empty', 'Your note will appear here as you document the encounter.'));
+    } else {
+      out.append(document.createTextNode(HEADER + '\n\n'));
+      b.forEach(function (x, i) {
+        out.append(document.createTextNode(x.label + ': '));
+        x.text.split('***').forEach(function (part, j) {
+          if (j) out.append(make('mark', 'epic-wild-mark', '***'));
+          out.append(document.createTextNode(part));
+        });
+        if (i < b.length - 1) out.append(document.createTextNode('\n\n'));
+      });
+    }
+    copyBtn.disabled = !text;
+    var nc = document.getElementById('note-count'); if (nc) nc.textContent = text.length + ' characters';
+    var comp = document.getElementById('completion'); if (comp) comp.textContent = b.length + ' of ' + L.sys.length + ' documented';
+    wildPill.textContent = wild ? wild + ' unresolved ***' : 'No unresolved ***';
+    wildPill.classList.toggle('has', wild > 0);
+    nextB.disabled = !wild;
+    L.sys.forEach(function (s) {
+      var n = s.e.filter(function (e) { return elementText(e, s); }).length;
+      var c = body.querySelector('[data-count="' + s.id + '"]');
+      if (c) c.textContent = n ? n + ' of ' + s.e.length + ' documented' : s.e.length + ' elements';
+      var nb = nav.querySelector('[data-target="' + s.id + '"] .epic-nav-state');
+      if (nb) nb.classList.toggle('done', n > 0);
+    });
+    var cs = document.getElementById('copy-status'); if (cs) cs.textContent = '';
+  }
+  function rerender(s, e, focusSel) {
+    var old = body.querySelector('.epic-el[data-s="' + s.id + '"][data-e="' + e.id + '"]');
+    if (old) old.replaceWith(buildEl(s, e));
+    applyFilter();
+    if (focusSel) { var n = body.querySelector(focusSel); if (n) n.focus(); }
+    refresh();
+  }
+  var sel = function (d, extra) {
+    var a = ['[data-act="' + d.act + '"]', '[data-s="' + d.s + '"]', '[data-e="' + d.e + '"]'];
+    ['f', 'k'].forEach(function (k) { if (d[k] != null) a.push('[data-' + k + '="' + String(d[k]).replace(/"/g, '\\"') + '"]'); });
+    if (d.v != null) a.push('[data-v="' + String(d.v).replace(/"/g, '\\"') + '"]');
+    return a.join('');
+  };
+
+  /* ---------- actions ---------- */
+  body.addEventListener('click', function (ev) {
+    var t = ev.target.closest('[data-act]');
+    if (!t || t.tagName === 'INPUT') return;
+    var d = t.dataset, s = findSys(d.s), e = d.e && findEl(s, d.e), x = e && st(s, e);
+    switch (d.act) {
+      case 'normal':
+        x.normal = !x.normal;
+        if (x.normal) x.sel = {};
+        rerender(s, e, sel(d)); break;
+      case 'chip':
+        if (x.sel[d.f]) delete x.sel[d.f]; else { x.sel[d.f] = {}; x.normal = false; }
+        rerender(s, e, sel(d)); break;
+      case 'remove':
+        delete x.sel[d.f];
+        rerender(s, e, '.epic-el[data-s="' + s.id + '"][data-e="' + e.id + '"] .epic-chip[data-f="' + d.f + '"]'); break;
+      case 'pill':
+        var v = x.sel[d.f], spec = findF(e, d.f).s.filter(function (q) { return q.k === d.k; })[0], arr = v[d.k] || [];
+        var i = arr.indexOf(d.v);
+        if (spec.multi) { if (i === -1) arr.push(d.v); else arr.splice(i, 1); } else arr = i === -1 ? [d.v] : [];
+        v[d.k] = arr;
+        rerender(s, e, sel(d)); break;
+      case 'sysnormal':
+        s.e.forEach(function (el) { var q = st(s, el); if (!el.f.some(function (f) { return q.sel[f.id]; })) q.normal = true; });
+        s.e.forEach(function (el) { rerender(s, el); }); break;
+      case 'sysclear':
+        s.e.forEach(function (el) { state[key(s, el)] = { normal: false, sel: {}, note: '' }; });
+        s.e.forEach(function (el) { rerender(s, el); }); break;
+    }
+  });
+  body.addEventListener('input', function (ev) {
+    var t = ev.target;
+    if (t.dataset && t.dataset.act === 'note') {
+      var s = findSys(t.dataset.s), e = findEl(s, t.dataset.e);
+      st(s, e).note = t.value;
+      t.closest('.epic-el').dataset.state = elementState(s, e);
+      refresh();
+    }
+  });
+  function elementState(s, e) {
+    var x = st(s, e);
+    return x.normal ? 'normal' : e.f.some(function (f) { return x.sel[f.id]; }) ? 'abnormal' : x.note ? 'note' : 'empty';
+  }
+  allNormalB.addEventListener('click', function () {
+    L.sys.forEach(function (s) {
+      s.e.forEach(function (el) { var q = st(s, el); if (!el.f.some(function (f) { return q.sel[f.id]; })) q.normal = true; });
+      s.e.forEach(function (el) { rerender(s, el); });
+    });
+  });
+  function clearAll() {
+    state = {};
+    L.sys.forEach(function (s) { s.e.forEach(function (e) { rerender(s, e); }); });
+  }
+  document.getElementById('clear-button').addEventListener('click', function (ev) {
+    if (!panel.classList.contains('epic-on')) return;
+    ev.stopImmediatePropagation(); ev.preventDefault();
+    if (getText() && !window.confirm('Clear all exam findings?')) return;
+    clearAll();
+  }, true);
+
+  /* ---------- filter, expand/collapse, nav ---------- */
+  function applyFilter() {
+    var q = search.value.trim().toLowerCase();
+    $$('.epic-sys', body).forEach(function (d) {
+      var s = findSys(d.dataset.s), anySys = false;
+      $$('.epic-el', d).forEach(function (w) {
+        var e = findEl(s, w.dataset.e), x = st(s, e), any = false;
+        var hitEl = !q || e.l.toLowerCase().indexOf(q) !== -1 || s.l.toLowerCase().indexOf(q) !== -1;
+        $$('.epic-chip', w).forEach(function (c) {
+          var hit = !q || hitEl || c.textContent.toLowerCase().indexOf(q) !== -1 || !!x.sel[c.dataset.f];
+          c.hidden = !hit; if (hit) any = true;
+        });
+        w.hidden = !!q && !any && !hitEl;
+        if (!w.hidden) anySys = true;
+      });
+      d.hidden = !!q && !anySys;
+      if (q && !d.hidden) d.open = true;
+    });
+  }
+  search.addEventListener('input', applyFilter);
+  search.addEventListener('keydown', function (e) { if (e.key === 'Escape' && search.value) { e.preventDefault(); search.value = ''; applyFilter(); } });
+  expandB.addEventListener('click', function () { $$('.epic-sys', body).forEach(function (d) { if (!d.hidden) d.open = true; }); });
+  collapseB.addEventListener('click', function () { $$('.epic-sys', body).forEach(function (d) { d.open = false; }); });
+  nav.addEventListener('click', function (ev) {
+    var b = ev.target.closest('[data-target]'); if (!b) return;
+    var d = document.getElementById('epic-' + b.dataset.target);
+    if (search.value) { search.value = ''; applyFilter(); }
+    d.open = true; d.scrollIntoView({ block: 'start', behavior: 'auto' });
+  });
+
+  /* ---------- F2: next unresolved *** ---------- */
+  function gotoWild(back) {
+    var groups = $$('.epic-spec.unres', body).filter(function (g) { return g.offsetParent !== null || !g.closest('details').open; });
+    if (!groups.length) { wildPill.textContent = 'No unresolved ***'; return false; }
+    var cur = document.activeElement && document.activeElement.closest && document.activeElement.closest('.epic-spec');
+    var i = cur ? groups.indexOf(cur) : -1, n;
+    if (i === -1) {
+      var after = groups.filter(function (g) { return cur && (cur.compareDocumentPosition(g) & 4); });
+      n = back ? groups[groups.length - 1] : (after[0] || groups[0]);
+    } else n = groups[(i + (back ? -1 : 1) + groups.length) % groups.length];
+    var det = n.closest('details'); if (det) det.open = true;
+    n.scrollIntoView({ block: 'center', behavior: 'auto' });
+    var first = n.querySelector('.epic-pill'); if (first) first.focus();
+    n.classList.add('flash'); setTimeout(function () { n.classList.remove('flash'); }, 900);
+    return true;
+  }
+  nextB.addEventListener('click', function () { gotoWild(false); });
+  document.addEventListener('keydown', function (ev) {
+    if (ev.key !== 'F2' || !panel.classList.contains('epic-on') || panel.hidden) return;
+    ev.preventDefault(); gotoWild(ev.shiftKey);
+  });
+
+  /* ---------- copy (plain text, never the highlighted markup) ---------- */
+  copyBtn.addEventListener('click', function (ev) {
+    if (!panel.classList.contains('epic-on')) return;
+    ev.stopImmediatePropagation(); ev.preventDefault();
+    var text = getText(); if (!text) return;
+    var done = function (ok) {
+      var cs = document.getElementById('copy-status'), w = wildCount(text);
+      if (cs) cs.textContent = ok ? (w ? 'Copied with ' + w + ' unresolved ***' : 'Copied') : 'Copy failed. Select the note and copy manually.';
+    };
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(false); });
+    } else {
+      var ta = make('textarea'); ta.value = text; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;top:-1000px';
+      document.body.append(ta); ta.select();
+      var ok = false; try { ok = document.execCommand('copy'); } catch (_) { }
+      ta.remove(); done(ok);
+    }
+  }, true);
+
+  /* ---------- classic view toggle ---------- */
+  toggleB.addEventListener('click', function () {
+    var on = panel.classList.toggle('epic-on');
+    toggleB.textContent = on ? 'Classic view' : 'Structured view';
+    allNormalB.hidden = !on;
+    if (on) refresh();
+    else { var ta = document.getElementById('finding-general'); if (ta) ta.dispatchEvent(new Event('input', { bubbles: true })); }
+  });
+
+  refresh();
+  window.EpicExam = { getText: getText, state: function () { return state; }, lib: L, refresh: refresh, clear: clearAll };
 })();
 </script>
 </body>
