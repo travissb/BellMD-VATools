@@ -4674,6 +4674,78 @@ window.EXAM_LIB = (function () {
   ]));
 })();
 
+/* Exam library part 4: dedicated Mental Status Examination block (replaces the short Psychiatric system) */
+(function () {
+  var L = window.EXAM_LIB, S = L.S, F = L.F, E = L.E, SYS = L.SYS;
+  for (var i = L.sys.length - 1; i >= 0; i--) if (L.sys[i].id === 'psych') L.sys.splice(i, 1);
+  var AFF = ['Constricted', 'Blunted', 'Flat', 'Labile', 'Tearful', 'Expansive', 'Incongruent with mood'];
+  var m = SYS('mse', 'Mental Status Examination', [
+    E('mse-app', 'Appearance', 'Appears stated age, well groomed, and appropriately dressed with good hygiene.', [
+      F('m-disheveled', 'Disheveled', 'Disheveled with {d}', [S('d', 'Features', ['poor hygiene', 'unkempt clothing', 'malodorous', 'poor grooming'], { multi: 1 })]),
+      F('m-age', 'Appears older / younger', 'Appears {d} than stated age', [S('d', 'Appears', ['older', 'younger'])]),
+      F('m-dress', 'Inappropriate dress', 'Dressed inappropriately for {d}', [S('d', 'Context', ['the weather', 'the setting'])]),
+      F('m-injury', 'Visible signs of self-injury', 'Healing marks consistent with self-injury noted on the {loc}', [S('loc', 'Location', ['forearms', 'wrists', 'thighs'], { multi: 1 })])
+    ]),
+    E('mse-beh', 'Behavior / Attitude', 'Calm, cooperative, and engaged with good eye contact.', [
+      F('m-uncoop', 'Uncooperative / guarded', '{d}', [S('d', 'Attitude', ['Uncooperative', 'Guarded', 'Hostile', 'Withdrawn', 'Suspicious', 'Evasive'])]),
+      F('m-eye', 'Poor eye contact', '{d} eye contact', [S('d', 'Quality', ['Poor', 'Fleeting', 'Intense'])]),
+      F('m-agit', 'Agitated', '{lvl} agitation', [S('lvl', 'Degree', ['Mild', 'Moderate', 'Severe'])]),
+      F('m-seduct', 'Disinhibited', 'Disinhibited and intrusive', [])
+    ]),
+    E('mse-motor', 'Psychomotor activity', 'No psychomotor agitation or retardation. No abnormal movements.', [
+      F('m-pma', 'Psychomotor agitation', 'Psychomotor agitation with {d}', [S('d', 'Features', ['restlessness', 'pacing', 'hand wringing', 'inability to sit still'], { multi: 1 })]),
+      F('m-pmr', 'Psychomotor retardation', 'Psychomotor retardation', []),
+      F('m-abn', 'Abnormal movements', '{d} noted', [S('d', 'Movement', ['Tremor', 'Tics', 'Akathisia', 'Tardive dyskinesia', 'Catatonic posturing'])])
+    ]),
+    E('mse-speech', 'Speech', 'Normal rate, rhythm, volume, and tone. Fluent and spontaneous.', [
+      F('m-sp', 'Abnormal speech', '{d}', [S('d', 'Speech', ['Pressured', 'Rapid', 'Slowed', 'Soft', 'Loud', 'Monotone', 'Slurred', 'Halting', 'Mumbled'], { multi: 1 })]),
+      F('m-pov', 'Poverty of speech', 'Poverty of speech with {d}', [S('d', 'Pattern', ['minimal spontaneous output', 'increased latency of response', 'one-word answers'])]),
+      F('m-mute', 'Mute', 'Mute', [])
+    ]),
+    E('mse-mood', 'Mood (patient-stated)', 'Euthymic.', [
+      F('m-dep', 'Depressed', 'Depressed{sev}', [S('sev', 'Severity', ['mildly', 'moderately', 'severely'], { req: 0, f: ', $' })]),
+      F('m-anx', 'Anxious', 'Anxious', []),
+      F('m-irr', 'Irritable', 'Irritable', []),
+      F('m-elev', 'Elevated / Euphoric', 'Elevated and euphoric', []),
+      F('m-ang', 'Angry', 'Angry', []),
+      F('m-hopeless', 'Hopeless / Helpless', 'Feelings of {d} endorsed', [S('d', 'Feelings', ['hopelessness', 'helplessness', 'worthlessness', 'guilt'], { multi: 1 })])
+    ]),
+    E('mse-aff', 'Affect (observed)', 'Full range, appropriate, and congruent with mood.', [
+      F('m-aff', 'Abnormal affect', '{d}', [S('d', 'Affect', AFF, { multi: 1 })]),
+      F('m-dep2', 'Depressed / sad', 'Sad and dysphoric', []),
+      F('m-anxa', 'Anxious', 'Anxious', [])
+    ]),
+    E('mse-tp', 'Thought process', 'Linear and goal-directed.', [
+      F('m-tp', 'Disorganized', '{d}', [S('d', 'Pattern', ['Tangential', 'Circumstantial', 'Disorganized', 'Loose associations', 'Flight of ideas', 'Thought blocking', 'Perseverative', 'Illogical'])])
+    ]),
+    E('mse-tc', 'Thought content', 'No suicidal ideation, homicidal ideation, delusions, obsessions, or preoccupations.', [
+      F('m-si', 'Suicidal ideation', '{type} suicidal ideation{plan}', [S('type', 'Type', ['Passive', 'Active']), S('plan', 'Plan / intent', ['with plan and intent', 'with plan, without intent', 'without plan or intent'], { req: 0, f: ' $' })]),
+      F('m-hi', 'Homicidal ideation', 'Homicidal ideation{tgt}', [S('tgt', 'Target', ['toward a specific person', 'without a specific target'], { req: 0, f: ' $' })]),
+      F('m-del', 'Delusions', '{type} delusions', [S('type', 'Type', ['Paranoid', 'Persecutory', 'Grandiose', 'Somatic', 'Religious', 'Referential'], { multi: 1 })]),
+      F('m-obs', 'Obsessions / preoccupations', '{d} noted', [S('d', 'Content', ['Obsessive thoughts', 'Preoccupation with somatic symptoms', 'Preoccupation with guilt', 'Ruminations'])]),
+      F('m-sh', 'Self-harm thoughts', 'Thoughts of self-harm without suicidal intent', [])
+    ]),
+    E('mse-perc', 'Perception', 'No hallucinations. Not responding to internal stimuli.', [
+      F('m-hall', 'Hallucinations', '{type} hallucinations{resp}', [S('type', 'Type', ['Auditory', 'Visual', 'Auditory and visual', 'Tactile', 'Command auditory']), S('resp', 'Behavior', ['appearing to respond to internal stimuli'], { req: 0, f: ', $' })]),
+      F('m-ill', 'Illusions / derealization', '{d} reported', [S('d', 'Finding', ['Illusions', 'Derealization', 'Depersonalization'])])
+    ]),
+    E('mse-cog', 'Cognition', 'Alert and oriented to person, place, time, and situation. Attention and concentration intact. Recent and remote memory grossly intact.', [
+      F('m-orient', 'Disoriented', 'Disoriented to {to}', [S('to', 'Disoriented to', ['person', 'place', 'time', 'situation'], { multi: 1 })]),
+      F('m-attn', 'Impaired attention', '{d} attention and concentration', [S('d', 'Degree', ['Mildly impaired', 'Moderately impaired', 'Severely impaired', 'Easily distractible'])]),
+      F('m-mem', 'Impaired memory', 'Impaired {kind} memory', [S('kind', 'Type', ['recent', 'remote', 'recent and remote', 'short-term'])]),
+      F('m-fund', 'Fund of knowledge', 'Fund of knowledge {d}', [S('d', 'Finding', ['reduced', 'below expected for education level'])])
+    ]),
+    E('mse-ins', 'Insight', 'Intact.', [
+      F('m-ins', 'Impaired insight', '{d}', [S('d', 'Degree', ['Limited', 'Poor', 'Absent'])])
+    ]),
+    E('mse-jud', 'Judgment', 'Intact.', [
+      F('m-jud', 'Impaired judgment', '{d}', [S('d', 'Degree', ['Limited', 'Impaired', 'Poor'])])
+    ])
+  ]);
+  m.lines = 'MENTAL STATUS EXAMINATION';
+  L.sys.push(m);
+})();
+
 /* Epic-style exam engine: Normal buttons, finding chips, specifier pills, *** wildcards, F2 navigation, formal prose */
 (function () {
   'use strict';
@@ -4715,7 +4787,7 @@ window.EXAM_LIB = (function () {
       if (!spec) return '';
       var arr = vals[k] || [];
       if (!arr.length) return spec.req ? spec.f.replace('$', '***') : '';
-      return spec.f.replace('$', spec.multi ? joinList(arr) : arr[0]);
+      return spec.f.replace('$', spec.multi ? joinList(arr.map(function (v, i) { return i && /^[A-Z][a-z]/.test(v) ? v.charAt(0).toLowerCase() + v.slice(1) : v; })) : arr[0]);
     });
     return tidy(txt);
   }
@@ -4729,12 +4801,18 @@ window.EXAM_LIB = (function () {
   }
   function systemText(s) { return s.e.map(function (e) { return elementText(e, s); }).filter(Boolean).join(' '); }
   function blocks() {
-    return L.sys.map(function (s) { var t = systemText(s); return t ? { label: s.l, text: t } : null; }).filter(Boolean);
+    var o = [];
+    L.sys.forEach(function (s) {
+      if (s.lines) {
+        var ls = s.e.map(function (e) { var t = elementText(e, s); return t ? e.l.replace(/ \(.*\)$/, '') + ': ' + t : ''; }).filter(Boolean);
+        if (ls.length) o.push(s.lines + '\n' + ls.join('\n'));
+      } else { var t = systemText(s); if (t) o.push(s.l + ': ' + t); }
+    });
+    return o;
   }
   function getText() {
     var b = blocks();
-    if (!b.length) return '';
-    return HEADER + '\n\n' + b.map(function (x) { return x.label + ': ' + x.text; }).join('\n\n');
+    return b.length ? HEADER + '\n\n' + b.join('\n\n') : '';
   }
   var wildCount = function (t) { return (t.match(/\*\*\*/g) || []).length; };
 
@@ -4845,14 +4923,9 @@ window.EXAM_LIB = (function () {
     if (!text) {
       out.append(make('span', 'preview-empty', 'Your note will appear here as you document the encounter.'));
     } else {
-      out.append(document.createTextNode(HEADER + '\n\n'));
-      b.forEach(function (x, i) {
-        out.append(document.createTextNode(x.label + ': '));
-        x.text.split('***').forEach(function (part, j) {
-          if (j) out.append(make('mark', 'epic-wild-mark', '***'));
-          out.append(document.createTextNode(part));
-        });
-        if (i < b.length - 1) out.append(document.createTextNode('\n\n'));
+      text.split('***').forEach(function (part, j) {
+        if (j) out.append(make('mark', 'epic-wild-mark', '***'));
+        out.append(document.createTextNode(part));
       });
     }
     copyBtn.disabled = !text;
