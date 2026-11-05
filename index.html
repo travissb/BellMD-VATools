@@ -1014,6 +1014,96 @@ html[data-theme="dark"] .pre-rounds-sheet > table > tbody > tr:first-child th { 
   .finding-choice:hover, .quiet-button:hover, .copy-button:hover, .tool-tab:hover, .system-link:hover { transform: none; }
 }
 
+/* ---------- SHARP THEME: square corners, solid surfaces, crisp 1px borders, no glass/soft shadows ---------- */
+*, *::before, *::after { border-radius: 0 !important; }
+
+:root {
+  --line: #b6c2d2; --surface-solid: #ffffff; --surface-head: #f1f5f9;
+  --bar: #ffffff; --canvas: #e9eef4; --accent: #4f46e5;
+}
+html[data-theme="dark"] {
+  --line: #2e3b52; --surface-solid: #0f172a; --surface-head: #131f38;
+  --bar: #0b1221; --canvas: #020817; --accent: #818cf8;
+}
+
+body, html[data-theme="dark"] body { background: var(--canvas); }
+html[data-theme="dark"] .workspace-panel { background: transparent; }
+
+/* Header */
+.app-header { background: #0f172a; border-bottom: 3px solid var(--accent); box-shadow: none; }
+.brand-mark { background: var(--accent); border: 1px solid #fff; box-shadow: none; }
+
+/* Tabs: flat bar, square tabs, heavy underline on the active one */
+.tool-tabs, html[data-theme="dark"] .tool-tabs {
+  background: var(--bar); border-bottom: 1px solid var(--line);
+  -webkit-backdrop-filter: none; backdrop-filter: none; padding-top: 10px; gap: 2px;
+}
+.tool-tab { border-bottom: 3px solid transparent; }
+.tool-tab:hover { background: var(--surface-head); border-color: var(--line); border-bottom-color: transparent; transform: none; }
+.tool-tab[aria-selected="true"],
+html[data-theme="dark"] .tool-tab[aria-selected="true"] {
+  background: var(--surface-head); border-color: var(--line); border-bottom-color: var(--accent); box-shadow: none;
+}
+
+/* Surfaces */
+.panel, .encounter-bar, .system-section {
+  background: var(--surface-solid); border: 1px solid var(--line); box-shadow: none;
+  -webkit-backdrop-filter: none; backdrop-filter: none; animation: none;
+}
+html[data-theme="dark"] .panel, html[data-theme="dark"] .encounter-bar, html[data-theme="dark"] .system-section { background: var(--surface-solid); }
+.panel:hover { border-color: var(--accent); box-shadow: none; transform: none; }
+.encounter-bar { border-left: 4px solid var(--accent); }
+.panel.med-rec-input, .panel.med-rec-results, .pre-rounds-input-panel, .pre-rounds-output-panel { border-top: 3px solid var(--accent); }
+
+.rail-heading, .editor-head, .preview-head, .preview-foot,
+html[data-theme="dark"] .rail-heading, html[data-theme="dark"] .editor-head,
+html[data-theme="dark"] .preview-head, html[data-theme="dark"] .preview-foot { background: var(--surface-head); }
+.med-rec-category, .pre-rounds-patient-form, .pre-rounds-sheet-wrap,
+html[data-theme="dark"] .med-rec-category, html[data-theme="dark"] .pre-rounds-patient-form,
+html[data-theme="dark"] .pre-rounds-sheet-wrap { background: var(--surface-head); }
+.pre-rounds-sheet { box-shadow: none; }
+
+/* Fields */
+.med-rec-paste, .med-rec-table input, .system-section textarea, .mse-text-input,
+#exam-note-panel .mse-text-input, .pre-rounds-field input, .pre-rounds-field textarea,
+.pre-rounds-labs input, .finding-detail-editor textarea, .quick-bar input[type="search"] {
+  background: var(--field-bg); border: 1px solid var(--line);
+}
+.med-rec-paste:focus, .med-rec-table input:focus, .system-section textarea:focus, .mse-text-input:focus,
+.pre-rounds-field input:focus, .pre-rounds-field textarea:focus, .pre-rounds-labs input:focus,
+.finding-detail-editor textarea:focus, .quick-bar input[type="search"]:focus { border-color: var(--accent); }
+button:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus-visible, [role="tab"]:focus-visible {
+  outline-width: 2px; outline-offset: 1px;
+}
+
+/* Buttons: solid fills, no gradients, no lift */
+.copy-button, .system-link.active, .quick-bar .seg button[aria-pressed="true"] { background: var(--accent); box-shadow: none; filter: none; }
+.copy-button:hover { background: #4338ca; transform: none; box-shadow: none; filter: none; }
+.quiet-button { background: var(--surface-solid); border: 1px solid var(--line); }
+.quiet-button:hover { background: var(--surface-head); border-color: var(--accent); transform: none; }
+.normal-button { border-width: 1px; }
+.system-link:hover { transform: none; }
+
+/* Chips: hard edges and a bar on the selected side */
+.finding-choice { background: var(--surface-solid); border: 1px solid var(--line); }
+.finding-choice:hover { background: var(--surface-head); border-color: var(--accent); }
+.finding-choice[data-state="affirmative"], .finding-choice[data-state="negative"] { box-shadow: inset 3px 0 0 currentColor; }
+
+/* Small decorations */
+.encounter-tag { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
+.live-pill { background: transparent; border: 1px solid currentColor; }
+.quick-bar { background: var(--surface-head); }
+.theme-toggle__switch { border-color: rgba(255, 255, 255, .45); }
+
+/* Floating elements: hard offset shadow instead of a soft blur */
+.finding-detail-editor { border: 1px solid var(--accent); box-shadow: 4px 4px 0 rgba(15, 23, 42, .22); }
+@media (max-width: 1399.98px) {
+  #exam-note-panel .preview, #ros-panel .preview { border-color: var(--accent); box-shadow: 5px 5px 0 rgba(15, 23, 42, .18); }
+}
+@media (min-width: 1400px) {
+  #exam-note-panel .preview, #ros-panel .preview { box-shadow: none; border-color: var(--line); }
+}
+
 /* ---------- Printing while in dark mode used to print a dark page ---------- */
 @media print {
   html[data-theme="dark"] body { background: #fff !important; color: #000 !important; }
