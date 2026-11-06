@@ -1188,6 +1188,24 @@ html[data-theme="dark"] .epic-chip[data-state="negative"] { color: #86efac; back
 html[data-theme="dark"] .epic-seg button[aria-pressed="true"] { color: #0f172a; }
 @media (pointer: coarse) { .epic-seg button { min-height: 40px; } }
 
+/* ROS panel */
+#ros-panel.epic-on #ros-form, #ros-panel.epic-on .quick-bar, #ros-panel.epic-on #ros-system-nav { display: none !important; }
+#ros-panel:not(.epic-on) .epic-exam, #ros-panel:not(.epic-on) .epic-nav { display: none; }
+#ros-panel [hidden] { display: none !important; }
+#ros-panel .epic-bar { margin: 10px 12px 0; }
+.epic-ros-chips { padding: 8px 14px 4px; }
+#ros-panel .epic-sys > .epic-card, #ros-panel .epic-sys > .epic-note { margin-left: 14px; margin-right: 14px; width: auto; }
+#ros-panel .epic-sys > .epic-note { display: block; width: calc(100% - 28px); margin-bottom: 12px; }
+#ros-panel.epic-on #ros-note-output { white-space: pre; overflow-x: auto; }
+.epic-select { padding: 5px 8px; font-size: 12px; color: var(--ink); background: var(--field-bg); border: 1px solid var(--line); }
+/* ROS preview needs room for 80-column lines */
+#ros-panel.epic-on #ros-note-output { font-size: 12px; }
+#ros-panel.epic-on .preview { width: min(640px, calc(100vw - 28px)); }
+@media (min-width: 1400px) {
+  #ros-panel.epic-on .workspace { grid-template-columns: 180px minmax(0, 1fr) 610px; }
+  #ros-panel.epic-on .preview { width: auto; }
+}
+
 /* ---------- Printing while in dark mode used to print a dark page ---------- */
 @media print {
   html[data-theme="dark"] body { background: #fff !important; color: #000 !important; }
@@ -4898,7 +4916,10 @@ mse-jud.m-jud|Judgment not impaired`;
     HSM: 'hepatosplenomegaly', CNs: 'cranial nerves', CN: 'cranial nerve', SI: 'suicidal ideation', HI: 'homicidal ideation', AVH: 'auditory and visual hallucinations',
     'A&O': 'alert and oriented', AAO: 'alert and oriented', S1: 'first heart sound', S2: 'second heart sound', S3: 'third heart sound', S4: 'fourth heart sound',
     BLE: 'bilateral lower extremities', BUE: 'bilateral upper extremities', RUE: 'right upper extremity', LUE: 'left upper extremity', RLE: 'right lower extremity', LLE: 'left lower extremity',
-    LE: 'lower extremity', UE: 'upper extremity', SLR: 'straight leg raise', MRG: 'murmurs, rubs, or gallops'
+    LE: 'lower extremity', UE: 'upper extremity', SLR: 'straight leg raise', MRG: 'murmurs, rubs, or gallops',
+    PND: 'paroxysmal nocturnal dyspnea', 'N/V': 'nausea and vomiting', 'N/V/D': 'nausea, vomiting, and diarrhea', 'F/C': 'fever and chills', HA: 'headache', LOC: 'loss of consciousness',
+    CP: 'chest pain', DOE: 'dyspnea on exertion', URI: 'upper respiratory infection', UTI: 'urinary tract infection', GERD: 'gastroesophageal reflux disease', BRBPR: 'bright red blood per rectum',
+    SOBOE: 'shortness of breath on exertion', FH: 'family history', ABD: 'abdominal'
   };
   var ACR_RE = new RegExp('(^|[^A-Za-z0-9])(' + Object.keys(ACR).sort(function (a, b) { return b.length - a.length; }).map(function (k) { return k.replace(/[\/&]/g, '\\$&'); }).join('|') + ')(?![A-Za-z0-9])', 'g');
   function expand(s) { return s.replace(ACR_RE, function (m, pre, a) { return pre + ACR[a]; }); }
@@ -5292,7 +5313,440 @@ mse-jud.m-jud|Judgment not impaired`;
   });
 
   refresh();
-  window.EpicExam = { getText: getText, state: function () { return state; }, lib: L, refresh: refresh, clear: clearAll };
+  window.EpicExam = { tidy: tidy, expand: expand, joinList: joinList, getText: getText, state: function () { return state; }, lib: L, refresh: refresh, clear: clearAll };
+})();
+
+/* ROS symptom library. R(id,label,base,negNoun,extraSpecs): base may hold {tokens}; sev/dur/course are added automatically. */
+window.ROS_LIB = (function () {
+  var S = window.EXAM_LIB.S;
+  var DUR = S('dur', 'Duration', ['less than 24 hours', '1 day', '2 days', '3 days', '4 to 6 days', '1 week', '2 weeks', 'several weeks', 'several months', 'more than 1 year'], { req: 0, f: ' for $' });
+  var COURSE = S('course', 'Course', ['constant', 'intermittent', 'worsening', 'improving', 'progressive', 'sudden in onset'], { req: 0, f: ', $' });
+  var SEV = S('sev', 'Severity', ['mild', 'moderate', 'severe'], { req: 0 });
+  var OPT = function (k, l, o, f, multi) { return S(k, l, o, { req: 0, f: f, multi: !!multi }); };
+  var LOC = function (o, f, req) { return S('loc', 'Location', o, { req: req ? 1 : 0, f: f || ' in the $', multi: true }); };
+  var CHAR = OPT('char', 'Quality', ['sharp', 'dull', 'aching', 'burning', 'pressure-like', 'stabbing', 'cramping', 'throbbing'], ', described as $', true);
+  var RAD = OPT('rad', 'Radiation', ['the left arm', 'the right arm', 'the jaw', 'the back', 'the neck', 'the shoulder', 'the groin', 'the abdomen'], ', radiating to $', true);
+  var TRIG = OPT('trig', 'Worse with', ['exertion', 'rest', 'eating', 'deep inspiration', 'movement', 'lying flat', 'coughing', 'bright light'], ', worse with $', true);
+  var REL = OPT('rel', 'Better with', ['rest', 'medication', 'position change', 'eating', 'antacids', 'heat', 'ice', 'bowel movement'], ', improved with $', true);
+  var EYE = OPT('side', 'Side', ['right eye', 'left eye', 'both eyes'], ' in the $');
+  var EAR = OPT('side', 'Side', ['right ear', 'left ear', 'both ears'], ' in the $');
+  var LIMB = LOC(['right arm', 'left arm', 'right leg', 'left leg', 'face', 'hands', 'feet', 'trunk'], ' of the $', true);
+  var FREQ = OPT('freq', 'Frequency', ['once', 'a few times', 'several times per day', 'multiple times per day'], ', occurring $');
+  var R = function (id, l, base, neg, x, nodef) { return { id: id, l: l, base: base, neg: neg || l.toLowerCase(), x: x || [], nodef: !!nodef }; };
+
+  var sys = [
+    ['constitutional', 'Constitutional', [
+      R('fever', 'Fever', 'fever', 0, [OPT('tmax', 'Highest temperature', ['99 to 100.3 degrees Fahrenheit', '100.4 to 101.9 degrees Fahrenheit', '102 degrees Fahrenheit or higher'], ', with highest recorded temperature of $')]),
+      R('chills', 'Chills', 'chills'), R('rigors', 'Rigors', 'rigors'), R('fatigue', 'Fatigue', 'fatigue'), R('malaise', 'Malaise', 'malaise'),
+      R('sweats', 'Night sweats', 'night sweats'),
+      R('wloss', 'Weight loss', 'unintentional weight loss{amt}', 'unintentional weight loss', [OPT('amt', 'Amount', ['5 pounds', '10 pounds', '15 pounds', '20 pounds or more'], ' of approximately $')]),
+      R('wgain', 'Weight gain', 'weight gain{amt}', 0, [OPT('amt', 'Amount', ['5 pounds', '10 pounds', '15 pounds', '20 pounds or more'], ' of approximately $')]),
+      R('appetite', 'Appetite change', '{dir} appetite', 'change in appetite', [S('dir', 'Direction', ['decreased', 'increased'], { req: 1 })]),
+      R('bodyaches', 'Body aches', 'generalized body aches')
+    ]],
+    ['eyes', 'Eyes', [
+      R('visionchange', 'Vision change', 'change in vision{side}', 'vision changes', [EYE]),
+      R('visionloss', 'Vision loss', '{kind} vision loss{side}', 'vision loss', [S('kind', 'Extent', ['partial', 'complete', 'transient'], { req: 1 }), EYE]),
+      R('blurred', 'Blurred vision', 'blurred vision{side}', 0, [EYE]), R('diplopia', 'Diplopia', 'double vision', 'double vision'),
+      R('eyepain', 'Eye pain', 'eye pain{side}', 0, [EYE]), R('eyered', 'Redness', 'eye redness{side}', 'eye redness', [EYE]),
+      R('eyedis', 'Discharge', '{kind} eye discharge{side}', 'eye discharge', [S('kind', 'Type', ['clear', 'mucoid', 'purulent'], { req: 0 }), EYE]),
+      R('photo', 'Photophobia', 'photophobia'), R('floaters', 'Floaters', 'floaters{side}', 0, [EYE])
+    ]],
+    ['ent', 'Ears, Nose, and Throat', [
+      R('hearing', 'Hearing loss', 'hearing loss{side}', 0, [EAR]), R('earpain', 'Ear pain', 'ear pain{side}', 0, [EAR]),
+      R('eardrain', 'Ear drainage', 'ear drainage{side}', 0, [EAR]), R('tinnitus', 'Tinnitus', 'tinnitus{side}', 0, [EAR]),
+      R('congest', 'Nasal congestion', 'nasal congestion'), R('rhino', 'Rhinorrhea', '{kind} rhinorrhea', 'rhinorrhea', [S('kind', 'Type', ['clear', 'mucoid', 'purulent'], { req: 0 })]),
+      R('pnd2', 'Postnasal drainage', 'postnasal drainage'), R('sinus', 'Sinus pressure', 'sinus pressure'),
+      R('epist', 'Epistaxis', 'epistaxis'), R('sorethroat', 'Sore throat', 'sore throat'), R('hoarse', 'Hoarseness', 'hoarseness'),
+      R('dysph', 'Dysphagia', 'dysphagia{to}', 0, [OPT('to', 'To', ['solids', 'liquids', 'solids and liquids'], ' to $')]),
+      R('odynoph', 'Painful swallowing', 'painful swallowing')
+    ]],
+    ['cv', 'Cardiovascular', [
+      R('chestpain', 'Chest pain', 'chest pain', 0, [LOC(['substernal', 'left-sided', 'right-sided', 'central'], ' that is $'), CHAR, RAD, TRIG, REL]),
+      R('pressure', 'Chest pressure', 'chest pressure', 0, [RAD, TRIG, REL]),
+      R('palp', 'Palpitations', 'palpitations', 0, [OPT('pat', 'Pattern', ['racing', 'skipped beats', 'irregular', 'pounding'], ', described as $', true)]),
+      R('orthop', 'Orthopnea', 'orthopnea', 0, [OPT('pil', 'Pillows', ['2 pillows', '3 pillows', 'sleeping upright'], ', requiring $')]),
+      R('pnd', 'PND', 'PND', 'PND'),
+      R('edema', 'Peripheral edema', 'swelling of the {loc}', 'peripheral edema', [LOC(['both legs', 'right leg', 'left leg', 'feet', 'ankles', 'hands'], ' of the $', true)], 1),
+      R('syncope', 'Syncope', 'syncope'), R('presyn', 'Near-syncope', 'near-syncope'),
+      R('claud', 'Claudication', 'claudication{loc}', 0, [LOC(['right calf', 'left calf', 'both calves', 'thighs', 'buttocks'], ' in the $')])
+    ]],
+    ['resp', 'Respiratory', [
+      R('cough', 'Cough', 'cough', 0, [OPT('prod', 'Type', ['dry', 'productive of clear sputum', 'productive of white sputum', 'productive of yellow sputum', 'productive of green sputum', 'productive of blood-tinged sputum'], ', $')]),
+      R('dyspnea', 'Dyspnea', 'dyspnea', 'shortness of breath', [OPT('when', 'Occurs', ['at rest', 'with exertion', 'when lying flat', 'at night'], ', occurring $', true)]),
+      R('wheeze', 'Wheezing', 'wheezing'), R('hemop', 'Hemoptysis', 'hemoptysis'),
+      R('sputum', 'Sputum production', '{col} sputum production', 'sputum production', [S('col', 'Color', ['clear', 'white', 'yellow', 'green', 'blood-tinged'], { req: 0 })]),
+      R('pleuritic', 'Pleuritic chest pain', 'pleuritic chest pain', 0, [LOC(['right-sided', 'left-sided', 'bilateral'], ' that is $')]),
+      R('tight', 'Chest tightness', 'chest tightness')
+    ]],
+    ['gi', 'Gastrointestinal', [
+      R('abdpain', 'Abdominal pain', 'abdominal pain', 0, [LOC(['right upper quadrant', 'left upper quadrant', 'right lower quadrant', 'left lower quadrant', 'epigastric region', 'periumbilical region', 'suprapubic region', 'diffusely'], ' in the $', true), CHAR, TRIG, REL]),
+      R('nausea', 'Nausea', 'nausea'), R('vomit', 'Vomiting', 'vomiting', 0, [FREQ, OPT('cont', 'Contents', ['non-bloody', 'bilious', 'bloody', 'coffee-ground'], ', $')]),
+      R('diarrhea', 'Diarrhea', 'diarrhea', 0, [FREQ, OPT('qual', 'Stool', ['watery', 'bloody', 'mucoid', 'greasy'], ', with $ stools')]),
+      R('constip', 'Constipation', 'constipation'), R('melena', 'Melena', 'melena'), R('hematoch', 'Hematochezia', 'hematochezia'),
+      R('heartburn', 'Heartburn', 'heartburn'), R('bloat', 'Bloating', 'abdominal bloating'), R('satiety', 'Early satiety', 'early satiety'),
+      R('incontb', 'Bowel incontinence', 'bowel incontinence')
+    ]],
+    ['gu', 'Genitourinary', [
+      R('dysuria', 'Dysuria', 'dysuria'), R('ufreq', 'Frequency', 'urinary frequency', 'urinary frequency'), R('urg', 'Urgency', 'urinary urgency', 'urinary urgency'),
+      R('hematuria', 'Hematuria', 'hematuria'), R('nocturia', 'Nocturia', 'nocturia', 0, [OPT('n', 'Times per night', ['1 time', '2 times', '3 or more times'], ', $ per night')]),
+      R('hesit', 'Hesitancy / weak stream', 'urinary hesitancy or weak stream', 'urinary hesitancy or weak stream'),
+      R('flank', 'Flank pain', 'flank pain', 0, [OPT('side', 'Side', ['right flank', 'left flank', 'bilateral flank'], ' in the $')]),
+      R('uinc', 'Incontinence', 'urinary incontinence', 'urinary incontinence'), R('gudis', 'Discharge', 'genitourinary discharge', 'genitourinary discharge'),
+      R('pelvic', 'Pelvic pain', 'pelvic pain')
+    ]],
+    ['msk', 'Musculoskeletal', [
+      R('myalgia', 'Myalgias', 'myalgias', 0, [LOC(['upper extremities', 'lower extremities', 'back', 'diffusely'], ' in the $')]),
+      R('arthralgia', 'Arthralgias', 'arthralgias', 0, [LOC(['shoulders', 'elbows', 'wrists', 'hands', 'hips', 'knees', 'ankles', 'feet'], ' in the $', true)], 1),
+      R('backpain', 'Back pain', '{loc} back pain', 'back pain', [LOC(['cervical', 'upper', 'mid', 'lower'], '$', true), CHAR, RAD, TRIG, REL], 0),
+      R('jswell', 'Joint swelling', 'joint swelling', 0, [LOC(['shoulders', 'elbows', 'wrists', 'hands', 'hips', 'knees', 'ankles', 'feet'], ' of the $')]),
+      R('stiff', 'Joint stiffness', 'joint stiffness', 0, [OPT('when', 'When', ['in the morning', 'after inactivity', 'throughout the day'], ', worst $')]),
+      R('neckpain', 'Neck pain', 'neck pain', 0, [CHAR, RAD, TRIG, REL]), R('muscleweak', 'Muscle cramps', 'muscle cramps')
+    ]],
+    ['skin', 'Skin', [
+      R('rash', 'Rash', 'rash', 0, [LOC(['face', 'trunk', 'arms', 'legs', 'hands', 'feet', 'axillae', 'groin', 'diffusely'], ' on the $', true), OPT('qual', 'Quality', ['pruritic', 'painful', 'blistering', 'scaling'], ', $', true)]),
+      R('itch', 'Pruritus', 'pruritus'), R('lesion', 'Skin lesions', 'skin lesions', 0, [LOC(['face', 'scalp', 'trunk', 'arms', 'legs', 'hands', 'feet'], ' on the $', true)]),
+      R('colorchg', 'Color change', 'skin color change', 0, [OPT('kind', 'Type', ['pallor', 'jaundice', 'redness', 'bluish discoloration'], ', $')]),
+      R('woundnh', 'Non-healing wound', 'non-healing wound', 0, [LOC(['face', 'scalp', 'trunk', 'arms', 'legs', 'hands', 'feet'], ' on the $', true)]),
+      R('hairloss', 'Hair loss', 'hair loss')
+    ]],
+    ['neuro', 'Neurologic', [
+      R('headache', 'Headache', 'headache', 0, [LOC(['frontal', 'temporal', 'occipital', 'right-sided', 'left-sided', 'bilateral', 'diffuse'], ' that is $'), CHAR, TRIG, REL, OPT('assoc', 'Associated', ['nausea', 'photophobia', 'phonophobia', 'aura', 'visual changes'], ', associated with $', true)]),
+      R('dizzy', 'Dizziness', '{kind}', 'dizziness', [S('kind', 'Type', ['lightheadedness', 'vertigo', 'dizziness', 'disequilibrium'], { req: 1 })], 0),
+      R('weak', 'Weakness', 'weakness', 0, [LIMB]), R('numb', 'Numbness', 'numbness', 0, [LIMB]), R('paresth', 'Paresthesias', 'paresthesias', 0, [LIMB]),
+      R('tremor', 'Tremor', 'tremor', 0, [LOC(['hands', 'head', 'arms', 'legs'], ' of the $')]),
+      R('gait', 'Gait change', 'difficulty walking', 'gait changes', [OPT('falls', 'Falls', ['with falls', 'without falls'], ', $')]),
+      R('seizure', 'Seizures', 'seizure activity', 'seizures'), R('speech', 'Speech difficulty', 'difficulty with speech', 'speech difficulty'),
+      R('memory', 'Memory loss', 'memory loss')
+    ]],
+    ['psych', 'Psychiatric', [
+      R('anxiety', 'Anxiety', 'anxiety'), R('depress', 'Depression', 'depressed mood'), R('sleep', 'Sleep disturbance', '{kind}', 'sleep disturbance', [S('kind', 'Type', ['insomnia', 'difficulty falling asleep', 'frequent awakenings', 'hypersomnia', 'nightmares'], { req: 1 })]),
+      R('moodchg', 'Mood change', 'mood changes'), R('confusion', 'Confusion', 'confusion'), R('halluc', 'Hallucinations', '{kind} hallucinations', 'hallucinations', [S('kind', 'Type', ['auditory', 'visual', 'auditory and visual', 'tactile'], { req: 1 })]),
+      R('si', 'Suicidal ideation', '{kind} suicidal ideation', 'suicidal ideation', [S('kind', 'Type', ['passive', 'active'], { req: 1 })], 1),
+      R('hi', 'Homicidal ideation', 'homicidal ideation'), R('panic', 'Panic attacks', 'panic attacks')
+    ]],
+    ['endo', 'Endocrine', [
+      R('heat', 'Heat intolerance', 'heat intolerance'), R('cold', 'Cold intolerance', 'cold intolerance'), R('polydip', 'Polydipsia', 'polydipsia'),
+      R('polyuria', 'Polyuria', 'polyuria'), R('polyph', 'Polyphagia', 'polyphagia'), R('hotflash', 'Hot flashes', 'hot flashes')
+    ]],
+    ['heme', 'Hematologic / Lymphatic', [
+      R('bruise', 'Easy bruising', 'easy bruising'), R('bleed', 'Abnormal bleeding', 'abnormal bleeding', 0, [OPT('site', 'Site', ['gums', 'nose', 'gastrointestinal tract', 'urine', 'skin'], ' from the $')]),
+      R('nodes', 'Swollen lymph nodes', 'swollen lymph nodes', 'swollen lymph nodes', [LOC(['neck', 'axillae', 'groin', 'diffusely'], ' in the $')])
+    ]],
+    ['allergy', 'Allergic / Immunologic', [
+      R('envall', 'Environmental allergies', 'environmental allergies'), R('urtic', 'Urticaria', 'urticaria'),
+      R('recinf', 'Recurrent infections', 'recurrent infections'), R('drugall', 'Medication reaction', 'adverse reaction to medication', 'medication reactions')
+    ]]
+  ].map(function (a) {
+    return { id: a[0], l: a[1], f: a[2].map(function (r) {
+      var has = function (k) { return r.base.indexOf('{' + k + '}') !== -1; };
+      var specs = r.nodef ? [] : [SEV], before = '', after = '';
+      r.x.forEach(function (sp) {
+        specs.push(sp);
+        if (has(sp.k)) return;
+        if (sp.f.charAt(0) === ' ') before += '{' + sp.k + '}'; else after += '{' + sp.k + '}';
+      });
+      specs.push(DUR, COURSE);
+      return { id: r.id, l: r.l, n: r.neg, t: (r.nodef ? '' : '{sev} ') + r.base + before + '{dur}{course}' + after, s: specs };
+    }) };
+  });
+  var OL = { ent: 'ENT', gi: 'GI', gu: 'GU', heme: 'Heme/Lymph', allergy: 'Allergy/Immuno' };
+  sys.forEach(function (x) { x.ol = OL[x.id] || x.l; });
+  return { sys: sys };
+})();
+
+/* Epic-style ROS: left-click (+), right-click (-), specifier pills, typed detail, aligned (+)/(-) output with hanging indent */
+(function () {
+  'use strict';
+  var R = window.ROS_LIB, X = window.EpicExam;
+  var panel = document.getElementById('ros-panel'), out = document.getElementById('ros-note-output'), copyBtn = document.getElementById('ros-copy-button');
+  var form = document.getElementById('ros-form');
+  if (!R || !X || !panel || !out || !form) return;
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var make = function (tag, cls, text) { var n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
+  var HEADER = 'REVIEW OF SYSTEMS', IND = '  ';
+  var opts = { width: 80 };
+  var state = {};
+  var blank = function () { return { sel: {}, neg: {}, det: {}, note: '' }; };
+  var st = function (s) { return state[s.id] || (state[s.id] = blank()); };
+  function tidy(t) {
+    t = t.replace(/\s+/g, ' ').replace(/\s+([,.;])/g, '$1').replace(/,\s*,/g, ',').replace(/^[\s,;]+/, '').replace(/[\s.]+$/, '').trim();
+    return t ? t.charAt(0).toUpperCase() + t.slice(1) : '';
+  }
+  var lower1 = function (t) { return /^[A-Z][a-z]/.test(t) ? t.charAt(0).toLowerCase() + t.slice(1) : t; };
+  var findSys = function (id) { return R.sys.filter(function (s) { return s.id === id; })[0]; };
+  var findF = function (s, id) { return s.f.filter(function (f) { return f.id === id; })[0]; };
+
+  /* ---------- prose ---------- */
+  function fill(f, vals) {
+    var t = f.t.replace(/\{(\w+)\}/g, function (m, k) {
+      var sp = f.s.filter(function (x) { return x.k === k; })[0]; if (!sp) return '';
+      var a = vals[k] || [];
+      if (!a.length) return sp.req ? sp.f.replace('$', '***') : '';
+      return sp.f.replace('$', sp.multi ? X.joinList(a) : a[0]);
+    });
+    return tidy(t);
+  }
+  function wrap(prefix, text, width) {
+    var pad = new Array(prefix.length + 1).join(' ');
+    if (!width) return [prefix + text];
+    var words = text.split(' '), lines = [], cur = prefix, first = true;
+    words.forEach(function (w) {
+      if (!first && (cur + ' ' + w).length > width) { lines.push(cur); cur = pad + w; }
+      else { cur += (first ? '' : ' ') + w; }
+      first = false;
+    });
+    lines.push(cur); return lines;
+  }
+  /* one line per system: label column, then (+) items and (-) items inline; wrapped text hangs under the first marker */
+  function sysText(s) {
+    var x = st(s), pos = s.f.filter(function (f) { return x.sel[f.id]; }), neg = s.f.filter(function (f) { return x.neg[f.id]; }), parts = [];
+    if (pos.length) {
+      var items = pos.map(function (f, i) {
+        var t = fill(f, x.sel[f.id]), d = tidy(x.det[f.id] || '');
+        if (d) t += ' (' + lower1(d) + ')';
+        return i ? lower1(t) : t;
+      });
+      parts.push('(+) ' + items.join('; ') + '.');
+    }
+    if (neg.length) parts.push('(-) ' + tidy(X.joinList(neg.map(function (f) { return f.n; }))) + '.');
+    var n = tidy(x.note || ''); if (n) parts.push('Note: ' + n + '.');
+    return parts.join(' ');
+  }
+  function getLines() {
+    var rows = R.sys.map(function (s) { var t = sysText(s); return t ? { l: s.ol + ':', t: t } : null; }).filter(Boolean);
+    var w = 0; rows.forEach(function (r) { w = Math.max(w, r.l.length); });
+    var o = []; rows.forEach(function (r) { o = o.concat(wrap(r.l + new Array(w - r.l.length + 3).join(' '), r.t, opts.width)); });
+    return o;
+  }
+  function getText() { var b = getLines(); return b.length ? HEADER + '\n' + b.join('\n') : ''; }
+  var sysDone = function (s) { return sysText(s).length > 0; };
+  var wildCount = function (t) { return (t.match(/\*\*\*/g) || []).length; };
+
+  /* ---------- UI ---------- */
+  var root = make('div', 'epic-exam'); root.id = 'ros-epic';
+  var bar = make('div', 'epic-bar');
+  var tapNeg = false, mk = function (lbl, items, cb) {
+    var seg = make('div', 'epic-seg'), bs = [];
+    items.forEach(function (p) {
+      var b = make('button', '', p[1]); b.type = 'button'; b.dataset.mode = p[0]; b.setAttribute('aria-pressed', String(!!p[2]));
+      b.addEventListener('click', function () { bs.forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); }); cb(p[0]); });
+      bs.push(b); seg.append(b);
+    });
+    seg.setAttribute('role', 'group'); seg.setAttribute('aria-label', lbl); return seg;
+  };
+  var click = mk('What a click records', [['pos', 'Present (+)', 1], ['neg', 'Absent (-)']], function (m) { tapNeg = m === 'neg'; });
+  var wsel = make('select', 'epic-select'); wsel.setAttribute('aria-label', 'Line wrap width');
+  [['80', 'Wrap at 80'], ['100', 'Wrap at 100'], ['120', 'Wrap at 120'], ['0', 'No wrapping']].forEach(function (p) { var o = make('option', '', p[1]); o.value = p[0]; wsel.append(o); });
+  wsel.addEventListener('change', function () { opts.width = parseInt(wsel.value, 10); refresh(); });
+  var search = make('input'); search.type = 'search'; search.placeholder = 'Filter symptoms (e.g. cough)'; search.setAttribute('aria-label', 'Filter symptoms'); search.autocomplete = 'off';
+  var nextB = make('button', 'quiet-button quick-btn', 'Next *** (F2)'), expandB = make('button', 'quiet-button quick-btn', 'Expand all'), collapseB = make('button', 'quiet-button quick-btn', 'Collapse all');
+  [nextB, expandB, collapseB].forEach(function (b) { b.type = 'button'; });
+  var wildPill = make('span', 'epic-wild', ''); wildPill.setAttribute('role', 'status');
+  var hint = make('p', 'quick-hint', 'Left-click a symptom to record it as present (+); right-click (or Shift+Enter) records it as absent (-). Hover or focus a symptom and start typing to add your own detail. Each system prints on one line with its (+) and (-) items inline. Press F2 to jump to the next ***.');
+  bar.append(make('span', 'quick-label', 'Click sets'), click, wsel, search, nextB, wildPill, expandB, collapseB, hint);
+  var body = make('div', 'epic-body'); root.append(bar, body);
+  form.parentNode.insertBefore(root, form);
+  panel.classList.add('epic-on');
+  var tools = panel.querySelector('.editor-tools');
+  var toggleB = make('button', 'quiet-button', 'Classic view'); toggleB.type = 'button'; toggleB.id = 'ros-epic-toggle';
+  tools.insertBefore(toggleB, tools.firstChild);
+  var nav = make('nav', 'epic-nav'); nav.id = 'ros-epic-nav';
+  panel.querySelector('.rail').insertBefore(nav, document.getElementById('ros-system-nav').nextSibling);
+
+  function spec(s, f, sp, vals) {
+    var chosen = vals[sp.k] || [], g = make('div', 'epic-spec' + (sp.req && !chosen.length ? ' unres' : ''));
+    g.setAttribute('role', 'group'); g.setAttribute('aria-label', sp.l);
+    g.append(make('span', 'epic-spec-label', sp.l + (sp.req ? '' : ' (optional)')));
+    var row = make('span', 'epic-pills');
+    sp.o.forEach(function (o) {
+      var b = make('button', 'epic-pill', o); b.type = 'button';
+      b.dataset.act = 'pill'; b.dataset.s = s.id; b.dataset.f = f.id; b.dataset.k = sp.k; b.dataset.v = o;
+      b.setAttribute('aria-pressed', String(chosen.indexOf(o) !== -1)); row.append(b);
+    });
+    g.append(row); return g;
+  }
+  function cardProse(x, f) { return (fill(f, x.sel[f.id]) + ' ' + X.tidy(x.det[f.id] || '')).trim(); }
+  function buildSys(s, open) {
+    var x = st(s), d = make('details', 'epic-sys'); d.id = 'rosx-' + s.id; d.dataset.s = s.id; d.open = open !== false;
+    var sum = make('summary'); sum.append(make('h3', '', s.l));
+    var cnt = make('span', 'epic-count', ''); cnt.dataset.count = s.id; sum.append(cnt); d.append(sum);
+    var tb = make('div', 'epic-sys-tools');
+    [['sysneg', 'All negative'], ['sysclear', 'Clear ' + s.l]].forEach(function (p) {
+      var b = make('button', 'quiet-button quick-btn', p[1]); b.type = 'button'; b.dataset.act = p[0]; b.dataset.s = s.id; tb.append(b);
+    });
+    d.append(tb);
+    var chips = make('div', 'epic-chips epic-ros-chips');
+    s.f.forEach(function (f) {
+      var c = make('button', 'epic-chip', f.l); c.type = 'button'; c.dataset.act = 'chip'; c.dataset.s = s.id; c.dataset.f = f.id;
+      var cs = x.sel[f.id] ? 'affirmative' : x.neg[f.id] ? 'negative' : 'clear';
+      c.dataset.state = cs; c.setAttribute('aria-pressed', cs === 'affirmative' ? 'true' : cs === 'negative' ? 'mixed' : 'false');
+      chips.append(c);
+    });
+    d.append(chips);
+    s.f.forEach(function (f) {
+      if (!x.sel[f.id]) return;
+      var card = make('div', 'epic-card'), ch = make('div', 'epic-card-head'); ch.append(make('strong', '', f.l + ' (+)'));
+      var rm = make('button', 'epic-remove', '✕'); rm.type = 'button'; rm.setAttribute('aria-label', 'Remove ' + f.l);
+      rm.dataset.act = 'remove'; rm.dataset.s = s.id; rm.dataset.f = f.id; ch.append(rm); card.append(ch);
+      f.s.forEach(function (sp) { card.append(spec(s, f, sp, x.sel[f.id])); });
+      var det = make('input', 'epic-detail'); det.type = 'text'; det.placeholder = 'Type to add specifics (e.g. started after eating)';
+      det.setAttribute('aria-label', 'Additional detail for ' + f.l); det.value = x.det[f.id] || '';
+      det.dataset.act = 'detail'; det.dataset.s = s.id; det.dataset.f = f.id; card.append(det);
+      var pv = make('p', 'epic-card-prose'); pv.textContent = cardProse(x, f); card.append(pv);
+      d.append(card);
+    });
+    var note = make('input', 'epic-note'); note.type = 'text'; note.placeholder = 'Additional ' + s.l.toLowerCase() + ' comments (free text)';
+    note.setAttribute('aria-label', 'Additional ' + s.l + ' comments'); note.value = x.note || '';
+    note.dataset.act = 'note'; note.dataset.s = s.id; d.append(note);
+    return d;
+  }
+  R.sys.forEach(function (s) {
+    body.append(buildSys(s));
+    var nb = make('button', 'epic-nav-btn'); nb.type = 'button'; nb.dataset.target = s.id;
+    nb.append(make('span', '', s.l), make('span', 'epic-nav-state')); nav.append(nb);
+  });
+
+  /* ---------- update ---------- */
+  function refresh() {
+    var text = getText(), wild = wildCount(text), docd = R.sys.filter(sysDone).length;
+    out.replaceChildren();
+    if (!text) out.append(make('span', 'preview-empty', 'Your ROS will appear here as you document the encounter.'));
+    else text.split('***').forEach(function (p, j) { if (j) out.append(make('mark', 'epic-wild-mark', '***')); out.append(document.createTextNode(p)); });
+    copyBtn.disabled = !text;
+    var nc = document.getElementById('ros-note-count'); if (nc) nc.textContent = text.length + ' characters';
+    var cp = document.getElementById('ros-completion'); if (cp) cp.textContent = docd + ' of ' + R.sys.length + ' documented';
+    wildPill.textContent = wild ? wild + ' unresolved ***' : 'No unresolved ***'; wildPill.classList.toggle('has', wild > 0); nextB.disabled = !wild;
+    R.sys.forEach(function (s) {
+      var x = st(s), p = Object.keys(x.sel).length, n = Object.keys(x.neg).length;
+      var c = body.querySelector('[data-count="' + s.id + '"]');
+      if (c) c.textContent = (p || n) ? (p ? p + ' (+)' : '') + (p && n ? ', ' : '') + (n ? n + ' (-)' : '') : s.f.length + ' symptoms';
+      var d = nav.querySelector('[data-target="' + s.id + '"] .epic-nav-state'); if (d) d.classList.toggle('done', sysDone(s));
+    });
+    var cs = document.getElementById('ros-copy-status'); if (cs) cs.textContent = '';
+  }
+  function rerender(s, focus) {
+    var old = document.getElementById('rosx-' + s.id);
+    if (old) old.replaceWith(buildSys(s, old.open));
+    applyFilter();
+    if (focus) { var n = body.querySelector(focus); if (n) n.focus(); }
+    refresh();
+  }
+  var sel = function (d) {
+    var a = ['[data-act="' + d.act + '"]', '[data-s="' + d.s + '"]'];
+    if (d.f != null) a.push('[data-f="' + d.f + '"]'); if (d.k != null) a.push('[data-k="' + d.k + '"]');
+    if (d.v != null) a.push('[data-v="' + String(d.v).replace(/"/g, '\\"') + '"]'); return a.join('');
+  };
+
+  /* ---------- actions ---------- */
+  function toggleNeg(x, id) { if (x.neg[id]) delete x.neg[id]; else { x.neg[id] = true; delete x.sel[id]; delete x.det[id]; } }
+  function togglePos(x, id) { if (x.sel[id]) { delete x.sel[id]; delete x.det[id]; } else { x.sel[id] = {}; delete x.neg[id]; } }
+  body.addEventListener('click', function (ev) {
+    var t = ev.target.closest('[data-act]'); if (!t || t.tagName === 'INPUT') return;
+    var d = t.dataset, s = findSys(d.s), x = st(s);
+    switch (d.act) {
+      case 'chip': if (tapNeg) toggleNeg(x, d.f); else togglePos(x, d.f); rerender(s, sel(d)); break;
+      case 'remove': delete x.sel[d.f]; delete x.det[d.f]; rerender(s, '#rosx-' + s.id + ' .epic-chip[data-f="' + d.f + '"]'); break;
+      case 'pill':
+        var v = x.sel[d.f], sp = findF(s, d.f).s.filter(function (q) { return q.k === d.k; })[0], a = v[d.k] || [], i = a.indexOf(d.v);
+        if (sp.multi) { if (i === -1) a.push(d.v); else a.splice(i, 1); } else a = i === -1 ? [d.v] : [];
+        v[d.k] = a; rerender(s, sel(d)); break;
+      case 'sysneg': s.f.forEach(function (f) { if (!x.sel[f.id]) x.neg[f.id] = true; }); rerender(s); break;
+      case 'sysclear': state[s.id] = blank(); rerender(s); break;
+    }
+  });
+  var ctx = function (c) { var s = findSys(c.dataset.s); return { s: s, x: st(s) }; };
+  body.addEventListener('contextmenu', function (ev) {
+    var c = ev.target.closest('.epic-chip'); if (!c) return; ev.preventDefault();
+    var k = ctx(c); toggleNeg(k.x, c.dataset.f); rerender(k.s, sel(c.dataset));
+  });
+  body.addEventListener('keydown', function (ev) {
+    var c = ev.target.closest && ev.target.closest('.epic-chip');
+    if (c && ev.key === 'Enter' && ev.shiftKey) { ev.preventDefault(); var k = ctx(c); toggleNeg(k.x, c.dataset.f); rerender(k.s, sel(c.dataset)); }
+    else if (ev.target.classList && ev.target.classList.contains('epic-detail') && (ev.key === 'Enter' || ev.key === 'Escape')) {
+      ev.preventDefault(); var q = ev.target.dataset, ch = body.querySelector('.epic-chip[data-s="' + q.s + '"][data-f="' + q.f + '"]'); if (ch) ch.focus();
+    }
+  });
+  var hovered = null;
+  body.addEventListener('mouseover', function (ev) { hovered = ev.target.closest('.epic-chip'); });
+  body.addEventListener('mouseleave', function () { hovered = null; });
+  document.addEventListener('keydown', function (ev) {
+    if (!panel.classList.contains('epic-on') || panel.hidden) return;
+    if (ev.key.length !== 1 || ev.key === ' ' || ev.ctrlKey || ev.metaKey || ev.altKey) return;
+    var a = document.activeElement;
+    if (a && (a.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))) return;
+    var c = a && a.closest && a.closest('.epic-chip'); if (!c && hovered && hovered.isConnected) c = hovered;
+    if (!c || !body.contains(c)) return;
+    ev.preventDefault(); ev.stopPropagation();
+    var k = ctx(c), f = c.dataset.f;
+    if (!k.x.sel[f]) { k.x.sel[f] = {}; delete k.x.neg[f]; }
+    k.x.det[f] = (k.x.det[f] || '') + ev.key; rerender(k.s);
+    var inp = body.querySelector('.epic-detail[data-s="' + k.s.id + '"][data-f="' + f + '"]');
+    if (inp) { inp.focus(); inp.setSelectionRange(inp.value.length, inp.value.length); }
+  }, true);
+  body.addEventListener('input', function (ev) {
+    var t = ev.target, d = t.dataset; if (!d || !d.act) return;
+    var s = findSys(d.s), x = s && st(s);
+    if (d.act === 'detail') { x.det[d.f] = t.value; var pv = t.closest('.epic-card').querySelector('.epic-card-prose'); if (pv) pv.textContent = cardProse(x, findF(s, d.f)); refresh(); }
+    else if (d.act === 'note') { x.note = t.value; refresh(); }
+  });
+
+  /* ---------- filter / nav / F2 ---------- */
+  function applyFilter() {
+    var q = search.value.trim().toLowerCase();
+    $$('.epic-sys', body).forEach(function (d) {
+      var s = findSys(d.dataset.s), x = st(s), any = false, hitS = !q || s.l.toLowerCase().indexOf(q) !== -1;
+      $$('.epic-chip', d).forEach(function (c) {
+        var hit = !q || hitS || c.textContent.toLowerCase().indexOf(q) !== -1 || !!x.sel[c.dataset.f] || !!x.neg[c.dataset.f];
+        c.hidden = !hit; if (hit) any = true;
+      });
+      d.hidden = !!q && !any; if (q && !d.hidden) d.open = true;
+    });
+  }
+  search.addEventListener('input', applyFilter);
+  search.addEventListener('keydown', function (e) { if (e.key === 'Escape' && search.value) { e.preventDefault(); search.value = ''; applyFilter(); } });
+  expandB.addEventListener('click', function () { $$('.epic-sys', body).forEach(function (d) { if (!d.hidden) d.open = true; }); });
+  collapseB.addEventListener('click', function () { $$('.epic-sys', body).forEach(function (d) { d.open = false; }); });
+  nav.addEventListener('click', function (ev) {
+    var b = ev.target.closest('[data-target]'); if (!b) return;
+    var d = document.getElementById('rosx-' + b.dataset.target); if (search.value) { search.value = ''; applyFilter(); }
+    d.open = true; d.scrollIntoView({ block: 'start', behavior: 'auto' });
+  });
+  function gotoWild(back) {
+    var g = $$('.epic-spec.unres', body); if (!g.length) return;
+    var cur = document.activeElement && document.activeElement.closest && document.activeElement.closest('.epic-spec'), i = cur ? g.indexOf(cur) : -1, n;
+    n = i === -1 ? (back ? g[g.length - 1] : g[0]) : g[(i + (back ? -1 : 1) + g.length) % g.length];
+    var det = n.closest('details'); if (det) det.open = true;
+    n.scrollIntoView({ block: 'center', behavior: 'auto' }); var f = n.querySelector('.epic-pill'); if (f) f.focus();
+    n.classList.add('flash'); setTimeout(function () { n.classList.remove('flash'); }, 900);
+  }
+  nextB.addEventListener('click', function () { gotoWild(false); });
+  document.addEventListener('keydown', function (ev) {
+    if (ev.key !== 'F2' || !panel.classList.contains('epic-on') || panel.hidden) return; ev.preventDefault(); gotoWild(ev.shiftKey);
+  });
+
+  /* ---------- clear / copy / classic toggle ---------- */
+  document.getElementById('ros-clear-button').addEventListener('click', function (ev) {
+    if (!panel.classList.contains('epic-on')) return; ev.stopImmediatePropagation(); ev.preventDefault();
+    if (getText() && !window.confirm('Clear all ROS findings?')) return;
+    state = {}; R.sys.forEach(function (s) { rerender(s); });
+  }, true);
+  copyBtn.addEventListener('click', function (ev) {
+    if (!panel.classList.contains('epic-on')) return; ev.stopImmediatePropagation(); ev.preventDefault();
+    var text = getText(); if (!text) return;
+    var done = function (ok) { var cs = document.getElementById('ros-copy-status'), w = wildCount(text); if (cs) cs.textContent = ok ? (w ? 'Copied with ' + w + ' unresolved ***' : 'Copied') : 'Copy failed. Select the note and copy manually.'; };
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(false); });
+    else { var ta = make('textarea'); ta.value = text; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;top:-1000px'; document.body.append(ta); ta.select(); var ok = false; try { ok = document.execCommand('copy'); } catch (_) { } ta.remove(); done(ok); }
+  }, true);
+  toggleB.addEventListener('click', function () {
+    var on = panel.classList.toggle('epic-on'); toggleB.textContent = on ? 'Classic view' : 'Structured view';
+    if (on) refresh(); else { var ta = document.querySelector('#ros-system-fields textarea'); if (ta) ta.dispatchEvent(new Event('input', { bubbles: true })); }
+  });
+
+  var rf = panel.querySelector('.rail-foot'); if (rf) rf.textContent = 'Click a symptom for present (+), right-click or press Shift+Enter for absent (-). Use All negative for a whole system. Type to add detail.';
+  refresh();
+  window.EpicRos = { getText: getText, state: function () { return state; }, lib: R, opts: opts, refresh: refresh };
 })();
 </script>
 </body>
