@@ -1206,6 +1206,81 @@ html[data-theme="dark"] .epic-seg button[aria-pressed="true"] { color: #0f172a; 
   #ros-panel.epic-on .preview { width: auto; }
 }
 
+/* ---------- Pre-Rounds: modern layout (sharp, theme-aware) ---------- */
+#pre-rounds-panel .pre-rounds-layout { grid-template-columns: minmax(460px, .9fr) minmax(0, 1.3fr); gap: 16px; }
+#pre-rounds-panel .pre-rounds-input-panel, #pre-rounds-panel .pre-rounds-output-panel { padding: 0; border-top: 3px solid var(--accent); }
+#pre-rounds-panel .pre-rounds-toolbar { margin: 0; padding: 10px 14px; gap: 8px; background: var(--surface-head); border-bottom: 1px solid var(--line); }
+#pre-rounds-panel .pre-rounds-toolbar h2 { font-size: 14px; letter-spacing: .02em; flex: 1 1 auto; }
+#pre-rounds-panel .pre-rounds-toolbar .copy-button { margin-left: 0; }
+@media (min-width: 1100px) {
+  #pre-rounds-panel .pre-rounds-input-panel { position: sticky; top: calc(var(--tabs-h, 64px) + 12px); max-height: calc(100vh - var(--tabs-h, 64px) - 24px); overflow: auto; }
+}
+
+/* patient cards instead of thin tabs */
+#pre-rounds-panel .pre-rounds-patient-tabs { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 8px; overflow: visible; margin: 0; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+#pre-rounds-panel .pre-rounds-patient-tab { display: grid; gap: 3px; max-width: none; padding: 8px 10px 7px; text-align: left; color: var(--ink); background: var(--surface-solid); border: 1px solid var(--line); border-top: 3px solid transparent; cursor: pointer; white-space: normal; }
+#pre-rounds-panel .pre-rounds-patient-tab:hover { border-color: var(--accent); }
+#pre-rounds-panel .pre-rounds-patient-tab[aria-selected="true"] { background: var(--surface-head); border-color: var(--accent); border-top-color: var(--accent); font-weight: inherit; box-shadow: inset 0 0 0 1px var(--accent); }
+.pr-tab-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.pr-tab-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; font-weight: 700; }
+.pr-tab-room { flex: 0 0 auto; padding: 0 5px; font-size: 11px; font-weight: 700; color: var(--accent); border: 1px solid var(--accent); }
+.pr-tab-meta { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); font-size: 11px; font-weight: 400; }
+.pr-tab-bar { display: flex; gap: 2px; margin-top: 3px; }
+.pr-tab-bar i { flex: 1; height: 3px; background: var(--line); }
+.pr-tab-bar i.on { background: var(--brand-green, #16a34a); }
+
+/* form */
+#pre-rounds-panel .pre-rounds-patients { padding: 0 14px 14px; }
+#pre-rounds-panel .pre-rounds-patient-form { padding: 0; background: transparent; border: 0; }
+#pre-rounds-panel .pre-rounds-patient-heading { padding: 12px 0 2px; }
+#pre-rounds-panel .pre-rounds-patient-heading h3 { font-size: 16px; }
+#pre-rounds-panel .pre-rounds-fields { grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 8px 10px; }
+#pre-rounds-panel .pre-rounds-field, #pre-rounds-panel .pre-rounds-field--wide, #pre-rounds-panel .pre-rounds-labs, .pr-section { grid-column: 1 / -1; }
+#pre-rounds-panel .pre-rounds-field.pr-name { grid-column: span 4; }
+#pre-rounds-panel .pre-rounds-field.pr-room { grid-column: span 2; }
+#pre-rounds-panel .pre-rounds-field.pr-dx { grid-column: span 4; }
+#pre-rounds-panel .pre-rounds-field.pr-vital { grid-column: span 2; }
+.pr-section { display: flex; align-items: center; gap: 10px; margin: 10px 0 0; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
+.pr-section::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+#pre-rounds-panel .pre-rounds-field label, #pre-rounds-panel .pre-rounds-lab-grid label, #pre-rounds-panel .pre-rounds-labs legend { font-size: 11px; font-weight: 700; letter-spacing: .02em; color: var(--muted); }
+#pre-rounds-panel .pre-rounds-field label.pr-sr-label { font-size: 0; line-height: 0; }
+#pre-rounds-panel .pre-rounds-field input, #pre-rounds-panel .pre-rounds-field textarea, #pre-rounds-panel .pre-rounds-labs input {
+  padding: 7px 9px; font-size: 13px; font-weight: 400; line-height: 1.4; color: var(--ink); background: var(--field-bg); border: 1px solid var(--line); transition: border-color .12s, box-shadow .12s;
+}
+#pre-rounds-panel .pre-rounds-field input:focus, #pre-rounds-panel .pre-rounds-field textarea:focus, #pre-rounds-panel .pre-rounds-labs input:focus { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); outline: none; }
+#pre-rounds-panel .pre-rounds-field textarea { min-height: 56px; resize: vertical; overflow: hidden; }
+#pre-rounds-panel .pre-rounds-labs { padding: 10px; border: 1px solid var(--line); background: var(--surface-head); }
+#pre-rounds-panel .pre-rounds-labs legend { padding: 0 6px; text-transform: uppercase; letter-spacing: .09em; font-weight: 800; }
+#pre-rounds-panel .pre-rounds-lab-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px 6px; margin-top: 8px; }
+#pre-rounds-panel .pre-rounds-lab-grid input { margin-top: 3px; padding: 6px 4px; text-align: center; font-variant-numeric: tabular-nums; font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+[data-lab-status] { display: block; margin-top: 4px; font-size: 12px; font-weight: 600; }
+.pr-hint { margin: 8px 0 0; color: var(--muted); font-size: 11px; line-height: 1.4; }
+input[data-flag="hi"] { color: #b45309 !important; background: #fef3c7 !important; border-color: #f59e0b !important; font-weight: 700 !important; }
+input[data-flag="lo"] { color: #1d4ed8 !important; background: #dbeafe !important; border-color: #3b82f6 !important; font-weight: 700 !important; }
+html[data-theme="dark"] input[data-flag="hi"] { color: #fcd34d !important; background: rgba(245,158,11,.18) !important; border-color: rgba(245,158,11,.6) !important; }
+html[data-theme="dark"] input[data-flag="lo"] { color: #93c5fd !important; background: rgba(59,130,246,.2) !important; border-color: rgba(59,130,246,.6) !important; }
+
+/* preview column */
+#pre-rounds-panel .pre-rounds-preview-list { padding: 14px; gap: 16px; }
+#pre-rounds-panel .pre-rounds-sheet-wrap { padding: 0; background: transparent; border: 0; }
+#pre-rounds-panel .pre-rounds-sheet-actions { justify-content: space-between; align-items: center; margin: 0 0 6px; }
+.pr-sheet-label { font-size: 12px; color: var(--muted); }
+.pr-sheet-label strong { color: var(--ink); text-transform: uppercase; letter-spacing: .06em; font-size: 11px; }
+#pre-rounds-panel .pre-rounds-sheet { border: 1px solid var(--line); box-shadow: none; padding: 10px; }
+html[data-theme="dark"] #pre-rounds-panel .pre-rounds-sheet { border-color: #aebdce; }
+#pre-rounds-panel .pre-rounds-status { margin: 0; padding: 0 14px; min-height: 0; }
+#pre-rounds-panel .pre-rounds-status:not(:empty) { margin: 0 14px 14px; padding: 8px 12px; border: 1px solid var(--line); border-left: 4px solid var(--brand-green, #16a34a); background: var(--surface-head); }
+
+@media (max-width: 1099px) { #pre-rounds-panel .pre-rounds-layout { grid-template-columns: 1fr; } }
+@media (max-width: 720px) {
+  #pre-rounds-panel .pre-rounds-field.pr-name { grid-column: 1 / -1; }
+  #pre-rounds-panel .pre-rounds-field.pr-room, #pre-rounds-panel .pre-rounds-field.pr-dx { grid-column: span 5; }
+  #pre-rounds-panel .pre-rounds-field.pr-vital { grid-column: span 5; }
+  #pre-rounds-panel .pre-rounds-lab-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  #pre-rounds-panel .pre-rounds-patient-tabs { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+}
+@media (pointer: coarse) { #pre-rounds-panel .pre-rounds-field input, #pre-rounds-panel .pre-rounds-labs input { min-height: 40px; } }
+
 /* ---------- Printing while in dark mode used to print a dark page ---------- */
 @media print {
   html[data-theme="dark"] body { background: #fff !important; color: #000 !important; }
@@ -2181,8 +2256,8 @@ html[data-theme="dark"] .epic-seg button[aria-pressed="true"] { color: #0f172a; 
       const metadataLine = new RegExp(`^${metadataLabel.source}`, "i");
       const reportTitleLabel = /^(?:(?:exam|study|study\s+type|exam\s+type|procedure|procedure\s+name|modality)\s*[:=])/i;
       const reportDateLabel = /^(?:study\s+date|exam\s+date|date\s+of\s+(?:study|exam)|acquisition\s+date|performed\s+date|date(?:\s*\/\s*time)?|report\s+date|result\s+date)\s*[:#-]/i;
-      const sectionHeader = /^(?:#{1,6}\s*)?(impression(?:\s*\/\s*conclusion)?|conclusion|findings?|narrative|exam(?:ination)?(?:\s+description)?|report|culture results?|culture\s+(?:and|&)\s+(?:sensitivities?|susceptibilities?)|results?|interpretation|microbiology|gram stain|organism(?:\s+#?\d+)?|quantity|antimicrobial (?:susceptibilities?|sensitivities?)|antibiotics? (?:susceptibilities?|sensitivities?)|drug susceptibilities?|antibiogram|ast|susceptibilities?(?: results?| testing| profile| panel)?|sensitivities?(?: results?| testing| profile| panel)?|sens|susc)(?:\s*[\[(][^)\]]*[\])])?\s*:?\s*(.*)$/i;
-      const inlineSectionBreak = /\s+(?=(?:#{1,6}\s*)?(?:impression(?:\s*\/\s*conclusion)?|conclusion|findings?|narrative|exam(?:ination)?(?:\s+description)?|report|culture results?|culture\s+(?:and|&)\s+(?:sensitivities?|susceptibilities?)|(?<!culture\s)results?|interpretation|microbiology|gram stain|organism(?:\s+#?\d+)?|quantity|antimicrobial (?:susceptibilities?|sensitivities?)|antibiotics? (?:susceptibilities?|sensitivities?)|drug susceptibilities?|antibiogram|ast|susceptibilities?(?: results?| testing| profile| panel)?|sensitivities?(?: results?| testing| profile| panel)?|sens|susc)\s*:)/gi;
+      const sectionHeader = /^(?:#{1,6}\s*)?(impression(?:\s*\/\s*conclusion)?|conclusion|findings?|narrative|exam(?:ination)?(?:\s+description)?|report|culture results?|culture\s+(?:and|&)\s+(?:sensitivities?|susceptibilit(?:y|ies))|results?|interpretation|microbiology|gram stain|organism(?:\s+#?\d+)?|quantity|antimicrobial (?:susceptibilit(?:y|ies)|sensitivities?)|antibiotics? (?:susceptibilit(?:y|ies)|sensitivities?)|drug susceptibilit(?:y|ies)|antibiogram|ast|susceptibilit(?:y|ies)(?: results?| testing| profile| panel)?|sensitivities?(?: results?| testing| profile| panel)?|sens|susc)(?:\s*[\[(][^)\]]*[\])])?\s*:?\s*(.*)$/i;
+      const inlineSectionBreak = /\s+(?=(?:#{1,6}\s*)?(?:impression(?:\s*\/\s*conclusion)?|conclusion|findings?|narrative|exam(?:ination)?(?:\s+description)?|report|culture results?|culture\s+(?:and|&)\s+(?:sensitivities?|susceptibilit(?:y|ies))|(?<!culture\s)results?|interpretation|microbiology|gram stain|organism(?:\s+#?\d+)?|quantity|antimicrobial (?:susceptibilit(?:y|ies)|sensitivities?)|antibiotics? (?:susceptibilit(?:y|ies)|sensitivities?)|drug susceptibilit(?:y|ies)|antibiogram|ast|susceptibilit(?:y|ies)(?: results?| testing| profile| panel)?|sensitivities?(?: results?| testing| profile| panel)?|sens|susc)\s*:)/gi;
       const cleanLine = (line) => line
         .replace(/^\s*#{1,6}\s*/, "")
         .replace(/^\s*(?:[-*•]\s*|\d+[.)]\s*)/, "")
@@ -2303,7 +2378,7 @@ html[data-theme="dark"] .epic-seg button[aria-pressed="true"] { color: #0f172a; 
         };
         const isMicrobiologyReport = isMicrobiologyTitle(report.title)
           || !isImagingMicroTitle(report.title) && report.lines.some((line) =>
-            /^(?:culture(?:\s+results?|\s+(?:and|&)\s+(?:sensitivities?|susceptibilities?))?|microbiology|gram\s+stain|organism(?:\s+#?\d+)?|quantity|antimicrobial\s+(?:susceptibilities?|sensitivities?)|antibiotics?\s+(?:susceptibilities?|sensitivities?)|drug\s+susceptibilities?|antibiogram|ast(?:\s+results?)?|susceptibilities?(?:\s+(?:results?|testing|profile|panel))?|sensitivities?(?:\s+(?:results?|testing|profile|panel))?)\s*:/i.test(line)
+            /^(?:culture(?:\s+results?|\s+(?:and|&)\s+(?:sensitivities?|susceptibilit(?:y|ies)))?|microbiology|gram\s+stain|organism(?:\s+#?\d+)?|quantity|antimicrobial\s+(?:susceptibilit(?:y|ies)|sensitivities?)|antibiotics?\s+(?:susceptibilit(?:y|ies)|sensitivities?)|drug\s+susceptibilit(?:y|ies)|antibiogram|ast(?:\s+results?)?|susceptibilit(?:y|ies)(?:\s+(?:results?|testing|profile|panel))?|sensitivities?(?:\s+(?:results?|testing|profile|panel))?)\s*:/i.test(line)
             || isSusceptibilityHeader(line));
         const interpretationPattern = /\b(susceptible\s+dose[- ]+dependent|dose[- ]+dependent|non[- ]?susceptible|not\s+susceptible|susceptible|sensitive|intermediate|resistant|sdd|sus|susc|inter|res|ns|[SIR])\b/i;
         const parseSusceptibility = (line) => {
@@ -2667,8 +2742,8 @@ html[data-theme="dark"] .epic-seg button[aria-pressed="true"] { color: #0f172a; 
           title: "BMP",
           width: "33.333%",
           lines: [[12, 62, 182, 62], [54, 30, 54, 94], [108, 30, 108, 94], [182, 62, 220, 30], [182, 62, 220, 94]],
-          points: [["Na", "na", 31, 29, 48], ["K", "k", 31, 108, 91], ["Cl", "cl", 81, 29, 48], ["HCO3", "hco3", 81, 108, 91], ["BUN", "bun", 148, 29, 48], ["Cret", "cr", 148, 108, 91], ["Glucose", "gluc", 264, 57, 78]],
-          plainText: `Na ${values.na} | Cl ${values.cl} | BUN ${values.bun}\nK ${values.k} | HCO3 ${values.hco3} | Cret ${values.cr}\nGlucose ${values.gluc}`
+          points: [["Na", "na", 31, 29, 48], ["K", "k", 31, 108, 91], ["Cl", "cl", 81, 29, 48], ["HCO3", "hco3", 81, 108, 91], ["BUN", "bun", 148, 29, 48], ["Cr", "cr", 148, 108, 91], ["Glucose", "gluc", 264, 57, 78]],
+          plainText: `Na ${values.na} | Cl ${values.cl} | BUN ${values.bun}\nK ${values.k} | HCO3 ${values.hco3} | Cr ${values.cr}\nGlucose ${values.gluc}`
         },
         {
           title: "CBC",
@@ -5747,6 +5822,192 @@ window.ROS_LIB = (function () {
   var rf = panel.querySelector('.rail-foot'); if (rf) rf.textContent = 'Click a symptom for present (+), right-click or press Shift+Enter for absent (-). Use All negative for a whole system. Type to add detail.';
   refresh();
   window.EpicRos = { getText: getText, state: function () { return state; }, lib: R, opts: opts, refresh: refresh };
+})();
+
+/* Pre-Rounds: bug fixes + modern UI layer (added after the original script) */
+(function () {
+  'use strict';
+  if (typeof renderPreRounds !== 'function' || typeof parseEmrLabs !== 'function') return;
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var make = function (tag, cls, text) { var n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
+  var list = document.getElementById('pre-rounds-patients'), tabs = document.getElementById('pre-rounds-patient-tabs');
+  var preview = document.getElementById('pre-rounds-preview-list'), statusEl = document.getElementById('pre-rounds-status');
+
+  /* ---------- 1. Lab paste fixes ---------- */
+  /* more names EMRs use */
+  [['phos', 'po4'], ['phosphorusinorganic', 'po4'], ['inorganicphosphorus', 'po4'], ['glu', 'gluc'], ['glucoserandom', 'gluc'], ['glucosefasting', 'gluc'],
+   ['totalcalcium', 'ca'], ['calciumtotal', 'ca'], ['totalco2', 'hco3'], ['co2total', 'hco3'], ['tco2', 'hco3'], ['bicarb', 'hco3'], ['bunurea', 'bun'], ['plateletcount', 'plts'],
+   ['pltcount', 'plts'], ['wbccount', 'wbc'], ['hgbhb', 'hgb'], ['magnesiumlevel', 'mg']].forEach(function (p) { try { emrLabAliases.set(p[0], p[1]); } catch (_) { } });
+
+  var DATE_CELL = /(\d{1,2}[\/-]\d{1,2}(?:[\/-]\d{2,4})?|\d{4}-\d{2}-\d{2}|[A-Za-z]{3,9}\s+\d{1,2})/;
+  function cellTime(c) {
+    var m = c.match(/(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{1,2}):(\d{2}))?/), y, mo, d, hh = 0, mm = 0, t;
+    if (m) { y = +m[1]; mo = +m[2]; d = +m[3]; hh = +(m[4] || 0); mm = +(m[5] || 0); }
+    else if ((m = c.match(/(\d{1,2})[\/-](\d{1,2})(?:[\/-](\d{2,4}))?/))) {
+      mo = +m[1]; d = +m[2]; y = m[3] ? +m[3] : new Date().getFullYear(); if (y < 100) y += 2000;
+      var tm = c.match(/(\d{1,2}):?(\d{2})\s*([AP]M)?/i); var rest = c.slice(c.indexOf(m[0]) + m[0].length);
+      tm = rest.match(/(\d{1,2}):(\d{2})\s*([AP]M)?/i) || rest.match(/\b(\d{2})(\d{2})\b/);
+      if (tm) { hh = +tm[1]; mm = +tm[2]; if (tm[3] && /p/i.test(tm[3]) && hh < 12) hh += 12; if (tm[3] && /a/i.test(tm[3]) && hh === 12) hh = 0; }
+    } else { t = Date.parse(c); return isNaN(t) ? NaN : t; }
+    return new Date(y, mo - 1, d, hh, mm).getTime();
+  }
+  var labNote = '';
+  function normalizePaste(text) {
+    labNote = '';
+    var lines = text.replace(/\r\n?/g, '\n').split('\n');
+    /* trend table: first row has two or more date/time headers -> keep only the most recent column */
+    for (var i = 0; i < lines.length; i++) {
+      var dl = lines[i].indexOf('\t') !== -1 ? '\t' : lines[i].indexOf('|') !== -1 ? '|' : '';
+      if (!dl) continue;
+      var cells = lines[i].split(dl).map(function (c) { return c.trim(); });
+      var idx = []; cells.forEach(function (c, k) { if (k > 0 && DATE_CELL.test(c) && !/^[<>]?-?\d+(\.\d+)?$/.test(c)) idx.push(k); });
+      if (idx.length < 2) continue;
+      var ts = idx.map(function (k) { return cellTime(cells[k]); });
+      if (ts.some(isNaN)) break;
+      var best = idx[ts.indexOf(Math.max.apply(null, ts))];
+      var out = lines.slice(0, i); out.push('Test' + dl + 'Result');
+      for (var j = i + 1; j < lines.length; j++) {
+        if (!lines[j].trim()) { out = out.concat(lines.slice(j)); break; }
+        var c2 = lines[j].split(dl).map(function (c) { return c.trim(); });
+        out.push(c2[0] + dl + (c2[best] || ''));
+      }
+      labNote = 'Several result columns found; used the most recent (' + cells[best] + ').';
+      return out.join('\n');
+    }
+    /* several results typed on one line: "Na 140 K 4.1 Cl 101 ..." */
+    var re = /(?:^|[\s,;])(Na|K|Cl|CO2|HCO3|BUN|Cr|Creat|Glu|Gluc|Ca|Mg|Phos|PO4|WBC|Hgb|Hb|Hct|Plt|Plts)\s*[:=]?\s*((?:[<>]=?)?\d[\d,]*(?:\.\d+)?)(?=\s|,|;|$)/gi;
+    return lines.map(function (ln) {
+      if (/[\t|]/.test(ln)) return ln;
+      var m, found = [], r = new RegExp(re.source, 'gi');
+      while ((m = r.exec(ln))) found.push(m[1] + ' ' + m[2]);
+      return found.length >= 3 ? found.join('\n') : ln;
+    }).join('\n');
+  }
+  var baseParse = window.parseEmrLabs;
+  window.parseEmrLabs = function (text) { return baseParse(normalizePaste(text)); };
+
+  /* re-pasting new results must not leave yesterday's values behind */
+  var baseApply = window.applyEmrLabs;
+  window.applyEmrLabs = function (card) {
+    var prev = card._pasted || {};
+    Object.keys(prev).forEach(function (f) { var el = card.querySelector('[data-field="' + f + '"]'); if (el && el.value === prev[f]) el.value = ''; });
+    var ok = baseApply(card);
+    var fields = {};
+    try { baseParse(normalizePaste(card.querySelector('[data-emr-labs]').value)).parsed.forEach(function (v, f) { fields[f] = card.querySelector('[data-field="' + f + '"]').value; }); } catch (_) { }
+    card._pasted = fields;
+    var st = card.querySelector('[data-lab-status]');
+    if (st && labNote && ok) st.textContent += ' ' + labNote;
+    return ok;
+  };
+
+  /* ---------- 2. Safer remove / clear, unsaved-work warning ---------- */
+  var hasData = function (card) { return $$('input, textarea', card).some(function (e) { return e.value.trim(); }); };
+  list.addEventListener('click', function (ev) {
+    var b = ev.target.closest('[data-remove-patient]'); if (!b) return;
+    var card = b.closest('.pre-rounds-patient-form');
+    if (hasData(card) && !window.confirm(list.children.length === 1 ? 'Clear everything entered for this patient?' : 'Remove this patient and everything entered for them?')) {
+      ev.stopImmediatePropagation(); ev.preventDefault();
+    }
+  }, true);
+  window.addEventListener('beforeunload', function (e) {
+    if ($$('.pre-rounds-patient-form', list).some(hasData)) { e.preventDefault(); e.returnValue = ''; }
+  });
+
+  /* ---------- 3. Decoration: sections, ranges, patient cards ---------- */
+  var VIT = {
+    temp: function (v) { var n = parseFloat(v); if (isNaN(n)) return ''; if (n < 45) n = n * 9 / 5 + 32; return n >= 100.4 ? 'hi' : n < 96.8 ? 'lo' : ''; },
+    hr: function (v) { var n = parseFloat(v); return isNaN(n) ? '' : n > 100 ? 'hi' : n < 50 ? 'lo' : ''; },
+    rr: function (v) { var n = parseFloat(v); return isNaN(n) ? '' : n > 20 ? 'hi' : n < 10 ? 'lo' : ''; },
+    bp: function (v) { var m = v.match(/(\d{2,3})\s*\/\s*(\d{2,3})/); if (!m) return ''; return (+m[1] >= 160 || +m[2] >= 100) ? 'hi' : (+m[1] < 90 || +m[2] < 50) ? 'lo' : ''; },
+    o2: function (v) { var n = parseFloat(v); return isNaN(n) ? '' : n < 92 ? 'lo' : ''; }
+  };
+  var RNG = { na: [135, 145], k: [3.5, 5.1], cl: [98, 107], hco3: [22, 29], bun: [7, 20], cr: [0.6, 1.3], gluc: [70, 140], ca: [8.5, 10.5], mg: [1.6, 2.6], po4: [2.5, 4.5], wbc: [4, 11], hgb: [12, 17.5], hct: [36, 52], plts: [150, 450] };
+  function flag(input) {
+    var f = input.dataset.field, v = input.value.trim(), s = '';
+    if (VIT[f]) s = VIT[f](v);
+    else if (RNG[f]) { var n = parseFloat(v.replace(/^[<>]=?/, '')); if (!isNaN(n)) s = n > RNG[f][1] ? 'hi' : n < RNG[f][0] ? 'lo' : ''; }
+    if (s) input.dataset.flag = s; else delete input.dataset.flag;
+    input.title = s ? (s === 'hi' ? 'Above' : 'Below') + ' a typical adult range (form highlight only; not shown on the sheet)' : '';
+  }
+  var COLS = { name: 'pr-name', room: 'pr-room', 'primary-dx': 'pr-dx', temp: 'pr-vital', hr: 'pr-vital', rr: 'pr-vital', bp: 'pr-vital', o2: 'pr-vital' };
+  function decorateCard(card) {
+    if (!card.dataset.pr) {
+      card.dataset.pr = '1';
+      var grid = $('.pre-rounds-fields', card);
+      $$('.pre-rounds-field', grid).forEach(function (f) { var i = $('[data-field]', f); if (i && COLS[i.dataset.field]) f.classList.add(COLS[i.dataset.field]); });
+      var h1 = make('h4', 'pr-section', 'Patient'), h2 = make('h4', 'pr-section', 'Vitals');
+      grid.insertBefore(h1, grid.firstChild);
+      grid.insertBefore(h2, $('.pr-vital', grid));
+      var NAMES = { subjective: 'Subjective', imaging: 'Imaging / Micro', assessment: 'Assessment & Plan', todos: 'To Dos' };
+      Object.keys(NAMES).forEach(function (k) {
+        var t = $('[data-field="' + k + '"]', card), f = t.closest('.pre-rounds-field'), l = $('label', f);
+        grid.insertBefore(make('h4', 'pr-section', NAMES[k]), f);
+        l.classList.add('pr-sr-label'); t.setAttribute('aria-label', NAMES[k]);
+      });
+      var grow = function (t) { var cap = t.matches('[data-emr-labs]') ? 130 : 420; t.style.height = 'auto'; t.style.height = Math.min(t.scrollHeight + 2, cap) + 'px'; t.style.overflowY = t.scrollHeight + 2 > cap ? 'auto' : 'hidden'; };
+      card.addEventListener('input', function (e) {
+        if (e.target.matches('textarea')) grow(e.target);
+        if (e.target.matches('[data-field]')) flag(e.target);
+      });
+      card.addEventListener('input', function (e) { if (e.target.matches('[data-emr-labs]')) setTimeout(function () { $$('.pre-rounds-lab-grid input', card).forEach(flag); }, 0); });
+      var legend = make('p', 'pr-hint', 'Amber and red field highlights use typical adult ranges to help you spot values; they are not printed on the sheet.');
+      $('.pre-rounds-labs', card).append(legend);
+    }
+    $$('[data-field]', card).forEach(function (i) { if (i.matches('input')) flag(i); });
+    var rm = $('[data-remove-patient]', card); rm.textContent = list.children.length === 1 ? 'Clear form' : 'Remove patient';
+  }
+  var FILLED = [['name'], ['room'], ['primary-dx'], ['subjective'], ['temp', 'hr', 'rr', 'bp', 'o2'], ['na', 'k', 'cl', 'hco3', 'bun', 'cr', 'gluc', 'ca', 'mg', 'po4', 'wbc', 'hgb', 'hct', 'plts'], ['imaging'], ['assessment'], ['todos']];
+  var val = function (card, f) { var e = card.querySelector('[data-field="' + f + '"]'); return e ? e.value.trim() : ''; };
+  function decorate() {
+    var cards = $$('.pre-rounds-patient-form', list);
+    cards.forEach(decorateCard);
+    cards.forEach(function (card, i) {
+      var tab = tabs.children[i]; if (!tab) return;
+      var done = FILLED.filter(function (g) { return g.some(function (f) { return val(card, f); }); }).length;
+      var name = val(card, 'name'), room = val(card, 'room'), dx = val(card, 'primary-dx');
+      tab.replaceChildren();
+      var top = make('span', 'pr-tab-top');
+      top.append(make('span', 'pr-tab-name', name || 'Patient ' + (i + 1)));
+      if (room) top.append(make('span', 'pr-tab-room', 'Rm ' + room));
+      tab.append(top, make('span', 'pr-tab-meta', dx || 'No diagnosis yet'));
+      var bar = make('span', 'pr-tab-bar'); bar.setAttribute('aria-hidden', 'true');
+      for (var k = 0; k < FILLED.length; k++) bar.append(make('i', k < done ? 'on' : ''));
+      tab.append(bar);
+      tab.setAttribute('aria-label', (name || 'Patient ' + (i + 1)) + (room ? ', room ' + room : '') + ', ' + done + ' of ' + FILLED.length + ' sections filled');
+    });
+    $$('.pre-rounds-sheet-wrap', preview).forEach(function (w, i) {
+      var a = $('.pre-rounds-sheet-actions', w), card = cards[i]; if (!a || !card) return;
+      var lbl = make('span', 'pr-sheet-label'); lbl.append(make('strong', '', 'Patient ' + (i + 1)), document.createTextNode(val(card, 'name') ? ' · ' + val(card, 'name') : ''));
+      a.insertBefore(lbl, a.firstChild); w.dataset.index = String(i);
+    });
+  }
+  var baseRender = window.renderPreRounds;
+  window.renderPreRounds = function () { baseRender(); decorate(); };
+  tabs.addEventListener('click', function (ev) {
+    var t = ev.target.closest('[role="tab"]'); if (!t) return;
+    var i = Array.prototype.indexOf.call(tabs.children, t), w = preview.children[i];
+    if (w && window.matchMedia('(min-width: 1100px)').matches) w.scrollIntoView({ block: 'nearest' });
+  });
+
+  /* ---------- 4. Toolbar: clear all, status ---------- */
+  var tb = $('.pre-rounds-input-panel .pre-rounds-toolbar'), addB = document.getElementById('add-pre-rounds-patient');
+  var clearAll = make('button', 'quiet-button', 'Clear all'); clearAll.type = 'button'; clearAll.id = 'clear-all-pre-rounds';
+  tb.append(clearAll);
+  clearAll.addEventListener('click', function () {
+    var cards = $$('.pre-rounds-patient-form', list);
+    if (!cards.some(hasData) && cards.length === 1) return;
+    if (!window.confirm('Remove all patients and clear everything entered?')) return;
+    cards.slice(1).forEach(function (c) { c.remove(); });
+    var first = list.firstElementChild;
+    $$('input, textarea', first).forEach(function (f) { f.value = ''; f.style.height = ''; });
+    first._unrecognizedLabs = []; first._pasted = {}; $('[data-lab-status]', first).textContent = '';
+    renderPreRounds();
+  });
+  new MutationObserver(function () {
+    if (statusEl.textContent) { statusEl.classList.add('show'); clearTimeout(statusEl._t); statusEl._t = setTimeout(function () { statusEl.classList.remove('show'); }, 4000); }
+  }).observe(statusEl, { childList: true, characterData: true, subtree: true });
+  renderPreRounds();
 })();
 </script>
 </body>
