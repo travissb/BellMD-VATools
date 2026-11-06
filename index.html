@@ -1175,6 +1175,19 @@ html[data-theme="dark"] .epic-wild-mark { background: rgba(245,158,11,.35); colo
 @media (pointer: coarse) { .epic-chip, .epic-pill, .epic-normal { min-height: 38px; } }
 @media print { .epic-exam { display: none !important; } }
 
+/* right-click (absent) state, detail box, click-mode toggle */
+.epic-chip[data-state="negative"] { color: #166534; background: #dcfce7; border-color: #16a34a; box-shadow: inset 3px 0 0 #16a34a; font-weight: 700; }
+.epic-chip[data-state="negative"]::before { content: "\2212\00a0"; }
+html[data-theme="dark"] .epic-chip[data-state="negative"] { color: #86efac; background: rgba(29,191,115,.16); border-color: rgba(29,191,115,.5); }
+.epic-el[data-state="neg"] { border-left-color: #16a34a; }
+.epic-detail { width: 100%; margin-top: 6px; padding: 5px 9px; font-size: 12px; color: var(--ink); background: var(--field-bg); border: 1px solid var(--line); }
+.epic-detail:focus { border-color: var(--accent); }
+.epic-seg { display: inline-flex; border: 1px solid var(--line); }
+.epic-seg button { padding: 5px 12px; color: var(--muted); background: transparent; border: 0; font-size: 12px; font-weight: 700; cursor: pointer; }
+.epic-seg button[aria-pressed="true"] { color: #fff; background: var(--accent); }
+html[data-theme="dark"] .epic-seg button[aria-pressed="true"] { color: #0f172a; }
+@media (pointer: coarse) { .epic-seg button { min-height: 40px; } }
+
 /* ---------- Printing while in dark mode used to print a dark page ---------- */
 @media print {
   html[data-theme="dark"] body { background: #fff !important; color: #000 !important; }
@@ -4407,7 +4420,7 @@ window.EXAM_LIB = (function () {
     ])
   ]));
 
-  sys.push(SYS('heent', 'HEENT', [
+  sys.push(SYS('heent', 'Head, Ears, Eyes, Nose, and Throat', [
     E('head', 'Head', 'Normocephalic and atraumatic.', [
       F('headtrauma', 'Trauma', '{kind} noted over the {loc}', [S('kind', 'Finding', ['contusion', 'laceration', 'hematoma', 'abrasion']), S('loc', 'Location', ['frontal scalp', 'parietal scalp', 'occipital scalp', 'temporal scalp', 'forehead'])]),
       F('scalptend', 'Scalp tenderness', 'Scalp tenderness to palpation{loc}', [S('loc', 'Location', ['frontal', 'temporal', 'parietal', 'occipital'], { req: 0, f: ' over the $ region' })]),
@@ -4478,17 +4491,17 @@ window.EXAM_LIB = (function () {
       F('afib', 'Irregularly irregular', 'Irregularly irregular rhythm{rate}', [S('rate', 'Rate', ['normal rate', 'tachycardic rate', 'bradycardic rate'], { req: 0, f: ' with $' })]),
       F('ectopy', 'Ectopic beats', 'Regular rate with occasional {kind}', [S('kind', 'Type', ['premature beats', 'extra beats'])])
     ]),
-    E('sounds', 'Heart sounds', 'Normal S1 and S2. No murmurs, rubs, or gallops.', [
+    E('sounds', 'Heart sounds', 'Normal first and second heart sounds. No murmurs, rubs, or gallops.', [
       F('murmur', 'Murmur', '{grade} {timing} murmur heard best at the {loc}{rad}', [
         S('grade', 'Grade', ['Grade I/VI', 'Grade II/VI', 'Grade III/VI', 'Grade IV/VI', 'Grade V/VI', 'Grade VI/VI']),
         S('timing', 'Timing', ['systolic', 'diastolic', 'holosystolic', 'systolic ejection', 'early diastolic', 'continuous']),
         S('loc', 'Location', ['aortic area', 'pulmonic area', 'tricuspid area', 'mitral area (apex)', 'left lower sternal border', 'left upper sternal border']),
         S('rad', 'Radiation', ['the carotids', 'the axilla', 'the back', 'no radiation'], { req: 0, f: ', radiating to $' })
       ]),
-      F('s3', 'S3 gallop', 'S3 gallop present', []),
-      F('s4', 'S4 gallop', 'S4 gallop present', []),
+      F('s3', 'S3 gallop', 'Third heart sound gallop present', []),
+      F('s4', 'S4 gallop', 'Fourth heart sound gallop present', []),
       F('rub', 'Pericardial rub', 'Pericardial friction rub present', []),
-      F('s2split', 'Abnormal S2', '{d}', [S('d', 'Finding', ['Fixed split S2', 'Widely split S2', 'Loud P2', 'Diminished S2'])]),
+      F('s2split', 'Abnormal S2', '{d}', [S('d', 'Finding', ['Fixed splitting of the second heart sound', 'Wide splitting of the second heart sound', 'Accentuated pulmonic component of the second heart sound', 'Diminished second heart sound'])]),
       F('muffled', 'Distant / muffled', 'Heart sounds distant', []),
       F('click', 'Click', '{d} click heard', [S('d', 'Type', ['Systolic', 'Mid-systolic', 'Opening snap'])])
     ]),
@@ -4626,7 +4639,7 @@ window.EXAM_LIB = (function () {
       F('atrophy', 'Muscle atrophy', 'Muscle atrophy of the {lat} {part}', [S('lat', 'Side', ['right', 'left', 'bilateral']), S('part', 'Limb', ['upper extremity', 'lower extremity', 'hand intrinsics', 'quadriceps'])])
     ]),
     E('sens', 'Sensation', 'Sensation intact to light touch and pinprick throughout.', [
-      F('hypoesth', 'Decreased sensation', 'Decreased sensation to {mod} in the {lat} {part}', [S('mod', 'Modality', ['light touch', 'pinprick', 'vibration', 'proprioception', 'light touch and pinprick'], { multi: 1 }), S('lat', 'Side', ['right', 'left', 'bilateral']), S('part', 'Region', ['upper extremity', 'lower extremity', 'hand', 'foot', 'C6 dermatome', 'L5 dermatome', 'S1 dermatome', 'stocking-glove distribution'])]),
+      F('hypoesth', 'Decreased sensation', 'Decreased sensation to {mod} in the {lat} {part}', [S('mod', 'Modality', ['light touch', 'pinprick', 'vibration', 'proprioception', 'light touch and pinprick'], { multi: 1 }), S('lat', 'Side', ['right', 'left', 'bilateral']), S('part', 'Region', ['upper extremity', 'lower extremity', 'hand', 'foot', 'sixth cervical dermatome', 'fifth lumbar dermatome', 'first sacral dermatome', 'stocking-glove distribution'])]),
       F('paresth', 'Paresthesias', 'Paresthesias in the {lat} {part}', [S('lat', 'Side', ['right', 'left', 'bilateral']), S('part', 'Region', ['hand', 'foot', 'upper extremity', 'lower extremity'])]),
       F('neglect', 'Sensory / visual neglect', 'Left-sided neglect noted', [])
     ]),
@@ -4746,6 +4759,105 @@ window.EXAM_LIB = (function () {
   L.sys.push(m);
 })();
 
+/* Exam library part 5: negative (right-click) statements, nav short names */
+(function () {
+  var L = window.EXAM_LIB;
+  var T = `appearance.distress|No acute distress
+appearance.ill|Not ill-appearing
+appearance.diaph|Not diaphoretic
+appearance.pale|Not pale
+appearance.cachexia|Not cachectic
+appearance.obese|Not obese
+appearance.frail|Not frail
+appearance.dehyd|Not dehydrated
+mental.disoriented|Not disoriented
+mental.somnolent|Not somnolent
+mental.lethargic|Not lethargic
+mental.obtunded|Not obtunded
+mental.unresp|Responsive
+mental.confused|Not confused
+head.headtrauma|No head trauma
+eyes.pupils|No pupillary abnormality
+eyes.eomabn|No extraocular movement abnormality
+ears.tmerythema|No tympanic membrane erythema or bulging
+ears.canal|No external canal abnormality
+ears.hearing|Hearing not decreased
+throat.dry|Mucous membranes not dry
+throat.dentition|Dentition not poor
+neckgen.rom|Range of motion not limited
+jvd.jvdp|No jugular venous distention
+rhythm.tachy|Not tachycardic
+rhythm.brady|Not bradycardic
+rhythm.afib|Rhythm not irregularly irregular
+sounds.s3|No third heart sound gallop
+sounds.s4|No fourth heart sound gallop
+sounds.s2split|No abnormal second heart sound
+sounds.muffled|Heart sounds not distant
+pulses.cap|Capillary refill not delayed
+effort.tachypnea|Not tachypneic
+effort.speech|Speaks in full sentences
+effort.cyan|No cyanosis
+breath.absent|Breath sounds present
+abdinsp.distend|Not distended
+abdinsp.scar|No surgical scars
+bowel.hyper|Bowel sounds not hyperactive
+bowel.hypo|Bowel sounds not hypoactive
+bowel.absentbs|Bowel sounds present
+palp.tender|No abdominal tenderness
+palp.murphy|Negative Murphy sign
+palp.mass|No abdominal mass
+spine.spinerom|Spinal range of motion not limited
+spine.slr|Negative straight leg raise
+joints.jrom|Range of motion not decreased
+gait.limp|Able to bear weight
+gait.assist|Ambulates without an assistive device
+skingen.turgor|Normal skin turgor
+cn.tongue|Tongue midline
+cn.cnother|No other cranial nerve deficit
+motor.weak|No focal weakness
+motor.tone|Normal tone
+sens.hypoesth|No decreased sensation
+reflex.babinski|Babinski sign absent
+reflex.hypo|No hyporeflexia or areflexia
+coord.ataxia|Gait not ataxic
+coord.romberg|Negative Romberg sign
+mse-app.m-disheveled|Not disheveled
+mse-app.m-age|Appears stated age
+mse-app.m-dress|Dressed appropriately
+mse-app.m-injury|No visible signs of self-injury
+mse-beh.m-uncoop|Not uncooperative or guarded
+mse-beh.m-eye|Eye contact not poor
+mse-beh.m-agit|Not agitated
+mse-beh.m-seduct|Not disinhibited
+mse-motor.m-abn|No abnormal movements
+mse-speech.m-sp|Speech not abnormal
+mse-speech.m-mute|Not mute
+mse-mood.m-dep|Mood not depressed
+mse-mood.m-anx|Mood not anxious
+mse-mood.m-irr|Mood not irritable
+mse-mood.m-elev|Mood not elevated
+mse-mood.m-ang|Mood not angry
+mse-mood.m-hopeless|No feelings of hopelessness
+mse-aff.m-aff|Affect not abnormal
+mse-aff.m-dep2|Affect not sad or dysphoric
+mse-aff.m-anxa|Affect not anxious
+mse-tp.m-tp|Thought process not disorganized
+mse-tc.m-si|No suicidal ideation
+mse-tc.m-hi|No homicidal ideation
+mse-tc.m-obs|No obsessions or preoccupations
+mse-tc.m-sh|No thoughts of self-harm
+mse-perc.m-ill|No illusions or derealization
+mse-cog.m-orient|Oriented to person, place, time, and situation
+mse-cog.m-attn|Attention and concentration intact
+mse-cog.m-mem|Memory intact
+mse-cog.m-fund|Fund of knowledge intact
+mse-ins.m-ins|Insight not impaired
+mse-jud.m-jud|Judgment not impaired`;
+  L.NEG = {};
+  T.split('\n').forEach(function (l) { var i = l.indexOf('|'); L.NEG[l.slice(0, i)] = l.slice(i + 1); });
+  L.sys.forEach(function (s) { if (s.id === 'heent') s.nav = 'HEENT'; });
+})();
+
 /* Epic-style exam engine: Normal buttons, finding chips, specifier pills, *** wildcards, F2 navigation, formal prose */
 (function () {
   'use strict';
@@ -4765,7 +4877,8 @@ window.EXAM_LIB = (function () {
   /* ---------- state ---------- */
   var state = {};
   var key = function (s, e) { return s.id + '.' + e.id; };
-  var st = function (s, e) { return state[key(s, e)] || (state[key(s, e)] = { normal: false, sel: {}, note: '' }); };
+  var blank = function () { return { normal: false, sel: {}, neg: {}, det: {}, note: '' }; };
+  var st = function (s, e) { return state[key(s, e)] || (state[key(s, e)] = blank()); };
   var findSys = function (id) { return L.sys.filter(function (s) { return s.id === id; })[0]; };
   var findEl = function (s, id) { return s.e.filter(function (e) { return e.id === id; })[0]; };
   var findF = function (e, id) { return e.f.filter(function (f) { return f.id === id; })[0]; };
@@ -4775,7 +4888,22 @@ window.EXAM_LIB = (function () {
     if (a.length < 3) return a.join(' and ');
     return a.slice(0, -1).join(', ') + ', and ' + a[a.length - 1];
   }
+  var ACR = {
+    'NC/AT': 'normocephalic and atraumatic', PERRLA: 'pupils equal, round, and reactive to light and accommodation', PERRL: 'pupils equal, round, and reactive to light',
+    EOMI: 'extraocular movements intact', EOMs: 'extraocular movements', EOM: 'extraocular movements', NAD: 'no acute distress', JVD: 'jugular venous distention', JVP: 'jugular venous pressure',
+    RRR: 'regular rate and rhythm', CTAB: 'clear to auscultation bilaterally', CTA: 'clear to auscultation', ROM: 'range of motion', CVA: 'costovertebral angle',
+    TMs: 'tympanic membranes', TM: 'tympanic membrane', WNL: 'within normal limits', SOB: 'shortness of breath', LAD: 'lymphadenopathy',
+    RUQ: 'right upper quadrant', LUQ: 'left upper quadrant', RLQ: 'right lower quadrant', LLQ: 'left lower quadrant', HEENT: 'head, ears, eyes, nose, and throat',
+    DTRs: 'deep tendon reflexes', DTR: 'deep tendon reflex', 'NT/ND': 'nontender and nondistended', NT: 'nontender', ND: 'nondistended', NABS: 'normoactive bowel sounds', BS: 'bowel sounds',
+    HSM: 'hepatosplenomegaly', CNs: 'cranial nerves', CN: 'cranial nerve', SI: 'suicidal ideation', HI: 'homicidal ideation', AVH: 'auditory and visual hallucinations',
+    'A&O': 'alert and oriented', AAO: 'alert and oriented', S1: 'first heart sound', S2: 'second heart sound', S3: 'third heart sound', S4: 'fourth heart sound',
+    BLE: 'bilateral lower extremities', BUE: 'bilateral upper extremities', RUE: 'right upper extremity', LUE: 'left upper extremity', RLE: 'right lower extremity', LLE: 'left lower extremity',
+    LE: 'lower extremity', UE: 'upper extremity', SLR: 'straight leg raise', MRG: 'murmurs, rubs, or gallops'
+  };
+  var ACR_RE = new RegExp('(^|[^A-Za-z0-9])(' + Object.keys(ACR).sort(function (a, b) { return b.length - a.length; }).map(function (k) { return k.replace(/[\/&]/g, '\\$&'); }).join('|') + ')(?![A-Za-z0-9])', 'g');
+  function expand(s) { return s.replace(ACR_RE, function (m, pre, a) { return pre + ACR[a]; }); }
   function tidy(s) {
+    s = expand(s);
     s = s.replace(/\s+/g, ' ').replace(/\s+([,.;])/g, '$1').replace(/,\s*,/g, ',').replace(/^[\s,;]+/, '').trim();
     if (!s) return '';
     s = s.charAt(0).toUpperCase() + s.slice(1);
@@ -4791,10 +4919,14 @@ window.EXAM_LIB = (function () {
     });
     return tidy(txt);
   }
+  function negText(e, f) { return (L.NEG && L.NEG[e.id + '.' + f.id]) || ('No ' + f.l.toLowerCase().replace(/ \/ /g, ' or ')); }
   function elementText(e, s) {
     var x = st(s, e), parts = [];
     if (x.normal) parts.push(e.n);
-    e.f.forEach(function (f) { if (x.sel[f.id]) parts.push(fill(f, x.sel[f.id])); });
+    e.f.forEach(function (f) {
+      if (x.sel[f.id]) { parts.push(fill(f, x.sel[f.id])); var d = tidy(x.det[f.id] || ''); if (d) parts.push(d); }
+      else if (x.neg[f.id]) parts.push(tidy(negText(e, f)));
+    });
     var n = tidy(x.note || '');
     if (n) parts.push(n);
     return parts.join(' ');
@@ -4805,14 +4937,14 @@ window.EXAM_LIB = (function () {
     L.sys.forEach(function (s) {
       if (s.lines) {
         var ls = s.e.map(function (e) { var t = elementText(e, s); return t ? e.l.replace(/ \(.*\)$/, '') + ': ' + t : ''; }).filter(Boolean);
-        if (ls.length) o.push(s.lines + '\n' + ls.join('\n'));
+        if (ls.length) o.push(s.l + ': ' + ls.join(' '));
       } else { var t = systemText(s); if (t) o.push(s.l + ': ' + t); }
     });
     return o;
   }
   function getText() {
     var b = blocks();
-    return b.length ? HEADER + '\n\n' + b.join('\n\n') : '';
+    return b.length ? HEADER + '\n' + b.join('\n') : '';
   }
   var wildCount = function (t) { return (t.match(/\*\*\*/g) || []).length; };
 
@@ -4825,8 +4957,16 @@ window.EXAM_LIB = (function () {
   var nextB = make('button', 'quiet-button quick-btn epic-next', 'Next *** (F2)');
   var wildPill = make('span', 'epic-wild', ''); wildPill.setAttribute('role', 'status');
   [expandB, collapseB, nextB].forEach(function (b) { b.type = 'button'; });
-  var hint = make('p', 'quick-hint', 'Normal inserts the standard statement for that element. Choosing an abnormal finding replaces it and opens specifiers; anything required but unchosen is written as *** in the note. Press F2 to jump to the next ***.');
-  bar.append(search, nextB, wildPill, expandB, collapseB, hint);
+  var hint = make('p', 'quick-hint', 'Left-click a finding to record it as present; right-click (or Shift+Enter) records it as absent. Hover or focus a finding and start typing to add your own detail. Normal inserts the standard statement for an element. Required choices left open are written as *** in the note; press F2 to jump to the next one.');
+  var seg = make('div', 'epic-seg'); seg.setAttribute('role', 'group'); seg.setAttribute('aria-label', 'What a click records');
+  var tapNeg = false, segBtns = [];
+  [['pos', 'Present'], ['neg', 'Absent']].forEach(function (p) {
+    var b = make('button', '', p[1]); b.type = 'button'; b.dataset.mode = p[0]; b.setAttribute('aria-pressed', String(p[0] === 'pos'));
+    b.addEventListener('click', function () { tapNeg = p[0] === 'neg'; segBtns.forEach(function (x) { x.setAttribute('aria-pressed', String(x.dataset.mode === p[0])); }); });
+    segBtns.push(b); seg.append(b);
+  });
+  var segLabel = make('span', 'quick-label', 'Click sets');
+  bar.append(segLabel, seg, search, nextB, wildPill, expandB, collapseB, hint);
   var body = make('div', 'epic-body'); body.id = 'epic-body';
   root.append(bar, body);
   form.parentNode.insertBefore(root, form);
@@ -4858,11 +4998,12 @@ window.EXAM_LIB = (function () {
     g.append(row);
     return g;
   }
+  function cardProse(x, f) { return (fill(f, x.sel[f.id]) + ' ' + tidy(x.det[f.id] || '')).trim(); }
   function buildEl(s, e) {
     var x = st(s, e);
     var abn = e.f.some(function (f) { return x.sel[f.id]; });
     var wrap = make('div', 'epic-el'); wrap.dataset.s = s.id; wrap.dataset.e = e.id;
-    wrap.dataset.state = x.normal ? 'normal' : abn ? 'abnormal' : x.note ? 'note' : 'empty';
+    wrap.dataset.state = elementState(s, e);
     var head = make('div', 'epic-el-head');
     head.append(make('h4', '', e.l));
     var nb = make('button', 'epic-normal', 'Normal'); nb.type = 'button';
@@ -4874,7 +5015,9 @@ window.EXAM_LIB = (function () {
     e.f.forEach(function (f) {
       var c = make('button', 'epic-chip', f.l); c.type = 'button';
       c.dataset.act = 'chip'; c.dataset.s = s.id; c.dataset.e = e.id; c.dataset.f = f.id;
-      c.setAttribute('aria-pressed', String(!!x.sel[f.id]));
+      var cs = x.sel[f.id] ? 'affirmative' : x.neg[f.id] ? 'negative' : 'clear';
+      c.dataset.state = cs; c.setAttribute('aria-pressed', cs === 'affirmative' ? 'true' : cs === 'negative' ? 'mixed' : 'false');
+      if (cs === 'negative') c.title = negText(e, f).replace(/\.?$/, '.');
       chips.append(c);
     });
     wrap.append(chips);
@@ -4886,7 +5029,11 @@ window.EXAM_LIB = (function () {
       rm.dataset.act = 'remove'; rm.dataset.s = s.id; rm.dataset.e = e.id; rm.dataset.f = f.id;
       ch.append(rm); card.append(ch);
       f.s.forEach(function (spec) { card.append(buildSpec(s, e, f, spec, x.sel[f.id])); });
-      var pv = make('p', 'epic-card-prose'); pv.textContent = fill(f, x.sel[f.id]);
+      var det = make('input', 'epic-detail'); det.type = 'text'; det.placeholder = 'Type to add specifics (e.g. louder with inspiration)';
+      det.setAttribute('aria-label', 'Additional detail for ' + f.l); det.value = x.det[f.id] || '';
+      det.dataset.act = 'detail'; det.dataset.s = s.id; det.dataset.e = e.id; det.dataset.f = f.id;
+      card.append(det);
+      var pv = make('p', 'epic-card-prose'); pv.textContent = cardProse(x, f);
       card.append(pv);
       wrap.append(card);
     });
@@ -4912,7 +5059,7 @@ window.EXAM_LIB = (function () {
   L.sys.forEach(function (s) {
     body.append(buildSys(s));
     var nb = make('button', 'epic-nav-btn'); nb.type = 'button'; nb.dataset.target = s.id;
-    nb.append(make('span', '', s.l), make('span', 'epic-nav-state'));
+    nb.append(make('span', '', s.nav || s.l), make('span', 'epic-nav-state'));
     nav.append(nb);
   });
 
@@ -4958,6 +5105,46 @@ window.EXAM_LIB = (function () {
   };
 
   /* ---------- actions ---------- */
+  function toggleNeg(x, e, fid) {
+    if (x.neg[fid]) delete x.neg[fid];
+    else { x.neg[fid] = true; delete x.sel[fid]; delete x.det[fid]; x.normal = false; }
+  }
+  function chipCtx(c) { var s = findSys(c.dataset.s); var e = findEl(s, c.dataset.e); return { s: s, e: e, x: st(s, e) }; }
+  body.addEventListener('contextmenu', function (ev) {
+    var c = ev.target.closest('.epic-chip'); if (!c) return;
+    ev.preventDefault();
+    var k = chipCtx(c); toggleNeg(k.x, k.e, c.dataset.f);
+    rerender(k.s, k.e, sel(c.dataset));
+  });
+  body.addEventListener('keydown', function (ev) {
+    var c = ev.target.closest && ev.target.closest('.epic-chip');
+    if (c && ev.key === 'Enter' && ev.shiftKey) {
+      ev.preventDefault(); var k = chipCtx(c); toggleNeg(k.x, k.e, c.dataset.f); rerender(k.s, k.e, sel(c.dataset));
+    } else if (ev.target.classList && ev.target.classList.contains('epic-detail') && (ev.key === 'Enter' || ev.key === 'Escape')) {
+      ev.preventDefault();
+      var q = ev.target.dataset, ch = body.querySelector('.epic-chip[data-s="' + q.s + '"][data-e="' + q.e + '"][data-f="' + q.f + '"]'); if (ch) ch.focus();
+    }
+  });
+  /* type-to-add: with a finding focused or hovered, typing opens its detail box */
+  var hovered = null;
+  body.addEventListener('mouseover', function (ev) { hovered = ev.target.closest('.epic-chip'); });
+  body.addEventListener('mouseleave', function () { hovered = null; });
+  document.addEventListener('keydown', function (ev) {
+    if (!panel.classList.contains('epic-on') || panel.hidden) return;
+    if (ev.key.length !== 1 || ev.key === ' ' || ev.ctrlKey || ev.metaKey || ev.altKey) return;
+    var a = document.activeElement;
+    if (a && (a.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))) return;
+    var c = a && a.closest && a.closest('.epic-chip');
+    if (!c && hovered && hovered.isConnected) c = hovered;
+    if (!c) return;
+    ev.preventDefault(); ev.stopPropagation();
+    var k = chipCtx(c), f = c.dataset.f;
+    if (!k.x.sel[f]) { k.x.sel[f] = {}; delete k.x.neg[f]; k.x.normal = false; }
+    k.x.det[f] = (k.x.det[f] || '') + ev.key;
+    rerender(k.s, k.e);
+    var inp = body.querySelector('.epic-detail[data-s="' + k.s.id + '"][data-e="' + k.e.id + '"][data-f="' + f + '"]');
+    if (inp) { inp.focus(); inp.setSelectionRange(inp.value.length, inp.value.length); }
+  }, true);
   body.addEventListener('click', function (ev) {
     var t = ev.target.closest('[data-act]');
     if (!t || t.tagName === 'INPUT') return;
@@ -4965,13 +5152,14 @@ window.EXAM_LIB = (function () {
     switch (d.act) {
       case 'normal':
         x.normal = !x.normal;
-        if (x.normal) x.sel = {};
+        if (x.normal) { x.sel = {}; x.neg = {}; x.det = {}; }
         rerender(s, e, sel(d)); break;
       case 'chip':
-        if (x.sel[d.f]) delete x.sel[d.f]; else { x.sel[d.f] = {}; x.normal = false; }
+        if (tapNeg) toggleNeg(x, e, d.f);
+        else if (x.sel[d.f]) { delete x.sel[d.f]; delete x.det[d.f]; } else { x.sel[d.f] = {}; delete x.neg[d.f]; x.normal = false; }
         rerender(s, e, sel(d)); break;
       case 'remove':
-        delete x.sel[d.f];
+        delete x.sel[d.f]; delete x.det[d.f];
         rerender(s, e, '.epic-el[data-s="' + s.id + '"][data-e="' + e.id + '"] .epic-chip[data-f="' + d.f + '"]'); break;
       case 'pill':
         var v = x.sel[d.f], spec = findF(e, d.f).s.filter(function (q) { return q.k === d.k; })[0], arr = v[d.k] || [];
@@ -4983,12 +5171,18 @@ window.EXAM_LIB = (function () {
         s.e.forEach(function (el) { var q = st(s, el); if (!el.f.some(function (f) { return q.sel[f.id]; })) q.normal = true; });
         s.e.forEach(function (el) { rerender(s, el); }); break;
       case 'sysclear':
-        s.e.forEach(function (el) { state[key(s, el)] = { normal: false, sel: {}, note: '' }; });
+        s.e.forEach(function (el) { state[key(s, el)] = blank(); });
         s.e.forEach(function (el) { rerender(s, el); }); break;
     }
   });
   body.addEventListener('input', function (ev) {
     var t = ev.target;
+    if (t.dataset && t.dataset.act === 'detail') {
+      var s2 = findSys(t.dataset.s), e2 = findEl(s2, t.dataset.e), x2 = st(s2, e2);
+      x2.det[t.dataset.f] = t.value;
+      var pv = t.closest('.epic-card').querySelector('.epic-card-prose'); if (pv) pv.textContent = cardProse(x2, findF(e2, t.dataset.f));
+      refresh(); return;
+    }
     if (t.dataset && t.dataset.act === 'note') {
       var s = findSys(t.dataset.s), e = findEl(s, t.dataset.e);
       st(s, e).note = t.value;
@@ -4998,7 +5192,7 @@ window.EXAM_LIB = (function () {
   });
   function elementState(s, e) {
     var x = st(s, e);
-    return x.normal ? 'normal' : e.f.some(function (f) { return x.sel[f.id]; }) ? 'abnormal' : x.note ? 'note' : 'empty';
+    return x.normal ? 'normal' : e.f.some(function (f) { return x.sel[f.id]; }) ? 'abnormal' : e.f.some(function (f) { return x.neg[f.id]; }) ? 'neg' : x.note ? 'note' : 'empty';
   }
   allNormalB.addEventListener('click', function () {
     L.sys.forEach(function (s) {
@@ -5026,7 +5220,7 @@ window.EXAM_LIB = (function () {
         var e = findEl(s, w.dataset.e), x = st(s, e), any = false;
         var hitEl = !q || e.l.toLowerCase().indexOf(q) !== -1 || s.l.toLowerCase().indexOf(q) !== -1;
         $$('.epic-chip', w).forEach(function (c) {
-          var hit = !q || hitEl || c.textContent.toLowerCase().indexOf(q) !== -1 || !!x.sel[c.dataset.f];
+          var hit = !q || hitEl || c.textContent.toLowerCase().indexOf(q) !== -1 || !!x.sel[c.dataset.f] || !!x.neg[c.dataset.f];
           c.hidden = !hit; if (hit) any = true;
         });
         w.hidden = !!q && !any && !hitEl;
