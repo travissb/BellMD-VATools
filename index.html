@@ -1281,7 +1281,7 @@ html[data-theme="dark"] #pre-rounds-panel .pre-rounds-sheet { border-color: #aeb
 }
 @media (pointer: coarse) { #pre-rounds-panel .pre-rounds-field input, #pre-rounds-panel .pre-rounds-labs input { min-height: 40px; } }
 
-/* ---------- Anesthesia Plan (sharp, theme-aware) ---------- */
+/* ---------- Anesthesia Plan ---------- */
 #anes-panel .an-intro { margin: 0 0 12px; color: var(--muted); line-height: 1.5; }
 .an-layout { display: grid; grid-template-columns: minmax(460px, .9fr) minmax(0, 1.3fr); gap: 16px; align-items: start; }
 #anes-panel .panel { padding: 0; border-top: 3px solid var(--accent); border-radius: 0; }
@@ -1322,10 +1322,10 @@ html[data-theme="dark"] #pre-rounds-panel .pre-rounds-sheet { border-color: #aeb
 .an-grid { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 8px 10px; margin-bottom: 8px; }
 .an-s2 { grid-column: span 2; } .an-s3 { grid-column: span 3; } .an-s4 { grid-column: span 4; } .an-s5 { grid-column: span 5; }
 .an-wide { grid-column: 1 / -1; margin: 6px 0; }
-.an-field label, .an-labgrid label { display: block; font-size: 11px; font-weight: 700; letter-spacing: .03em; color: var(--muted); text-transform: uppercase; }
+.an-field label, .an-labgrid label { display: block; font-size: 11px; font-weight: 700; letter-spacing: .02em; color: var(--muted); }
 .an-field input[type="text"], .an-field textarea, .an-field select, .an-labgrid input {
   display: block; width: 100%; margin-top: 3px; padding: 7px 9px; font: inherit; font-size: 13px; font-weight: 400; line-height: 1.4; text-transform: none; letter-spacing: 0;
-  color: var(--ink); background: var(--field-bg); border: 1px solid var(--line); border-radius: 0; }
+  color: var(--ink); background: var(--field-bg); border: 1px solid var(--line); }
 .an-field input:focus, .an-field textarea:focus, .an-field select:focus, .an-labgrid input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
 .an-field textarea { resize: vertical; min-height: 44px; }
 .an-unit { display: flex; gap: 0; }
@@ -1337,7 +1337,7 @@ html[data-theme="dark"] #pre-rounds-panel .pre-rounds-sheet { border-color: #aeb
 .an-group { margin: 0 0 10px; }
 .an-gt { margin: 0 0 4px; font-size: 11px; font-weight: 700; color: var(--muted); }
 .an-chips { display: flex; flex-wrap: wrap; gap: 5px; }
-.an-chip { padding: 5px 9px; font: inherit; font-size: 12px; line-height: 1.25; color: var(--ink); background: var(--surface-solid); border: 1px solid var(--line); border-radius: 0; cursor: pointer; text-align: left; }
+.an-chip { padding: 5px 9px; font: inherit; font-size: 12px; line-height: 1.25; color: var(--ink); background: var(--surface-solid); border: 1px solid var(--line); cursor: pointer; text-align: left; }
 .an-chip:hover { border-color: var(--accent); }
 .an-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 .an-chip[data-s="1"] { color: #fff; background: var(--accent); border-color: var(--accent); font-weight: 600; }
@@ -1373,37 +1373,78 @@ html[data-theme="dark"] .an-labgrid input[data-flag="lo"] { color: #93c5fd; back
 .an-wrap-label strong { color: var(--ink); text-transform: uppercase; letter-spacing: .06em; font-size: 11px; }
 .an-overflow { font-size: 11px; font-weight: 700; color: #b45309; } html[data-theme="dark"] .an-overflow { color: #fcd34d; }
 
-/* the half-sheet is always paper: white with black ink */
+/* printable assessment sheet */
 .an-scale { width: 7.9in; transform-origin: top left; }
-.an-sheet { box-sizing: border-box; width: 7.9in; min-height: 5.15in; color: #000; background: #fff; border: 1px solid #aebdce; font: 8pt/1.25 Arial, Helvetica, sans-serif; }
-.an-sheet.an-compact { font-size: 7pt; }
+.an-sheet { display: flex; flex-direction: column; box-sizing: border-box; width: 7.9in; min-height: 10in; color: #172536; background: #fff; border: 1px solid #94a3b8; font: 9pt/1.3 Arial, Helvetica, sans-serif; }
+.an-sheet.an-compact { font-size: 8pt; }
 .an-sheet * { box-sizing: border-box; }
-.an-sheet h5 { margin: 0 0 2px; padding: 1px 3px; font-size: 1em; letter-spacing: .06em; text-transform: uppercase; background: #e4e4e4; color: #000; border: 0; }
-.an-head { display: grid; grid-template-columns: 2.1fr .9fr 2.3fr 1.5fr .6fr; border-bottom: 1px solid #000; }
-.an-hc { padding: 2px 4px; border-right: 1px solid #333; min-width: 0; }
-.an-hc:last-child { border-right: 0; }
-.an-hc small { display: block; font-size: .8em; text-transform: uppercase; letter-spacing: .05em; color: #444; }
-.an-hv { font-size: 1.15em; font-weight: 700; min-height: 1.3em; overflow-wrap: anywhere; }
-.an-hc-asa { text-align: center; background: #f1f1f1; } .an-hc-asa .an-hv { font-size: 1.9em; line-height: 1.1; }
-.an-allergy { padding: 2px 4px; border-bottom: 1px solid #000; font-size: 1.1em; }
-.an-allergy.an-latex { background: #ffe1e1; }
-.an-allergy b { color: #b00000; }
-.an-case { display: grid; grid-template-columns: 2.2fr 1.2fr 1.4fr 1.6fr; border-bottom: 1px solid #000; }
-.an-case > div { padding: 2px 4px; border-right: 1px solid #333; min-width: 0; overflow-wrap: anywhere; } .an-case > div:last-child { border-right: 0; }
-.an-body { display: grid; grid-template-columns: 2.2fr 1.9fr 3.8fr; border-bottom: 1px solid #000; }
-.an-col { padding: 0 0 3px; border-right: 1px solid #333; min-width: 0; } .an-col:last-child { border-right: 0; }
-.an-col .an-row, .an-studies { padding: 0 4px; margin: 0 0 2px; overflow-wrap: anywhere; }
-.an-row b { font-weight: 700; }
-.an-line { display: inline-block; min-width: 55%; border-bottom: 1px solid #777; }
-.an-data .an-fish { display: grid; grid-template-columns: 1fr 1fr; gap: 0; padding: 0 2px; }
+.an-sheet h5 { display: flex; align-items: center; gap: 6px; margin: 0 0 5px; color: #17364b; font-size: 1em; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.an-sheet h5::after { content: ""; height: 1px; flex: 1; background: #cbd5e1; }
+.an-hero { display: grid; grid-template-columns: minmax(0, 1fr) 68px; gap: 10px; align-items: stretch; padding: 8px 10px; color: #fff; background: #132d40; border-bottom: 3px solid #18a999; }
+.an-kicker { margin-bottom: 3px; color: #73e0d1; font-size: .78em; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+.an-hero .an-meta-label { color: #b9d1db; }
+.an-patient-name { font-size: 1.65em; font-weight: 800; line-height: 1.08; letter-spacing: -.02em; overflow-wrap: anywhere; }
+.an-patient-id { color: #c2d4df; font-size: .9em; font-weight: 500; letter-spacing: .02em; }
+.an-procedure { margin-top: 5px; color: #edf5f8; font-size: 1.12em; font-weight: 700; overflow-wrap: anywhere; }
+.an-asa { display: grid; align-content: center; justify-items: center; min-width: 0; padding: 4px; color: #132d40; background: #fff; text-align: center; }
+.an-asa small { font-size: .72em; font-weight: 800; letter-spacing: .09em; }
+.an-asa strong { font-size: 2em; line-height: 1.1; }
+.an-asa span { margin-top: 2px; color: #a53b32; font-size: .65em; font-weight: 900; letter-spacing: .06em; }
+.an-asa:not(.an-emergency) span { display: none; }
+.an-meta { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); border-bottom: 1px solid #cbd5e1; background: #f3f7fa; }
+.an-meta-item { min-width: 0; padding: 4px 6px; border-right: 1px solid #d5dee6; border-bottom: 1px solid #d5dee6; }
+.an-meta-item:nth-child(6n) { border-right: 0; }
+.an-meta-label { display: block; margin-bottom: 1px; color: #566d7c; font-size: .7em; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.an-meta-value { min-height: 1.25em; font-weight: 700; overflow-wrap: anywhere; }
+.an-write-line { display: inline-block; width: min(100%, 145px); height: .95em; border-bottom: 1px solid #8797a4; vertical-align: baseline; }
+.an-write-line.an-fill { width: 100%; }
+.an-allergy { display: flex; align-items: baseline; gap: 6px; min-height: 1.8em; padding: 4px 7px; color: #46380c; background: #fff7db; border-bottom: 1px solid #e5cb75; }
+.an-allergy b { flex: 0 0 auto; color: #795b00; font-size: .8em; letter-spacing: .08em; }
+.an-allergy.an-latex { color: #7d2424; background: #fff0ef; border-color: #e7aaa5; }
+.an-allergy.an-latex b { color: #a52c2c; }
+.an-plan { margin: 7px 7px 6px; border: 1px solid #a9bfcc; border-top: 3px solid #168e88; }
+.an-plan-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 4px 7px; color: #fff; background: #173d50; }
+.an-plan-head h5 { flex: 1; margin: 0; color: #fff; }
+.an-plan-head h5::after { background: rgba(255,255,255,.28); }
+.an-plan-head span { color: #b9d1db; font-size: .72em; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.an-plan-primary { display: grid; grid-template-columns: 1.25fr 1fr 1fr; }
+.an-plan-focus { min-width: 0; min-height: 3.3em; padding: 5px 7px; border-right: 1px solid #c7d5dc; border-bottom: 1px solid #c7d5dc; }
+.an-plan-focus:last-child { border-right: 0; }
+.an-plan-focus span, .an-plan-detail span { display: block; margin-bottom: 2px; color: #526a78; font-size: .73em; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+.an-plan-focus strong { display: block; font-size: 1.12em; line-height: 1.25; overflow-wrap: anywhere; }
+.an-plan-details { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.an-plan-detail { min-width: 0; min-height: 2.5em; padding: 3px 7px; border-right: 1px solid #e0e7eb; border-bottom: 1px solid #e0e7eb; overflow-wrap: anywhere; }
+.an-plan-detail:nth-child(even) { border-right: 0; }
+.an-plan-detail span { display: inline; margin: 0 4px 0 0; }
+.an-plan-comments { min-height: 2.9em; padding: 4px 7px; border-top: 1px solid #bdcbd3; overflow-wrap: anywhere; }
+.an-plan-comments b { color: #526a78; font-size: .73em; letter-spacing: .07em; text-transform: uppercase; }
+.an-overview { display: grid; grid-template-columns: 1fr 1.15fr; gap: 7px; padding: 0 7px; }
+.an-col { min-width: 0; padding: 5px 6px; border: 1px solid #d5dee5; background: #fff; }
+.an-col .an-row { display: grid; grid-template-columns: max-content minmax(24px, 1fr); align-items: baseline; gap: 4px; min-height: 1.55em; padding: 2px 0; margin: 0; border-bottom: 1px dotted #d5dee5; overflow-wrap: anywhere; }
+.an-row b { color: #465e6e; font-size: .82em; }
+.an-row.an-blank { min-height: 1.65em; }
+.an-line { display: inline-block; width: min(100%, 100px); border-bottom: 1px solid #8797a4; vertical-align: baseline; }
+.an-risk-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; margin-top: 5px; }
+.an-risk-card { min-width: 0; padding: 4px; background: #eef5f7; border-left: 2px solid #168e88; }
+.an-risk-card small { display: block; color: #526a78; font-size: .7em; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
+.an-risk-card strong { display: block; margin-top: 2px; font-size: 1.1em; line-height: 1.1; }
+.an-risk-card span { display: block; margin-top: 2px; font-size: .76em; line-height: 1.15; overflow-wrap: anywhere; }
+.an-risk-card .an-write-line { width: 100%; }
+.an-data { margin: 6px 7px 7px; padding: 5px 6px; border: 1px solid #d5dee5; background: #f8fafb; }
+.an-data .an-fish { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px; }
 .an-fish-cell { min-width: 0; } .an-fish-cell svg { display: block; width: 100%; height: auto !important; }
-.an-extras { padding: 2px 4px; font-size: 1.05em; } .an-extras b { font-weight: 700; } .an-extras sup { font-weight: 700; margin-left: 1px; }
-.an-unrec { color: #222; }
-.an-studies { margin-top: 3px; padding-top: 2px; border-top: 1px solid #999; white-space: pre-wrap; }
-.an-plan h5 { margin-bottom: 0; }
-.an-plan-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 0; }
-.an-plan-grid .an-row { padding: 1px 4px; margin: 0; border-right: 1px solid #ccc; overflow-wrap: anywhere; }
-.an-plan-grid .an-row:nth-child(even) { border-right: 0; }
+.an-extras { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 2px 10px; padding: 2px 4px; border-top: 1px solid #d5dee5; font-size: .92em; }
+.an-extras b { font-weight: 800; } .an-extras sup { margin-left: 2px; font-weight: 800; }
+.an-unrec { color: #263d4b; }
+.an-data-notes { display: grid; grid-template-columns: 1fr 1.5fr; gap: 8px; margin-top: 3px; padding-top: 4px; border-top: 1px solid #b9c9d2; }
+.an-data-note { min-width: 0; overflow-wrap: anywhere; }
+.an-data-note b { color: #526a78; font-size: .76em; letter-spacing: .05em; text-transform: uppercase; }
+.an-data-note .an-write-line { width: min(100%, 120px); }
+.an-sheet .an-empty-line { display: inline-block; width: min(100%, 180px); min-height: 1.1em; border-bottom: 1px solid #8797a4; vertical-align: bottom; }
+.an-signoff { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin: auto 8px 8px; padding-top: 6px; border-top: 1px solid #b9c9d2; }
+.an-signoff > div { display: flex; align-items: baseline; gap: 6px; min-width: 0; }
+.an-signoff b { flex: 0 0 auto; color: #526a78; font-size: .76em; letter-spacing: .05em; text-transform: uppercase; }
+.an-signoff .an-write-line { flex: 1 1 auto; min-width: 30px; }
 
 /* responsive */
 @media (max-width: 1099px) { .an-layout { grid-template-columns: minmax(0, 1fr); } .an-input { max-height: none; } }
@@ -1413,19 +1454,19 @@ html[data-theme="dark"] .an-labgrid input[data-flag="lo"] { color: #93c5fd; back
 }
 @media (pointer: coarse) { .an-chip { min-height: 36px; } .an-field input[type="text"], .an-field select { min-height: 40px; } }
 
-/* printing: only the sheets, two half-sheets per Letter page */
+/* printing: one complete assessment sheet per patient */
 @media print {
   html body #anes-panel:not([hidden]) { display: block !important; max-width: none; padding: 0; margin: 0; }
   html body #pre-rounds-panel[hidden] { display: none !important; }
   #anes-panel > .encounter-bar, #anes-panel > .an-intro, #anes-panel .an-input, #anes-panel .an-toolbar, #anes-panel .an-status, #anes-panel .an-wrap-bar { display: none !important; }
   .an-layout { display: block; }
   #anes-panel .an-output { border: 0 !important; padding: 0; box-shadow: none; background: transparent; }
-  .an-preview { display: block; padding: 0; }
-  .an-wrap { break-inside: avoid; page-break-inside: avoid; margin: 0; }
-  .an-scale { zoom: 1 !important; width: 100%; }
-  .an-sheet { width: 100%; min-height: 5.15in; border: 1px solid #000; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-  .an-wrap:not(:last-child) .an-sheet { margin-bottom: 0; }
-  .an-wrap { padding-bottom: .05in; background: #fff; }
+  .an-preview { display: block; width: 7.9in; padding: 0; }
+  .an-wrap { width: 7.9in; break-inside: avoid; page-break-inside: avoid; break-after: page; page-break-after: always; margin: 0; }
+  .an-wrap:last-child { break-after: auto; page-break-after: auto; }
+  .an-scale { zoom: 1 !important; width: 7.9in; }
+  .an-sheet { width: 7.9in; min-height: 10in; border: 1px solid #000; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .an-wrap { background: #fff; }
   html body { background: #fff !important; }
 }
 
@@ -1438,6 +1479,98 @@ html[data-theme="dark"] .an-labgrid input[data-flag="lo"] { color: #93c5fd; back
   html[data-theme="dark"] .pre-rounds-sheet td { color: #000; }
   html[data-theme="dark"] .pre-rounds-sheet > table > tbody > tr:first-child th { background: #e8e8e8; color: #000; border-color: #333; }
   .quick-bar { display: none !important; }
+}
+
+/* ---------- Shared workspace sizing ---------- */
+:root {
+  --workspace-title-size: 20px;
+  --workspace-panel-title-size: 15px;
+  --workspace-label-size: 11px;
+  --workspace-control-size: 13px;
+}
+
+.workspace-panel { padding: 16px 24px 36px; }
+#exam-note-panel, #ros-panel, #pre-rounds-panel, #anes-panel { padding-top: 16px; }
+#exam-note-panel > .encounter-bar, #ros-panel > .encounter-bar,
+#pre-rounds-panel > .encounter-bar, #anes-panel > .encounter-bar {
+  min-height: 82px;
+  padding: 14px 18px;
+  margin-bottom: 14px;
+  border-left: 4px solid var(--accent);
+}
+#exam-note-panel .workspace-title h1, #ros-panel .workspace-title h1,
+#pre-rounds-panel .workspace-title h1, #anes-panel .workspace-title h1 {
+  font-size: var(--workspace-title-size);
+  line-height: 1.2;
+  letter-spacing: -.02em;
+}
+#exam-note-panel .workspace-title p, #ros-panel .workspace-title p,
+#pre-rounds-panel .workspace-title p, #anes-panel .workspace-title p {
+  margin-top: 4px;
+  font-size: var(--workspace-control-size);
+  line-height: 1.4;
+}
+#exam-note-panel .encounter-tag, #ros-panel .encounter-tag,
+#pre-rounds-panel .encounter-tag, #anes-panel .encounter-tag {
+  padding: 6px 10px;
+  font-size: var(--workspace-label-size);
+}
+#pre-rounds-panel > .pre-rounds-intro, #anes-panel .an-intro {
+  margin-bottom: 14px;
+  font-size: var(--workspace-control-size);
+}
+
+#exam-note-panel .editor-head h2, #ros-panel .editor-head h2,
+#pre-rounds-panel .pre-rounds-toolbar h2, #anes-panel .an-toolbar h2 {
+  font-size: var(--workspace-panel-title-size);
+  line-height: 1.25;
+}
+#exam-note-panel .finding-group-label, #ros-panel .finding-group-label,
+#pre-rounds-panel .pre-rounds-field label:not(.pr-sr-label),
+#pre-rounds-panel .pre-rounds-lab-grid label, #pre-rounds-panel .pre-rounds-labs legend,
+#anes-panel .an-field label, #anes-panel .an-labgrid label {
+  font-size: var(--workspace-label-size);
+  letter-spacing: .02em;
+}
+#exam-note-panel .finding-choice, #ros-panel .finding-choice {
+  min-height: 28px;
+  padding: 4px 7px;
+  font-size: 12px;
+}
+#exam-note-panel .system-section textarea, #ros-panel .system-section textarea,
+#exam-note-panel .mse-text-input {
+  min-height: 44px;
+  padding: 7px 9px;
+  font-size: var(--workspace-control-size);
+  line-height: 1.4;
+}
+#pre-rounds-panel .pre-rounds-field input, #pre-rounds-panel .pre-rounds-field textarea,
+#pre-rounds-panel .pre-rounds-labs input,
+#anes-panel .an-field input[type="text"], #anes-panel .an-field textarea, #anes-panel .an-field select {
+  font-size: var(--workspace-control-size);
+}
+
+#pre-rounds-panel .pre-rounds-layout, #anes-panel .an-layout {
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.3fr);
+  gap: 16px;
+}
+
+@media (max-width: 1099px) {
+  #pre-rounds-panel .pre-rounds-layout, #anes-panel .an-layout { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 720px) {
+  .workspace-panel { padding: 12px 12px 24px; }
+  #exam-note-panel > .encounter-bar, #ros-panel > .encounter-bar,
+  #pre-rounds-panel > .encounter-bar, #anes-panel > .encounter-bar {
+    min-height: 0;
+    padding: 12px 14px;
+  }
+}
+@media (pointer: coarse) {
+  #exam-note-panel .finding-choice, #ros-panel .finding-choice { min-height: 38px; font-size: 13px; }
+}
+@media print {
+  #pre-rounds-panel { padding: 0; }
 }
 </style>
 </head>
@@ -6232,7 +6365,7 @@ window.AN_LIB = (function () {
     labFields: labFields, extraFields: extraFields, extraAliases: extraAliases, ranges: ranges, studies: studies };
 })();
 
-/* Anesthesia Plan tab: state, form, lab paste + fishbones, risk scores, half-sheet preview, print, copy */
+/* Anesthesia Plan tab: state, form, lab paste + fishbones, risk scores, print, copy */
 (function () {
   'use strict';
   var panel = document.getElementById('anes-panel');
@@ -6380,14 +6513,14 @@ window.AN_LIB = (function () {
     var pm = [];
     Object.keys(PMH_SHORT).forEach(function (k) { var t = joined(p, k); if (t) pm.push(PMH_SHORT[k] + ': ' + t); });
     if ((v.pmhNote || '').trim()) pm.push('Details: ' + v.pmhNote.trim());
-    row(s.history, 'PMH', pm.join('\n'));
+    row(s.history, 'PMH', pm.join('\n'), true);
     var cont = sel(p, 'meds').filter(function (x) { return x.s === 1; }).map(function (x) { return x.text; }).join(', ');
     var hold = sel(p, 'meds').filter(function (x) { return x.s === 2; }).map(function (x) { return x.text; }).join(', ');
-    row(s.history, 'Meds: continue', cont); row(s.history, 'Meds: hold', hold); row(s.history, 'Meds: other', v.medsNote);
-    row(s.history, 'Prior anesthesia', [joined(p, 'prior'), (v.priorNote || '').trim()].filter(Boolean).join('. '));
-    row(s.history, 'Social', joined(p, 'social'));
+    row(s.history, 'Meds: continue', cont, true); row(s.history, 'Meds: hold', hold, true); row(s.history, 'Meds: other', v.medsNote, true);
+    row(s.history, 'Prior anesthesia', [joined(p, 'prior'), (v.priorNote || '').trim()].filter(Boolean).join('. '), true);
+    row(s.history, 'Social', joined(p, 'social'), true);
     var npo = [joined(p, 'npo'), v.npoSolid ? 'last solids ' + v.npoSolid.trim() : '', v.npoClear ? 'last clears ' + v.npoClear.trim() : ''].filter(Boolean).join('; ');
-    row(s.history, 'NPO', npo);
+    row(s.history, 'NPO', npo, true);
     /* exam */
     var vit = [v.bp ? 'BP ' + v.bp.trim() : '', v.hr ? 'HR ' + v.hr.trim() : '', v.rr ? 'RR ' + v.rr.trim() : '', v.spo2 ? 'SpO2 ' + v.spo2.trim() + '%' : '', v.temp ? 'T ' + v.temp.trim() : ''].filter(Boolean).join(' | ');
     row(s.exam, 'Vitals', vit, true);
@@ -6395,10 +6528,10 @@ window.AN_LIB = (function () {
       one(p, 'neck') ? 'neck ' + one(p, 'neck').text.toLowerCase() : '', one(p, 'jaw') ? 'jaw ' + one(p, 'jaw').text : '', sel(p, 'dent').length ? 'dentition: ' + joined(p, 'dent').toLowerCase() : ''].filter(Boolean).join('; ');
     row(s.exam, 'Airway', aw, true);
     var af = airwayFlags(p);
-    if (af.flags.length) row(s.exam, 'Airway concerns', af.flags.join(', '));
-    else if (af.examined) row(s.exam, 'Airway concerns', 'none identified');
-    row(s.exam, 'Heart', joined(p, 'heart')); row(s.exam, 'Lungs', joined(p, 'lungs'));
-    row(s.exam, 'Functional capacity', joined(p, 'mets')); row(s.exam, 'Exam notes', v.examNote);
+    if (af.flags.length) row(s.exam, 'Airway concerns', af.flags.join(', '), true);
+    else row(s.exam, 'Airway concerns', af.examined ? 'none identified' : '', true);
+    row(s.exam, 'Heart', joined(p, 'heart'), true); row(s.exam, 'Lungs', joined(p, 'lungs'), true);
+    row(s.exam, 'Functional capacity', joined(p, 'mets'), true); row(s.exam, 'Exam notes', v.examNote);
     var rc = rcri(p), sb = stopbang(p), ap = apfel(p);
     row(s.exam, 'RCRI', (rc.n || one(p, 'mets')) ? rc.n + ' (' + rc.tier + ')' : '');
     row(s.exam, 'STOP-BANG', sel(p, 'stop').length ? sb.n + '/8 (' + sb.tier + ')' : '');
@@ -6412,10 +6545,15 @@ window.AN_LIB = (function () {
     /* plan */
     var pl = s.plan;
     row(pl, 'Technique', joined(p, 'tech'), true); row(pl, 'Airway', joined(p, 'airPlan'), true); row(pl, 'Monitors / access', joined(p, 'lines'), true);
-    row(pl, 'Induction', joined(p, 'drugs')); row(pl, 'Maintenance / reversal', joined(p, 'maint'));
-    row(pl, 'Analgesia', joined(p, 'analg'), true); row(pl, 'PONV prophylaxis', joined(p, 'ponv'));
-    row(pl, 'Blood / fluids', joined(p, 'blood')); row(pl, 'Special considerations', joined(p, 'spec'));
-    row(pl, 'Consent', joined(p, 'consent')); row(pl, 'Comments', v.planNote);
+    row(pl, 'Induction', joined(p, 'drugs'), true); row(pl, 'Maintenance / reversal', joined(p, 'maint'), true);
+    row(pl, 'Analgesia', joined(p, 'analg'), true); row(pl, 'PONV prophylaxis', joined(p, 'ponv'), true);
+    row(pl, 'Blood / fluids', joined(p, 'blood'), true); row(pl, 'Special considerations', joined(p, 'spec'), true);
+    row(pl, 'Consent', joined(p, 'consent'), true); row(pl, 'Comments', v.planNote);
+    s.riskScores = [
+      { label: 'RCRI', value: rc.n, detail: rc.tier, show: !!(rc.n || one(p, 'mets')) },
+      { label: 'STOP-BANG', value: sb.n + '/8', detail: sb.tier, show: !!sel(p, 'stop').length },
+      { label: 'PONV · Apfel', value: ap.n + '/4', detail: 'about ' + ap.pct + '% risk', show: !!(ap.n || ap.f.length || one(p, 'sex')) }
+    ];
     return s;
   }
   function studiesText(p) {
@@ -6471,22 +6609,90 @@ window.AN_LIB = (function () {
   function buildSheet(p) {
     var s = summarize(p), h = s.head;
     var sh = el('article', 'an-sheet' + (compact ? ' an-compact' : ''));
-    var head = el('div', 'an-head');
-    var cell = function (label, text, cls) { var d = el('div', 'an-hc' + (cls ? ' ' + cls : '')); d.append(el('small', '', label), el('div', 'an-hv', text || ' ')); return d; };
-    head.append(cell('Patient', h.name ? h.name + (h.id ? '  (' + h.id + ')' : '') : '', 'an-hc-name'), cell('Age / Sex', h.agesex), cell('Height / Weight / BMI', h.anth), cell('Date · Location', [h.date, h.room].filter(Boolean).join(' · ')), cell('ASA', h.asa.replace('ASA ', ''), 'an-hc-asa'));
-    sh.append(head);
-    var al = el('div', 'an-allergy'); al.append(el('b', '', 'ALLERGIES: '), document.createTextNode(h.allergy || '________________'));
+    var valueOrLine = function (parent, text, fill) {
+      if (text) parent.append(document.createTextNode(text));
+      else parent.append(el('span', 'an-write-line' + (fill ? ' an-fill' : ''), ' '));
+    };
+    var meta = function (parent, label, text) {
+      var d = el('div', 'an-meta-item');
+      d.append(el('small', 'an-meta-label', label));
+      var v = el('div', 'an-meta-value');
+      valueOrLine(v, text, true);
+      d.append(v); parent.append(d);
+    };
+    var hero = el('header', 'an-hero');
+    var identity = el('div', 'an-identity');
+    identity.append(el('div', 'an-kicker', 'Pre-op assessment · Anesthesia plan'));
+    var patientLine = el('div', 'an-patient-name');
+    if (h.name) patientLine.append(document.createTextNode(h.name));
+    else { patientLine.append(el('span', 'an-meta-label', 'Patient name  '), el('span', 'an-write-line', ' ')); }
+    if (h.id) patientLine.append(el('span', 'an-patient-id', '  ·  ' + h.id));
+    identity.append(patientLine);
+    var procedure = el('div', 'an-procedure');
+    procedure.append(el('span', '', 'PROCEDURE  '));
+    valueOrLine(procedure, h.procedure, !h.procedure);
+    identity.append(procedure);
+    var asa = one(p, 'asa'), emergency = !!sel(p, 'emerg').length;
+    var asaBox = el('div', 'an-asa' + (emergency ? ' an-emergency' : ''));
+    asaBox.append(el('small', '', 'ASA'));
+    var asaValue = el('strong');
+    if (asa) asaValue.textContent = asa.label; else asaValue.append(el('span', 'an-write-line an-fill', ' '));
+    asaBox.append(asaValue);
+    asaBox.append(el('span', '', emergency ? 'EMERGENCY' : ''));
+    hero.append(identity, asaBox); sh.append(hero);
+
+    var metadata = el('div', 'an-meta');
+    [['Age / sex', h.agesex], ['Height · weight · BMI', h.anth], ['Date', h.date], ['OR / location', h.room],
+      ['Surgeon', h.surgeon], ['Position · disposition', [h.pos, h.dispo].filter(Boolean).join(' · ')]].forEach(function (x) { meta(metadata, x[0], x[1]); });
+    sh.append(metadata);
+
+    var al = el('div', 'an-allergy'); al.append(el('b', '', 'ALLERGIES'));
+    valueOrLine(al, h.allergy, !h.allergy);
     if (/latex/i.test(h.allergy)) al.classList.add('an-latex');
     sh.append(al);
-    var cs = el('div', 'an-case');
-    [['Procedure', h.procedure], ['Surgeon', h.surgeon], ['Position', h.pos], ['Disposition', h.dispo]].forEach(function (x) { var d = el('div'); d.append(el('b', '', x[0] + ': '), document.createTextNode(x[1] || '________')); cs.append(d); });
-    sh.append(cs);
 
-    var body = el('div', 'an-body');
-    var c1 = el('div', 'an-col'), c2 = el('div', 'an-col'), c3 = el('div', 'an-col an-data');
-    c1.append(el('h5', '', 'History')); rowsInto(c1, s.history);
-    c2.append(el('h5', '', 'Exam / Risk')); rowsInto(c2, s.exam);
-    c3.append(el('h5', '', 'Labs / Data'));
+    var planRows = {};
+    s.plan.forEach(function (r) { planRows[r[0]] = r[1]; });
+    var plan = el('section', 'an-plan');
+    var planHead = el('div', 'an-plan-head'), planTitle = el('h5', '', 'Anesthesia plan');
+    planHead.append(planTitle);
+    plan.append(planHead);
+    var primary = el('div', 'an-plan-primary');
+    [['Technique', planRows.Technique], ['Airway', planRows.Airway], ['Monitors / access', planRows['Monitors / access']]].forEach(function (x) {
+      var d = el('div', 'an-plan-focus'); d.append(el('span', '', x[0]));
+      var v = el('strong'); valueOrLine(v, x[1], !x[1]); d.append(v); primary.append(d);
+    });
+    plan.append(primary);
+    var details = el('div', 'an-plan-details');
+    [['Induction', planRows.Induction], ['Maintenance / reversal', planRows['Maintenance / reversal']],
+      ['Analgesia', planRows.Analgesia], ['PONV prophylaxis', planRows['PONV prophylaxis']],
+      ['Blood / fluids', planRows['Blood / fluids']], ['Special considerations', planRows['Special considerations']],
+      ['Consent', planRows.Consent]].forEach(function (x) {
+      var d = el('div', 'an-plan-detail'); d.append(el('span', '', x[0])); valueOrLine(d, x[1], !x[1]); details.append(d);
+    });
+    plan.append(details);
+    var comments = el('div', 'an-plan-comments');
+    comments.append(el('b', '', 'Plan comments  '));
+    if (planRows.Comments) comments.append(document.createTextNode(planRows.Comments));
+    else { comments.append(document.createElement('br'), el('span', 'an-empty-line', ' '), document.createElement('br'), el('span', 'an-empty-line', ' ')); }
+    plan.append(comments); sh.append(plan);
+
+    var overview = el('div', 'an-overview');
+    var history = el('section', 'an-col'); history.append(el('h5', '', 'History')); rowsInto(history, s.history);
+    var exam = el('section', 'an-col'); exam.append(el('h5', '', 'Focused assessment'));
+    rowsInto(exam, s.exam.filter(function (r) { return !/^(RCRI|STOP-BANG|PONV \(Apfel\))$/.test(r[0]); }));
+    var riskGrid = el('div', 'an-risk-grid');
+    s.riskScores.forEach(function (r) {
+      var card = el('div', 'an-risk-card'), score = el('strong'), detail = el('span');
+      card.append(el('small', '', r.label));
+      valueOrLine(score, r.show ? r.value : '', true);
+      valueOrLine(detail, r.show ? r.detail : '', true);
+      card.append(score, detail); riskGrid.append(card);
+    });
+    exam.append(riskGrid);
+    overview.append(history, exam); sh.append(overview);
+
+    var data = el('section', 'an-data'); data.append(el('h5', '', 'Labs & studies'));
     var fg = el('div', 'an-fish');
     var vals = s.labs.values;
     FISH.forEach(function (def) { var c = el('div', 'an-fish-cell'); c.append(fishbone(def, vals)); fg.append(c); });
@@ -6494,27 +6700,30 @@ window.AN_LIB = (function () {
     s.labs.extras.forEach(function (x) { var d = el('div'); d.append(el('b', '', x[0] + ' '), document.createTextNode(x[1]));
       if (x[2]) d.append(el('sup', '', x[2] === 'hi' ? 'H' : 'L')); ex.append(d); });
     s.labs.unrec.forEach(function (u) { ex.append(el('div', 'an-unrec', u.name + ' ' + u.value + (u.unit ? ' ' + u.unit : ''))); });
-    if (!ex.childNodes.length) ex.append(el('div', 'an-line', ' '));
-    fg.append(ex); c3.append(fg);
-    if (s.labs.note) rowsInto(c3, [['Lab notes', s.labs.note]]);
-    var st = el('div', 'an-studies'); st.append(el('b', '', 'Imaging / studies: '));
-    if (s.studies) { s.studies.split('\n').forEach(function (ln, i) { if (i) st.append(document.createElement('br')); st.append(document.createTextNode(ln)); }); } else st.append(el('span', 'an-line', ' '));
-    c3.append(st);
-    body.append(c1, c2, c3); sh.append(body);
-
-    var pl = el('div', 'an-plan'); pl.append(el('h5', '', 'Anesthesia plan'));
-    var pg = el('div', 'an-plan-grid'); rowsInto(pg, s.plan); pl.append(pg); sh.append(pl);
+    if (ex.childNodes.length) fg.append(ex);
+    data.append(fg);
+    var dataNotes = el('div', 'an-data-notes');
+    var labNote = el('div', 'an-data-note'); labNote.append(el('b', '', 'Lab notes  '));
+    if (s.labs.note) labNote.append(document.createTextNode(s.labs.note)); else labNote.append(el('span', 'an-write-line', ' '));
+    var studies = el('div', 'an-data-note'); studies.append(el('b', '', 'Imaging / studies  '));
+    if (s.studies) studies.append(document.createTextNode(s.studies)); else studies.append(el('span', 'an-write-line', ' '));
+    dataNotes.append(labNote, studies); data.append(dataNotes); sh.append(data);
+    var signoff = el('footer', 'an-signoff');
+    [['Anesthesia clinician / signature', ''], ['Date / time', '']].forEach(function (x) {
+      var d = el('div'); d.append(el('b', '', x[0]), el('span', 'an-write-line', ' ')); signoff.append(d);
+    });
+    sh.append(signoff);
     return sh;
   }
 
   /* ---------- panel markup ---------- */
   panel.innerHTML =
-    '<section class="encounter-bar" aria-label="Anesthesia plan worksheet"><div class="workspace-title"><p class="eyebrow">Documentation workspace</p><h1>Anesthesia Plan</h1><p>Pre-op assessment and plan, one half-sheet per patient</p></div><div class="encounter-tag">ANESTHESIA</div></section>' +
-    '<p class="an-intro">Tap options to fill in each section, paste labs to build fishbones, and print two half-sheets per page. Nothing is saved between page loads.</p>' +
+    '<section class="encounter-bar" aria-label="Anesthesia plan worksheet"><div class="workspace-title"><p class="eyebrow">Documentation workspace</p><h1>Anesthesia Plan</h1><p>Pre-op assessment and plan, one full-page sheet per patient</p></div><div class="encounter-tag">ANESTHESIA</div></section>' +
+    '<p class="an-intro">Tap options to fill in each section, paste labs to build fishbones, and print one assessment sheet per patient. Nothing is saved between page loads.</p>' +
     '<div class="an-layout">' +
     '<section class="panel an-input" aria-label="Patient entry"><div class="an-toolbar"><h2>Patient information</h2><button type="button" class="quiet-button" id="an-add">Add patient</button><button type="button" class="quiet-button" id="an-clear-all">Clear all</button></div>' +
     '<div class="an-tabs" id="an-tabs" role="tablist" aria-label="Anesthesia patients"></div><div class="an-form" id="an-form"></div></section>' +
-    '<section class="panel an-output" aria-label="Printable half-sheets"><div class="an-toolbar"><h2>Printable half-sheets</h2>' +
+    '<section class="panel an-output" aria-label="Printable preview"><div class="an-toolbar"><h2>Printable preview</h2>' +
     '<label class="an-compact-toggle"><input type="checkbox" id="an-compact"> Compact type</label><button type="button" class="quiet-button" id="an-print">Print sheets</button><button type="button" class="copy-button" id="an-copy-all">Copy all (text)</button></div>' +
     '<p class="an-status" id="an-status" role="status" aria-live="polite"></p><div class="an-preview" id="an-preview"></div></section></div>';
   var tabsEl = panel.querySelector('#an-tabs'), formEl = panel.querySelector('#an-form'), prevEl = panel.querySelector('#an-preview'), statusEl = panel.querySelector('#an-status');
@@ -6625,7 +6834,7 @@ window.AN_LIB = (function () {
     patients.forEach(function (p, i) {
       var w = el('div', 'an-wrap'), bar = el('div', 'an-wrap-bar');
       var lbl = el('span', 'an-wrap-label'); lbl.append(el('strong', '', 'Patient ' + (i + 1)), document.createTextNode(p.v.name ? ' · ' + p.v.name : ''));
-      var warn = el('span', 'an-overflow', '⚠ Longer than a half page; prints as a full page. Trim text or use compact type.'); warn.hidden = true;
+      var warn = el('span', 'an-overflow', 'Long entry exceeds one page; it may continue onto additional pages.'); warn.hidden = true;
       var cp = el('button', 'copy-button an-copy-one', 'Copy text'); cp.type = 'button'; cp.dataset.i = i;
       bar.append(lbl, warn, cp);
       var scale = el('div', 'an-scale'); var sheet = buildSheet(p); scale.append(sheet); w.append(bar, scale); prevEl.append(w);
@@ -6633,7 +6842,7 @@ window.AN_LIB = (function () {
     fit();
   }
   function fit() {
-    var limit = 5.15 * 96 + 2;
+    var limit = 10 * 96 + 2;
     prevEl.querySelectorAll('.an-wrap').forEach(function (w) {
       var sc = w.querySelector('.an-scale'), sh = sc.firstChild, avail = w.clientWidth, full = 7.9 * 96;
       if (!avail) return;
