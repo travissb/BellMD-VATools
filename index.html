@@ -1281,6 +1281,154 @@ html[data-theme="dark"] #pre-rounds-panel .pre-rounds-sheet { border-color: #aeb
 }
 @media (pointer: coarse) { #pre-rounds-panel .pre-rounds-field input, #pre-rounds-panel .pre-rounds-labs input { min-height: 40px; } }
 
+/* ---------- Anesthesia Plan (sharp, theme-aware) ---------- */
+#anes-panel .an-intro { margin: 0 0 12px; color: var(--muted); line-height: 1.5; }
+.an-layout { display: grid; grid-template-columns: minmax(460px, .9fr) minmax(0, 1.3fr); gap: 16px; align-items: start; }
+#anes-panel .panel { padding: 0; border-top: 3px solid var(--accent); border-radius: 0; }
+.an-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding: 10px 14px; background: var(--surface-head); border-bottom: 1px solid var(--line); }
+.an-toolbar h2 { flex: 1 1 auto; margin: 0; font-size: 14px; letter-spacing: .02em; }
+.an-toolbar .copy-button { margin-left: 0; }
+.an-compact-toggle { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: var(--muted); }
+@media (min-width: 1100px) {
+  .an-input { position: sticky; top: calc(var(--tabs-h, 64px) + 12px); max-height: calc(100vh - var(--tabs-h, 64px) - 24px); overflow: auto; }
+}
+
+/* patient cards */
+.an-tabs { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 8px; padding: 12px 14px 4px; }
+.an-tab { display: grid; gap: 3px; padding: 8px 10px 7px; text-align: left; color: var(--ink); background: var(--surface-solid); border: 1px solid var(--line); border-radius: 0; cursor: pointer; font: inherit; }
+.an-tab:hover { border-color: var(--accent); }
+.an-tab[aria-selected="true"] { background: var(--surface-head); border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.an-tab-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.an-tab-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; font-weight: 700; }
+.an-tab-room { flex: 0 0 auto; padding: 0 5px; font-size: 11px; font-weight: 700; color: var(--accent); border: 1px solid var(--accent); }
+.an-tab-meta { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); font-size: 11px; }
+.an-tab-bar { display: flex; gap: 2px; margin-top: 3px; }
+.an-tab-bar i { flex: 1; height: 3px; background: var(--line); }
+.an-tab-bar i.on { background: var(--brand-green, #16a34a); }
+
+/* form */
+.an-form { padding: 0 14px 16px; }
+.an-form-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 0 2px; }
+.an-form-head h3 { margin: 0; font-size: 16px; }
+.an-expand { margin: 0 0 8px; font-size: 12px; color: var(--muted); }
+.an-link { padding: 0; font: inherit; color: var(--accent); background: none; border: 0; cursor: pointer; text-decoration: underline; }
+.an-sec { margin: 0 0 8px; border: 1px solid var(--line); background: var(--surface-solid); }
+.an-sec > summary { display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; cursor: pointer; list-style: none; background: var(--surface-head); font-size: 11px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); }
+.an-sec > summary::-webkit-details-marker { display: none; }
+.an-sec-mark::before { content: "+"; font-size: 15px; font-weight: 700; }
+.an-sec[open] .an-sec-mark::before { content: "\2212"; }
+.an-sec-body { padding: 10px 12px 12px; }
+.an-subhead { margin: 12px 0 6px; padding-top: 8px; border-top: 1px solid var(--line); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.an-grid { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 8px 10px; margin-bottom: 8px; }
+.an-s2 { grid-column: span 2; } .an-s3 { grid-column: span 3; } .an-s4 { grid-column: span 4; } .an-s5 { grid-column: span 5; }
+.an-wide { grid-column: 1 / -1; margin: 6px 0; }
+.an-field label, .an-labgrid label { display: block; font-size: 11px; font-weight: 700; letter-spacing: .03em; color: var(--muted); text-transform: uppercase; }
+.an-field input[type="text"], .an-field textarea, .an-field select, .an-labgrid input {
+  display: block; width: 100%; margin-top: 3px; padding: 7px 9px; font: inherit; font-size: 13px; font-weight: 400; line-height: 1.4; text-transform: none; letter-spacing: 0;
+  color: var(--ink); background: var(--field-bg); border: 1px solid var(--line); border-radius: 0; }
+.an-field input:focus, .an-field textarea:focus, .an-field select:focus, .an-labgrid input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.an-field textarea { resize: vertical; min-height: 44px; }
+.an-unit { display: flex; gap: 0; }
+.an-unit input { flex: 1 1 auto; min-width: 0; border-right: 0 !important; }
+.an-unit select { flex: 0 0 56px; width: 56px !important; padding: 7px 2px !important; }
+.an-auto { align-self: end; padding-bottom: 8px; font-size: 12px; font-weight: 700; color: var(--accent); }
+
+/* chips */
+.an-group { margin: 0 0 10px; }
+.an-gt { margin: 0 0 4px; font-size: 11px; font-weight: 700; color: var(--muted); }
+.an-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.an-chip { padding: 5px 9px; font: inherit; font-size: 12px; line-height: 1.25; color: var(--ink); background: var(--surface-solid); border: 1px solid var(--line); border-radius: 0; cursor: pointer; text-align: left; }
+.an-chip:hover { border-color: var(--accent); }
+.an-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.an-chip[data-s="1"] { color: #fff; background: var(--accent); border-color: var(--accent); font-weight: 600; }
+html[data-theme="dark"] .an-chip[data-s="1"] { color: #0b1221; }
+.an-tri .an-chip[data-s="1"]::after { content: " · continue"; font-weight: 400; }
+.an-tri .an-chip[data-s="2"] { color: #78350f; background: #fde68a; border-color: #f59e0b; font-weight: 600; }
+.an-tri .an-chip[data-s="2"]::after { content: " · HOLD"; }
+html[data-theme="dark"] .an-tri .an-chip[data-s="2"] { color: #fde68a; background: rgba(245, 158, 11, .22); }
+.an-quick { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 6px; }
+.an-quick-btn { border-style: dashed; }
+.an-check { display: flex; gap: 6px; align-items: flex-start; font-size: 12px; color: var(--muted); }
+.an-scores { margin-top: 8px; padding: 8px 10px; font-size: 12px; background: var(--surface-head); border-left: 3px solid var(--accent); display: grid; gap: 3px; }
+.an-scores span { color: var(--muted); }
+.an-scores .an-warn { color: #b45309; } html[data-theme="dark"] .an-scores .an-warn { color: #fcd34d; }
+
+/* labs */
+.an-labgrid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px 6px; margin-top: 8px; }
+.an-labgrid input { margin-top: 3px; padding: 6px 4px; text-align: center; font-variant-numeric: tabular-nums; font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; text-transform: none; }
+.an-labgrid input[data-flag="hi"] { color: #b45309; background: #fef3c7; border-color: #f59e0b; font-weight: 700; }
+.an-labgrid input[data-flag="lo"] { color: #1d4ed8; background: #dbeafe; border-color: #3b82f6; font-weight: 700; }
+html[data-theme="dark"] .an-labgrid input[data-flag="hi"] { color: #fcd34d; background: rgba(245,158,11,.18); border-color: rgba(245,158,11,.6); }
+html[data-theme="dark"] .an-labgrid input[data-flag="lo"] { color: #93c5fd; background: rgba(59,130,246,.2); border-color: rgba(59,130,246,.6); }
+.an-labstatus { min-height: 1.2em; margin: 2px 0 4px; font-size: 12px; font-weight: 600; color: var(--brand-green, #16a34a); }
+.an-hint { margin: 8px 0 0; font-size: 11px; color: var(--muted); }
+
+/* preview */
+.an-status { min-height: 0; margin: 0; padding: 0 14px; font-size: 12px; font-weight: 700; color: var(--brand-green, #16a34a); }
+.an-status.show { padding: 8px 14px 0; }
+.an-preview { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; padding: 14px; }
+.an-wrap, .an-input, .an-output { min-width: 0; }
+.an-wrap-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.an-wrap-label { flex: 1 1 auto; font-size: 12px; color: var(--muted); }
+.an-wrap-label strong { color: var(--ink); text-transform: uppercase; letter-spacing: .06em; font-size: 11px; }
+.an-overflow { font-size: 11px; font-weight: 700; color: #b45309; } html[data-theme="dark"] .an-overflow { color: #fcd34d; }
+
+/* the half-sheet is always paper: white with black ink */
+.an-scale { width: 7.9in; transform-origin: top left; }
+.an-sheet { box-sizing: border-box; width: 7.9in; min-height: 5.15in; color: #000; background: #fff; border: 1px solid #aebdce; font: 8pt/1.25 Arial, Helvetica, sans-serif; }
+.an-sheet.an-compact { font-size: 7pt; }
+.an-sheet * { box-sizing: border-box; }
+.an-sheet h5 { margin: 0 0 2px; padding: 1px 3px; font-size: 1em; letter-spacing: .06em; text-transform: uppercase; background: #e4e4e4; color: #000; border: 0; }
+.an-head { display: grid; grid-template-columns: 2.1fr .9fr 2.3fr 1.5fr .6fr; border-bottom: 1px solid #000; }
+.an-hc { padding: 2px 4px; border-right: 1px solid #333; min-width: 0; }
+.an-hc:last-child { border-right: 0; }
+.an-hc small { display: block; font-size: .8em; text-transform: uppercase; letter-spacing: .05em; color: #444; }
+.an-hv { font-size: 1.15em; font-weight: 700; min-height: 1.3em; overflow-wrap: anywhere; }
+.an-hc-asa { text-align: center; background: #f1f1f1; } .an-hc-asa .an-hv { font-size: 1.9em; line-height: 1.1; }
+.an-allergy { padding: 2px 4px; border-bottom: 1px solid #000; font-size: 1.1em; }
+.an-allergy.an-latex { background: #ffe1e1; }
+.an-allergy b { color: #b00000; }
+.an-case { display: grid; grid-template-columns: 2.2fr 1.2fr 1.4fr 1.6fr; border-bottom: 1px solid #000; }
+.an-case > div { padding: 2px 4px; border-right: 1px solid #333; min-width: 0; overflow-wrap: anywhere; } .an-case > div:last-child { border-right: 0; }
+.an-body { display: grid; grid-template-columns: 2.2fr 1.9fr 3.8fr; border-bottom: 1px solid #000; }
+.an-col { padding: 0 0 3px; border-right: 1px solid #333; min-width: 0; } .an-col:last-child { border-right: 0; }
+.an-col .an-row, .an-studies { padding: 0 4px; margin: 0 0 2px; overflow-wrap: anywhere; }
+.an-row b { font-weight: 700; }
+.an-line { display: inline-block; min-width: 55%; border-bottom: 1px solid #777; }
+.an-data .an-fish { display: grid; grid-template-columns: 1fr 1fr; gap: 0; padding: 0 2px; }
+.an-fish-cell { min-width: 0; } .an-fish-cell svg { display: block; width: 100%; height: auto !important; }
+.an-extras { padding: 2px 4px; font-size: 1.05em; } .an-extras b { font-weight: 700; } .an-extras sup { font-weight: 700; margin-left: 1px; }
+.an-unrec { color: #222; }
+.an-studies { margin-top: 3px; padding-top: 2px; border-top: 1px solid #999; white-space: pre-wrap; }
+.an-plan h5 { margin-bottom: 0; }
+.an-plan-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 0; }
+.an-plan-grid .an-row { padding: 1px 4px; margin: 0; border-right: 1px solid #ccc; overflow-wrap: anywhere; }
+.an-plan-grid .an-row:nth-child(even) { border-right: 0; }
+
+/* responsive */
+@media (max-width: 1099px) { .an-layout { grid-template-columns: minmax(0, 1fr); } .an-input { max-height: none; } }
+@media (max-width: 720px) {
+  .an-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); } .an-s2 { grid-column: span 3; } .an-s3, .an-s4, .an-s5 { grid-column: 1 / -1; }
+  .an-labgrid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (pointer: coarse) { .an-chip { min-height: 36px; } .an-field input[type="text"], .an-field select { min-height: 40px; } }
+
+/* printing: only the sheets, two half-sheets per Letter page */
+@media print {
+  html body #anes-panel:not([hidden]) { display: block !important; max-width: none; padding: 0; margin: 0; }
+  html body #pre-rounds-panel[hidden] { display: none !important; }
+  #anes-panel > .encounter-bar, #anes-panel > .an-intro, #anes-panel .an-input, #anes-panel .an-toolbar, #anes-panel .an-status, #anes-panel .an-wrap-bar { display: none !important; }
+  .an-layout { display: block; }
+  #anes-panel .an-output { border: 0 !important; padding: 0; box-shadow: none; background: transparent; }
+  .an-preview { display: block; padding: 0; }
+  .an-wrap { break-inside: avoid; page-break-inside: avoid; margin: 0; }
+  .an-scale { zoom: 1 !important; width: 100%; }
+  .an-sheet { width: 100%; min-height: 5.15in; border: 1px solid #000; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .an-wrap:not(:last-child) .an-sheet { margin-bottom: 0; }
+  .an-wrap { padding-bottom: .05in; background: #fff; }
+  html body { background: #fff !important; }
+}
+
 /* ---------- Printing while in dark mode used to print a dark page ---------- */
 @media print {
   html[data-theme="dark"] body { background: #fff !important; color: #000 !important; }
@@ -1311,6 +1459,7 @@ html[data-theme="dark"] #pre-rounds-panel .pre-rounds-sheet { border-color: #aeb
     <button class="tool-tab" id="exam-note-tab" type="button" role="tab" aria-selected="true" aria-controls="exam-note-panel" tabindex="0">Exam Note</button>
     <button class="tool-tab" id="ros-tab" type="button" role="tab" aria-selected="false" aria-controls="ros-panel" tabindex="-1">ROS</button>
     <button class="tool-tab" id="pre-rounds-tab" type="button" role="tab" aria-selected="false" aria-controls="pre-rounds-panel" tabindex="-1">Pre-Rounds</button>
+    <button class="tool-tab" id="anes-tab" type="button" role="tab" aria-selected="false" aria-controls="anes-panel" tabindex="-1">Anesthesia Plan</button>
   </nav>
 
   <main class="page workspace-panel" id="exam-note-panel" role="tabpanel" aria-labelledby="exam-note-tab" tabindex="0">
@@ -1540,6 +1689,7 @@ html[data-theme="dark"] #pre-rounds-panel .pre-rounds-sheet { border-color: #aeb
     <p class="privacy-note">This page runs locally in your browser and does not save or transmit information. Use only as permitted by your organization's policies, verify all information, and do not treat the generated sheet as a substitute for the approved medical record.</p>
   </main>
 
+  <main class="page workspace-panel" id="anes-panel" role="tabpanel" aria-labelledby="anes-tab" tabindex="0" hidden></main>
   <script>
     const toolTabs = [...document.querySelectorAll(".tool-tab")];
 
@@ -5884,7 +6034,7 @@ window.ROS_LIB = (function () {
     }).join('\n');
   }
   var baseParse = window.parseEmrLabs;
-  window.parseEmrLabs = function (text) { return baseParse(normalizePaste(text)); };
+  window.parseEmrLabs = function (text) { var r = baseParse(normalizePaste(text)); window.__labNote = labNote; return r; };
 
   /* re-pasting new results must not leave yesterday's values behind */
   var baseApply = window.applyEmrLabs;
@@ -6007,6 +6157,577 @@ window.ROS_LIB = (function () {
     if (statusEl.textContent) { statusEl.classList.add('show'); clearTimeout(statusEl._t); statusEl._t = setTimeout(function () { statusEl.classList.remove('show'); }, 4000); }
   }).observe(statusEl, { childList: true, characterData: true, subtree: true });
   renderPreRounds();
+})();
+
+/* Anesthesia Plan: option library.
+   Group: {k:key, t:title, o:[options], m:'multi'|'single'|'tri'}.  Option "Label|printed text" prints different text than it shows. */
+window.AN_LIB = (function () {
+  var G = function (k, t, o, m) { return { k: k, t: t, o: o, m: m || 'multi' }; };
+
+  var pmh = [
+    G('pmhCv', 'Cardiovascular', ['HTN', 'CAD', 'Prior MI', 'Stent / PCI', 'CABG', 'Heart failure', 'Atrial fibrillation', 'Other arrhythmia', 'Valvular disease', 'Pulmonary HTN', 'PAD', 'Aortic aneurysm', 'Pacemaker / ICD', 'DVT / PE']),
+    G('pmhPulm', 'Pulmonary', ['Asthma', 'COPD', 'Home O2', 'OSA', 'CPAP user', 'Interstitial lung disease', 'Recent URI', 'Prior pneumonia']),
+    G('pmhNeuro', 'Neuro / Psych', ['CVA / TIA', 'Seizures', 'Dementia', 'Neuropathy', 'Myasthenia / neuromuscular disease', 'Parkinson disease', 'Cervical spine disease', 'Chronic pain', 'Anxiety', 'Depression', 'PTSD']),
+    G('pmhEndo', 'Endocrine / Renal', ['DM type 2', 'DM type 1', 'Hypothyroidism', 'Hyperthyroidism', 'Adrenal insufficiency', 'Obesity', 'CKD', 'ESRD on dialysis', 'Electrolyte abnormality']),
+    G('pmhGi', 'GI / Heme / Onc / MSK', ['GERD', 'Hiatal hernia', 'Gastroparesis / dysphagia', 'Cirrhosis', 'Anemia', 'Bleeding disorder', 'Thrombocytopenia', 'Malignancy', 'Prior chemo / radiation', 'Arthritis / limited mobility'])
+  ];
+  var meds = [G('meds', 'Home medications of anesthetic relevance (tap once = continue, twice = hold)', [
+    'Anticoagulant', 'Antiplatelet', 'Beta blocker', 'ACE-I / ARB', 'Calcium channel blocker', 'Diuretic', 'Statin', 'SGLT2 inhibitor', 'GLP-1 agonist', 'Metformin', 'Insulin', 'Other diabetes agent',
+    'Chronic steroid', 'Chronic opioid', 'Benzodiazepine', 'Gabapentinoid', 'SSRI / SNRI', 'MAOI', 'Antipsychotic', 'Bronchodilator inhaler', 'Herbal / supplement'
+  ], 'tri')];
+  var allergy = [G('allergy', 'Allergies', ['NKDA', 'Latex', 'Penicillin', 'Cephalosporin', 'Sulfa', 'Contrast', 'Iodine / Betadine', 'Opioid', 'NSAID', 'Adhesive / tape', 'Other'])];
+  var prior = [
+    G('prior', 'Prior anesthesia / family history', ['No prior anesthesia', 'Prior anesthesia uneventful', 'PONV', 'Motion sickness', 'Difficult airway / intubation', 'Difficult IV access', 'Prolonged emergence', 'Postoperative delirium', 'Intraoperative awareness', 'Personal MH history|Personal malignant hyperthermia history', 'Family MH history|Family malignant hyperthermia history', 'Pseudocholinesterase deficiency'])
+  ];
+  var social = [G('social', 'Social', ['Never smoker', 'Former smoker', 'Current smoker', 'Alcohol use', 'Heavy alcohol / withdrawal risk', 'Marijuana', 'Illicit / IV drug use'])];
+  var npo = [G('npo', 'NPO', ['NPO status confirmed', 'Non-compliant with NPO', 'Full stomach / aspiration risk'])];
+  var pos = [G('pos', 'Position', ['Supine', 'Lateral', 'Prone', 'Lithotomy', 'Beach chair', 'Trendelenburg', 'Reverse Trendelenburg'])];
+  var dispo = [G('dispo', 'Planned disposition', ['PACU then home', 'PACU then floor', 'PACU then ICU', 'Remain intubated', 'Telemetry / step-down', '23-hour observation'])];
+
+  var airway = [
+    G('mall', 'Mallampati', ['I', 'II', 'III', 'IV'], 'single'),
+    G('mouth', 'Mouth opening', ['≥ 3 FB|≥ 3 fingerbreadths', '< 3 FB|< 3 fingerbreadths'], 'single'),
+    G('tmd', 'Thyromental distance', ['≥ 6 cm', '< 6 cm'], 'single'),
+    G('neck', 'Neck ROM', ['Full', 'Limited extension', 'Limited flexion', 'Fused / collar'], 'single'),
+    G('jaw', 'Jaw protrusion', ['Class I (bites upper lip)', 'Class II', 'Class III'], 'single'),
+    G('dent', 'Dentition', ['Intact', 'Loose / chipped teeth', 'Missing teeth', 'Dentures', 'Crowns / bridge', 'Edentulous', 'Prominent upper incisors']),
+    G('airOther', 'Other airway findings', ['Beard', 'Large tongue', 'Short / thick neck', 'Prior difficult airway', 'Stridor / hoarseness', 'Prior tracheostomy', 'Airway mass / trauma'])
+  ];
+  var exam = [
+    G('heart', 'Heart', ['Regular rate and rhythm', 'Irregular rhythm', 'Murmur', 'Gallop', 'JVD', 'Peripheral edema']),
+    G('lungs', 'Lungs', ['Clear bilaterally', 'Wheezes', 'Crackles', 'Rhonchi', 'Diminished breath sounds', 'Increased work of breathing']),
+    G('mets', 'Functional capacity', ['≥ 4 METs (2 flights of stairs)', '< 4 METs', 'Unable to assess'], 'single')
+  ];
+  var rcri = [G('rcri', 'Revised Cardiac Risk Index', ['High-risk surgery (intraperitoneal, intrathoracic, suprainguinal vascular)', 'Ischemic heart disease', 'Heart failure', 'Cerebrovascular disease', 'Insulin-treated diabetes', 'Creatinine > 2.0'])];
+  var stop = [G('stop', 'STOP-BANG (age, sex, BMI fill in automatically)', ['Snoring', 'Tired / daytime sleepiness', 'Observed apnea', 'Pressure (HTN)', 'Neck circumference > 40 cm'])];
+  var apfel = [G('apfel', 'PONV risk (Apfel; sex, smoking, PONV history fill in automatically)', ['Postoperative opioids expected'])];
+
+  var plan = [
+    G('asa', 'ASA physical status', ['I', 'II', 'III', 'IV', 'V', 'VI'], 'single'),
+    G('tech', 'Anesthetic technique', ['General: endotracheal|General endotracheal', 'General: LMA|General with laryngeal mask airway', 'MAC / sedation|Monitored anesthesia care', 'Spinal', 'Epidural', 'Combined spinal-epidural', 'Peripheral nerve block', 'Regional with general', 'TIVA|Total intravenous anesthesia', 'Local with standby', 'Rapid sequence induction']),
+    G('airPlan', 'Airway plan', ['Endotracheal tube', 'Laryngeal mask airway', 'Mask ventilation', 'Video laryngoscopy', 'Direct laryngoscopy', 'Awake fiberoptic intubation', 'Difficult airway cart in room', 'Nasal intubation', 'Double-lumen tube / bronchial blocker', 'Preoxygenate / high-flow nasal oxygen']),
+    G('lines', 'Monitors and access', ['Standard ASA monitors', 'Second large-bore IV', 'Arterial line', 'Central line', 'Processed EEG (BIS)', 'TEE', 'Cerebral oximetry (NIRS)', 'Neuromuscular monitor', 'Foley catheter', 'Active warming']),
+    G('drugs', 'Induction / airway drugs', ['Propofol', 'Etomidate', 'Ketamine', 'Midazolam', 'Fentanyl', 'Lidocaine', 'Succinylcholine', 'Rocuronium', 'Cisatracurium', 'Dexmedetomidine']),
+    G('maint', 'Maintenance and reversal', ['Sevoflurane', 'Desflurane', 'Isoflurane', 'Propofol infusion', 'Avoid nitrous oxide', 'Avoid succinylcholine', 'Sugammadex', 'Neostigmine / glycopyrrolate']),
+    G('analg', 'Analgesia', ['Acetaminophen', 'Ketorolac / NSAID', 'Gabapentinoid', 'IV lidocaine', 'Ketamine', 'Methadone', 'Opioid titrated to effect', 'Regional block', 'Surgeon local infiltration', 'Opioid-sparing approach']),
+    G('ponv', 'PONV prophylaxis', ['Ondansetron', 'Dexamethasone', 'Scopolamine patch', 'Aprepitant', 'Haloperidol / droperidol', 'Propofol-based TIVA', 'Minimize volatile / opioids']),
+    G('blood', 'Blood and fluids', ['Type and screen', 'Crossmatch', 'Blood available in room', 'Tranexamic acid', 'Cell saver', 'Restrictive fluids', 'Goal-directed fluids', 'Refuses blood products']),
+    G('spec', 'Special considerations', ['Aspiration prophylaxis', 'Glucose checks / insulin plan', 'Stress-dose steroids', 'Anticoagulation timing for neuraxial reviewed', 'Pacemaker / ICD: magnet or reprogram', 'OSA precautions', 'MH-safe machine, avoid triggers', 'Latex-free setup', 'Antibiotic prophylaxis timed', 'VTE prophylaxis / SCDs', 'Pregnancy test negative', 'Pressure-point padding', 'Hold ACE-I / ARB morning of surgery', 'Continue beta blocker']),
+    G('consent', 'Consent and discussion', ['Risks, benefits, and alternatives discussed', 'Consent obtained', 'Patient verbalizes understanding', 'Questions answered', 'Interpreter used', 'Surrogate consent'])
+  ];
+
+  var labFields = [['Na', 'na'], ['K', 'k'], ['Cl', 'cl'], ['HCO3', 'hco3'], ['BUN', 'bun'], ['Cr', 'cr'], ['Glucose', 'gluc'], ['WBC', 'wbc'], ['Hgb', 'hgb'], ['Hct', 'hct'], ['PLT', 'plts'], ['Ca', 'ca'], ['Mg', 'mg'], ['PO4', 'po4']];
+  var extraFields = [['INR', 'inr'], ['PT', 'pt'], ['PTT', 'ptt'], ['A1c', 'a1c'], ['Albumin', 'alb'], ['T bili', 'tbili'], ['AST', 'ast'], ['ALT', 'alt'], ['Lactate', 'lactate'], ['Troponin', 'trop'], ['hCG', 'hcg']];
+  var extraAliases = { inr: 'inr', internationalnormalizedratio: 'inr', pt: 'pt', prothrombintime: 'pt', ptt: 'ptt', aptt: 'ptt', partialthromboplastintime: 'ptt', activatedpartialthromboplastintime: 'ptt',
+    a1c: 'a1c', hba1c: 'a1c', hemoglobina1c: 'a1c', glycatedhemoglobin: 'a1c', albumin: 'alb', alb: 'alb', totalbilirubin: 'tbili', bilirubintotal: 'tbili', bilirubin: 'tbili', tbili: 'tbili',
+    ast: 'ast', sgot: 'ast', aspartateaminotransferase: 'ast', alt: 'alt', sgpt: 'alt', alanineaminotransferase: 'alt', lactate: 'lactate', lacticacid: 'lactate', lactatewholeblood: 'lactate',
+    troponin: 'trop', troponini: 'trop', troponint: 'trop', hstroponini: 'trop', hstroponint: 'trop', hcg: 'hcg', bhcg: 'hcg', hcgquantitative: 'hcg', betahcg: 'hcg' };
+  /* [low, high]  values outside are flagged */
+  var ranges = { na: [135, 145], k: [3.5, 5.1], cl: [98, 107], hco3: [22, 29], bun: [7, 20], cr: [0.6, 1.3], gluc: [70, 140], ca: [8.5, 10.5], mg: [1.6, 2.6], po4: [2.5, 4.5],
+    wbc: [4, 11], hgb: [12, 17.5], hct: [36, 52], plts: [150, 450], inr: [0.8, 1.2], ptt: [25, 37], alb: [3.5, 5.2], lactate: [0.5, 2], alt: [0, 55], ast: [0, 40], tbili: [0, 1.2] };
+
+  var studies = ['ECG', 'Echo', 'CXR', 'Stress test', 'Cardiac cath', 'PFTs', 'CT', 'Sleep study', 'Carotid duplex'];
+
+  return { pmh: pmh, meds: meds, allergy: allergy, prior: prior, social: social, npo: npo, pos: pos, dispo: dispo, airway: airway, exam: exam, rcri: rcri, stop: stop, apfel: apfel, plan: plan,
+    labFields: labFields, extraFields: extraFields, extraAliases: extraAliases, ranges: ranges, studies: studies };
+})();
+
+/* Anesthesia Plan tab: state, form, lab paste + fishbones, risk scores, half-sheet preview, print, copy */
+(function () {
+  'use strict';
+  var panel = document.getElementById('anes-panel');
+  if (!panel || typeof makeFishboneDiagram !== 'function' || typeof parseEmrLabs !== 'function' || !window.AN_LIB) return;
+  var L = window.AN_LIB;
+
+  /* ---------- groups ---------- */
+  var SEX = { k: 'sex', t: 'Sex', o: ['M', 'F'], m: 'single' };
+  var EMERG = { k: 'emerg', t: 'Emergency', o: ['E (emergency)|E'], m: 'multi' };
+  var GROUPS = {};
+  [].concat(L.pmh, L.meds, L.allergy, L.prior, L.social, L.npo, L.pos, L.dispo, L.airway, L.exam, L.rcri, L.stop, L.apfel, L.plan, [SEX, EMERG]).forEach(function (g) { GROUPS[g.k] = g; });
+  var PMH_SHORT = { pmhCv: 'CV', pmhPulm: 'Pulm', pmhNeuro: 'Neuro/Psych', pmhEndo: 'Endo/Renal', pmhGi: 'GI/Heme/Onc/MSK' };
+
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var lab = function (o) { return o.split('|')[0]; };
+  var out = function (o) { var a = o.split('|'); return a[1] || a[0]; };
+  var num = function (s) { var m = String(s == null ? '' : s).match(/-?\d+(\.\d+)?/); return m ? parseFloat(m[0]) : NaN; };
+  var today = function () { var d = new Date(); return (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear(); };
+
+  /* ---------- state ---------- */
+  var patients = [], active = 0, nextId = 1, compact = false;
+  function newPatient() { return { id: nextId++, v: { date: today(), wUnit: 'kg', hUnit: 'cm' }, c: {}, labs: {}, pasted: {}, unrec: [], labNote: '' }; }
+  var cur = function () { return patients[active]; };
+
+  function sel(p, g) {
+    var o = p.c[g] || {};
+    return GROUPS[g].o.filter(function (x) { return o[x]; }).map(function (x) { return { label: lab(x), text: out(x), s: o[x], raw: x }; });
+  }
+  var has = function (p, g, label) { return sel(p, g).some(function (x) { return x.label === label; }); };
+  var joined = function (p, g) { return sel(p, g).map(function (x) { return x.text; }).join(', '); };
+  var one = function (p, g) { var s = sel(p, g); return s.length ? s[0] : null; };
+
+  function hasData(p) {
+    return Object.keys(p.v).some(function (k) { return k !== 'date' && k !== 'wUnit' && k !== 'hUnit' && String(p.v[k]).trim(); }) ||
+      Object.keys(p.c).some(function (g) { return Object.keys(p.c[g]).length; }) || Object.keys(p.labs).some(function (k) { return p.labs[k]; });
+  }
+
+  /* ---------- calculations ---------- */
+  function bmiOf(p) {
+    var w = num(p.v.wt), h = num(p.v.ht);
+    if (!(w > 0 && h > 0)) return NaN;
+    if (p.v.wUnit === 'lb') w *= 0.45359237;
+    if (p.v.hUnit === 'in') h *= 2.54;
+    return w / Math.pow(h / 100, 2);
+  }
+  var bmiCat = function (b) { return b < 18.5 ? 'underweight' : b < 25 ? 'normal' : b < 30 ? 'overweight' : b < 35 ? 'obese class I' : b < 40 ? 'obese class II' : 'obese class III'; };
+  function rcri(p) { var n = sel(p, 'rcri').length; return { n: n, tier: n === 0 ? 'low risk' : n === 1 ? 'elevated risk' : 'high risk' }; }
+  function stopbang(p) {
+    var n = sel(p, 'stop').length, auto = [];
+    var b = bmiOf(p), a = num(p.v.age);
+    if (b > 35) { n++; auto.push('BMI > 35'); }
+    if (a > 50) { n++; auto.push('age > 50'); }
+    if (one(p, 'sex') && one(p, 'sex').label === 'M') { n++; auto.push('male'); }
+    return { n: n, auto: auto, tier: n >= 5 ? 'high risk' : n >= 3 ? 'intermediate risk' : 'low risk' };
+  }
+  function apfel(p) {
+    var n = 0, f = [];
+    if (one(p, 'sex') && one(p, 'sex').label === 'F') { n++; f.push('female'); }
+    if ((has(p, 'social', 'Never smoker') || has(p, 'social', 'Former smoker')) && !has(p, 'social', 'Current smoker')) { n++; f.push('non-smoker'); }
+    if (has(p, 'prior', 'PONV') || has(p, 'prior', 'Motion sickness')) { n++; f.push('PONV / motion sickness'); }
+    if (has(p, 'apfel', 'Postoperative opioids expected')) { n++; f.push('postoperative opioids'); }
+    return { n: n, f: f, pct: [10, 21, 39, 61, 79][n] };
+  }
+  function airwayFlags(p) {
+    var f = [], m = one(p, 'mall'), mo = one(p, 'mouth'), t = one(p, 'tmd'), nk = one(p, 'neck'), j = one(p, 'jaw'), b = bmiOf(p);
+    if (m && (m.label === 'III' || m.label === 'IV')) f.push('Mallampati ' + m.label);
+    if (mo && mo.label.charAt(0) === '<') f.push('limited mouth opening');
+    if (t && t.label.charAt(0) === '<') f.push('short thyromental distance');
+    if (nk && nk.label !== 'Full') f.push(nk.label.toLowerCase());
+    if (j && j.label.indexOf('III') >= 0) f.push('limited jaw protrusion');
+    sel(p, 'airOther').forEach(function (x) { f.push(x.text.toLowerCase()); });
+    ['Loose / chipped teeth', 'Prominent upper incisors'].forEach(function (d) { if (has(p, 'dent', d)) f.push(d.toLowerCase()); });
+    if (b >= 35) f.push('BMI ≥ 35');
+    if (has(p, 'prior', 'Difficult airway / intubation')) f.push('history of difficult airway');
+    if (has(p, 'pmhPulm', 'OSA')) f.push('OSA');
+    var examined = m || mo || t || nk || j;
+    return { flags: f, examined: !!examined };
+  }
+
+  /* ---------- labs ---------- */
+  function flagFor(f, val) {
+    var r = L.ranges[f], n = num(val);
+    if (!r || isNaN(n)) return '';
+    return n > r[1] ? 'hi' : n < r[0] ? 'lo' : '';
+  }
+  var normName = function (s) { return String(s || '').toLowerCase().replace(/\[[^\]]*\]|\([^)]*\)/g, '').replace(/[^a-z0-9]/g, ''); };
+
+  function applyPaste(p, text) {
+    var res;
+    try { res = window.parseEmrLabs(text); } catch (e) { res = { parsed: new Map(), unrecognized: [] }; }
+    var note = window.__labNote || '';
+    Object.keys(p.pasted).forEach(function (f) { if (p.labs[f] === p.pasted[f]) delete p.labs[f]; });
+    p.pasted = {};
+    var parsed = res.parsed || new Map(), extras = [];
+    (res.unrecognized || []).forEach(function (u) {
+      var f = L.extraAliases[normName(u.name)];
+      if (f && !parsed.has(f)) parsed.set(f, u.value); else extras.push(u);
+    });
+    parsed.forEach(function (val, f) { p.labs[f] = val; p.pasted[f] = val; });
+    p.unrec = extras.slice(0, 12);
+    p.labNote = note;
+    return parsed.size + extras.length;
+  }
+
+  function labValues(p) { var v = {}; L.labFields.forEach(function (x) { v[x[1]] = p.labs[x[1]] || ''; }); return v; }
+
+  var FISH = [
+    { title: 'BMP', lines: [[12, 62, 182, 62], [54, 30, 54, 94], [108, 30, 108, 94], [182, 62, 220, 30], [182, 62, 220, 94]],
+      points: [['Na', 'na', 31, 29, 48], ['K', 'k', 31, 108, 91], ['Cl', 'cl', 81, 29, 48], ['HCO3', 'hco3', 81, 108, 91], ['BUN', 'bun', 148, 29, 48], ['Cr', 'cr', 148, 108, 91], ['Glucose', 'gluc', 264, 57, 78]],
+      text: function (v) { return 'Na ' + v.na + ' | Cl ' + v.cl + ' | BUN ' + v.bun + '\nK ' + v.k + ' | HCO3 ' + v.hco3 + ' | Cr ' + v.cr + '\nGlucose ' + v.gluc; } },
+    { title: 'CBC', lines: [[68, 32, 100, 62], [68, 92, 100, 62], [100, 62, 205, 62], [205, 62, 238, 32], [205, 62, 238, 92]],
+      points: [['WBC', 'wbc', 32, 56, 77], ['Hgb', 'hgb', 153, 29, 46], ['Hct', 'hct', 153, 110, 91], ['PLT', 'plts', 266, 56, 77]],
+      text: function (v) { return 'Hgb ' + v.hgb + ' | WBC ' + v.wbc + ' | Plts ' + v.plts + '\nHct ' + v.hct; } },
+    { title: 'Ca / Mg / PO4', lines: [[150, 18, 150, 62], [150, 62, 102, 94], [150, 62, 198, 94]],
+      points: [['Ca', 'ca', 111, 40, 55], ['Mg', 'mg', 189, 40, 55], ['PO4', 'po4', 150, 101, 117]],
+      text: function (v) { return 'Ca ' + v.ca + ' | Mg ' + v.mg + ' | PO4 ' + v.po4; } }
+  ];
+  function fishbone(def, values) {
+    var svg = makeFishboneDiagram(def.title, values, def.lines, def.points, def.text(values));
+    svg.removeAttribute('height');
+    var vals = svg.querySelectorAll('text[font-size="11"]');
+    def.points.forEach(function (pt, i) {
+      var fl = flagFor(pt[1], values[pt[1]]);
+      if (fl && vals[i]) { vals[i].setAttribute('font-weight', '700'); vals[i].textContent = values[pt[1]] + (fl === 'hi' ? ' ↑' : ' ↓'); }
+    });
+    return svg;
+  }
+
+  /* ---------- summary (shared by sheet and plain text) ---------- */
+  function summarize(p) {
+    var v = p.v, s = { head: {}, history: [], exam: [], plan: [] };
+    var b = bmiOf(p), sx = one(p, 'sex'), asa = one(p, 'asa');
+    var h = s.head;
+    h.name = (v.name || '').trim(); h.id = (v.last4 || '').trim();
+    h.agesex = [v.age ? v.age + ' y' : '', sx ? sx.label : ''].filter(Boolean).join(' ');
+    h.anth = [v.ht ? 'Ht ' + v.ht + ' ' + v.hUnit : '', v.wt ? 'Wt ' + v.wt + ' ' + v.wUnit : '', !isNaN(b) ? 'BMI ' + b.toFixed(1) : ''].filter(Boolean).join(' · ');
+    h.date = v.date || ''; h.room = (v.room || '').trim();
+    h.asa = asa ? ('ASA ' + asa.label + (sel(p, 'emerg').length ? ' E' : '')) : (sel(p, 'emerg').length ? 'ASA — E' : '');
+    var al = joined(p, 'allergy'), alN = (v.allergyNote || '').trim();
+    h.allergy = [al, alN].filter(Boolean).join(' — ');
+    h.procedure = (v.proc || '').trim(); h.surgeon = (v.surgeon || '').trim(); h.pos = joined(p, 'pos'); h.dispo = joined(p, 'dispo');
+
+    var row = function (arr, label, text, keep) { text = (text || '').trim(); if (text || keep) arr.push([label, text]); };
+    /* history */
+    var pm = [];
+    Object.keys(PMH_SHORT).forEach(function (k) { var t = joined(p, k); if (t) pm.push(PMH_SHORT[k] + ': ' + t); });
+    if ((v.pmhNote || '').trim()) pm.push('Details: ' + v.pmhNote.trim());
+    row(s.history, 'PMH', pm.join('\n'));
+    var cont = sel(p, 'meds').filter(function (x) { return x.s === 1; }).map(function (x) { return x.text; }).join(', ');
+    var hold = sel(p, 'meds').filter(function (x) { return x.s === 2; }).map(function (x) { return x.text; }).join(', ');
+    row(s.history, 'Meds: continue', cont); row(s.history, 'Meds: hold', hold); row(s.history, 'Meds: other', v.medsNote);
+    row(s.history, 'Prior anesthesia', [joined(p, 'prior'), (v.priorNote || '').trim()].filter(Boolean).join('. '));
+    row(s.history, 'Social', joined(p, 'social'));
+    var npo = [joined(p, 'npo'), v.npoSolid ? 'last solids ' + v.npoSolid.trim() : '', v.npoClear ? 'last clears ' + v.npoClear.trim() : ''].filter(Boolean).join('; ');
+    row(s.history, 'NPO', npo);
+    /* exam */
+    var vit = [v.bp ? 'BP ' + v.bp.trim() : '', v.hr ? 'HR ' + v.hr.trim() : '', v.rr ? 'RR ' + v.rr.trim() : '', v.spo2 ? 'SpO2 ' + v.spo2.trim() + '%' : '', v.temp ? 'T ' + v.temp.trim() : ''].filter(Boolean).join(' | ');
+    row(s.exam, 'Vitals', vit, true);
+    var aw = [one(p, 'mall') ? 'Mallampati ' + one(p, 'mall').text : '', one(p, 'mouth') ? 'mouth opening ' + one(p, 'mouth').text : '', one(p, 'tmd') ? 'TMD ' + one(p, 'tmd').text : '',
+      one(p, 'neck') ? 'neck ' + one(p, 'neck').text.toLowerCase() : '', one(p, 'jaw') ? 'jaw ' + one(p, 'jaw').text : '', sel(p, 'dent').length ? 'dentition: ' + joined(p, 'dent').toLowerCase() : ''].filter(Boolean).join('; ');
+    row(s.exam, 'Airway', aw, true);
+    var af = airwayFlags(p);
+    if (af.flags.length) row(s.exam, 'Airway concerns', af.flags.join(', '));
+    else if (af.examined) row(s.exam, 'Airway concerns', 'none identified');
+    row(s.exam, 'Heart', joined(p, 'heart')); row(s.exam, 'Lungs', joined(p, 'lungs'));
+    row(s.exam, 'Functional capacity', joined(p, 'mets')); row(s.exam, 'Exam notes', v.examNote);
+    var rc = rcri(p), sb = stopbang(p), ap = apfel(p);
+    row(s.exam, 'RCRI', (rc.n || one(p, 'mets')) ? rc.n + ' (' + rc.tier + ')' : '');
+    row(s.exam, 'STOP-BANG', sel(p, 'stop').length ? sb.n + '/8 (' + sb.tier + ')' : '');
+    row(s.exam, 'PONV (Apfel)', (ap.n || ap.f.length) ? ap.n + '/4 (about ' + ap.pct + '%)' : (one(p, 'sex') ? '0/4 (about 10%)' : ''));
+    /* labs */
+    var vals = labValues(p);
+    s.labs = { values: vals, extras: [], unrec: p.unrec || [] };
+    L.extraFields.forEach(function (x) { var val = p.labs[x[1]]; if (val) s.labs.extras.push([x[0], val, flagFor(x[1], val)]); });
+    s.labs.note = (v.labNote2 || '').trim();
+    s.studies = studiesText(p);
+    /* plan */
+    var pl = s.plan;
+    row(pl, 'Technique', joined(p, 'tech'), true); row(pl, 'Airway', joined(p, 'airPlan'), true); row(pl, 'Monitors / access', joined(p, 'lines'), true);
+    row(pl, 'Induction', joined(p, 'drugs')); row(pl, 'Maintenance / reversal', joined(p, 'maint'));
+    row(pl, 'Analgesia', joined(p, 'analg'), true); row(pl, 'PONV prophylaxis', joined(p, 'ponv'));
+    row(pl, 'Blood / fluids', joined(p, 'blood')); row(pl, 'Special considerations', joined(p, 'spec'));
+    row(pl, 'Consent', joined(p, 'consent')); row(pl, 'Comments', v.planNote);
+    return s;
+  }
+  function studiesText(p) {
+    var t = (p.v.studies || '').replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
+    if (p.v.impOnly && t) {
+      var m = t.match(/impression\s*:?([\s\S]*?)(?=\n\s*(?:findings|technique|history|comparison|indication)\s*:|$)/gi);
+      if (m && m.length) t = m.map(function (x) { return x.replace(/^\s*impression\s*:?\s*/i, '').trim(); }).join('\n');
+    }
+    return t;
+  }
+
+  /* ---------- plain text ---------- */
+  function plainText(p) {
+    var s = summarize(p), h = s.head, L2 = [];
+    L2.push('ANESTHESIA PRE-OP ASSESSMENT AND PLAN');
+    L2.push([h.name ? 'Patient: ' + h.name + (h.id ? ' (' + h.id + ')' : '') : '', h.agesex, h.anth, h.date ? 'Date: ' + h.date : '', h.room ? 'Location: ' + h.room : ''].filter(Boolean).join(' | '));
+    L2.push([h.asa, h.procedure ? 'Procedure: ' + h.procedure : '', h.surgeon ? 'Surgeon: ' + h.surgeon : '', h.pos ? 'Position: ' + h.pos : '', h.dispo ? 'Disposition: ' + h.dispo : ''].filter(Boolean).join(' | '));
+    L2.push('Allergies: ' + (h.allergy || 'not documented'));
+    var block = function (title, rows) { if (!rows.length) return; L2.push('', title); rows.forEach(function (r) { if (r[1]) L2.push(r[0] + ': ' + r[1].replace(/\n/g, '\n    ')); }); };
+    block('HISTORY', s.history); block('EXAM / RISK', s.exam);
+    L2.push('', 'DATA');
+    var v = s.labs.values, any = L.labFields.some(function (x) { return v[x[1]]; });
+    if (any) {
+      var f = function (name, k) { var fl = flagFor(k, v[k]); return v[k] ? name + ' ' + v[k] + (fl === 'hi' ? ' (H)' : fl === 'lo' ? ' (L)' : '') : ''; };
+      var ln = function (arr) { return arr.map(function (x) { return f(x[0], x[1]); }).filter(Boolean).join(' | '); };
+      var map = {}; L.labFields.forEach(function (x) { map[x[1]] = x; });
+      ['BMP: na,cl,bun,k,hco3,cr,gluc', 'CBC: wbc,hgb,hct,plts', 'Ca/Mg/PO4: ca,mg,po4'].forEach(function (g) {
+        var a = g.split(': '), t = ln(a[1].split(',').map(function (k) { return map[k]; }));
+        if (t) L2.push(a[0] + ': ' + t);
+      });
+    }
+    if (s.labs.extras.length) L2.push('Other: ' + s.labs.extras.map(function (x) { return x[0] + ' ' + x[1] + (x[2] === 'hi' ? ' (H)' : x[2] === 'lo' ? ' (L)' : ''); }).join(' | '));
+    if (s.labs.unrec.length) L2.push('Additional labs: ' + s.labs.unrec.map(function (u) { return u.name + ' ' + u.value + (u.unit ? ' ' + u.unit : ''); }).join(' | '));
+    if (s.labs.note) L2.push('Lab notes: ' + s.labs.note);
+    if (s.studies) L2.push('Imaging / studies:\n    ' + s.studies.replace(/\n/g, '\n    '));
+    if (L2[L2.length - 1] === 'DATA') L2.pop(), L2.pop();
+    block('ANESTHESIA PLAN', s.plan);
+    return L2.join('\n');
+  }
+
+  /* ---------- sheet ---------- */
+  var el = function (tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+  function rowsInto(parent, rows) {
+    rows.forEach(function (r) {
+      var d = el('div', 'an-row' + (r[1] ? '' : ' an-blank'));
+      d.append(el('b', '', r[0] + ': '));
+      var lines = (r[1] || '').split('\n');
+      lines.forEach(function (ln, i) { if (i) d.append(document.createElement('br')); d.append(document.createTextNode(ln || '')); });
+      if (!r[1]) d.append(el('span', 'an-line', ' '));
+      parent.append(d);
+    });
+  }
+  function buildSheet(p) {
+    var s = summarize(p), h = s.head;
+    var sh = el('article', 'an-sheet' + (compact ? ' an-compact' : ''));
+    var head = el('div', 'an-head');
+    var cell = function (label, text, cls) { var d = el('div', 'an-hc' + (cls ? ' ' + cls : '')); d.append(el('small', '', label), el('div', 'an-hv', text || ' ')); return d; };
+    head.append(cell('Patient', h.name ? h.name + (h.id ? '  (' + h.id + ')' : '') : '', 'an-hc-name'), cell('Age / Sex', h.agesex), cell('Height / Weight / BMI', h.anth), cell('Date · Location', [h.date, h.room].filter(Boolean).join(' · ')), cell('ASA', h.asa.replace('ASA ', ''), 'an-hc-asa'));
+    sh.append(head);
+    var al = el('div', 'an-allergy'); al.append(el('b', '', 'ALLERGIES: '), document.createTextNode(h.allergy || '________________'));
+    if (/latex/i.test(h.allergy)) al.classList.add('an-latex');
+    sh.append(al);
+    var cs = el('div', 'an-case');
+    [['Procedure', h.procedure], ['Surgeon', h.surgeon], ['Position', h.pos], ['Disposition', h.dispo]].forEach(function (x) { var d = el('div'); d.append(el('b', '', x[0] + ': '), document.createTextNode(x[1] || '________')); cs.append(d); });
+    sh.append(cs);
+
+    var body = el('div', 'an-body');
+    var c1 = el('div', 'an-col'), c2 = el('div', 'an-col'), c3 = el('div', 'an-col an-data');
+    c1.append(el('h5', '', 'History')); rowsInto(c1, s.history);
+    c2.append(el('h5', '', 'Exam / Risk')); rowsInto(c2, s.exam);
+    c3.append(el('h5', '', 'Labs / Data'));
+    var fg = el('div', 'an-fish');
+    var vals = s.labs.values;
+    FISH.forEach(function (def) { var c = el('div', 'an-fish-cell'); c.append(fishbone(def, vals)); fg.append(c); });
+    var ex = el('div', 'an-fish-cell an-extras');
+    s.labs.extras.forEach(function (x) { var d = el('div'); d.append(el('b', '', x[0] + ' '), document.createTextNode(x[1]));
+      if (x[2]) d.append(el('sup', '', x[2] === 'hi' ? 'H' : 'L')); ex.append(d); });
+    s.labs.unrec.forEach(function (u) { ex.append(el('div', 'an-unrec', u.name + ' ' + u.value + (u.unit ? ' ' + u.unit : ''))); });
+    if (!ex.childNodes.length) ex.append(el('div', 'an-line', ' '));
+    fg.append(ex); c3.append(fg);
+    if (s.labs.note) rowsInto(c3, [['Lab notes', s.labs.note]]);
+    var st = el('div', 'an-studies'); st.append(el('b', '', 'Imaging / studies: '));
+    if (s.studies) { s.studies.split('\n').forEach(function (ln, i) { if (i) st.append(document.createElement('br')); st.append(document.createTextNode(ln)); }); } else st.append(el('span', 'an-line', ' '));
+    c3.append(st);
+    body.append(c1, c2, c3); sh.append(body);
+
+    var pl = el('div', 'an-plan'); pl.append(el('h5', '', 'Anesthesia plan'));
+    var pg = el('div', 'an-plan-grid'); rowsInto(pg, s.plan); pl.append(pg); sh.append(pl);
+    return sh;
+  }
+
+  /* ---------- panel markup ---------- */
+  panel.innerHTML =
+    '<section class="encounter-bar" aria-label="Anesthesia plan worksheet"><div class="workspace-title"><p class="eyebrow">Documentation workspace</p><h1>Anesthesia Plan</h1><p>Pre-op assessment and plan, one half-sheet per patient</p></div><div class="encounter-tag">ANESTHESIA</div></section>' +
+    '<p class="an-intro">Tap options to fill in each section, paste labs to build fishbones, and print two half-sheets per page. Nothing is saved between page loads.</p>' +
+    '<div class="an-layout">' +
+    '<section class="panel an-input" aria-label="Patient entry"><div class="an-toolbar"><h2>Patient information</h2><button type="button" class="quiet-button" id="an-add">Add patient</button><button type="button" class="quiet-button" id="an-clear-all">Clear all</button></div>' +
+    '<div class="an-tabs" id="an-tabs" role="tablist" aria-label="Anesthesia patients"></div><div class="an-form" id="an-form"></div></section>' +
+    '<section class="panel an-output" aria-label="Printable half-sheets"><div class="an-toolbar"><h2>Printable half-sheets</h2>' +
+    '<label class="an-compact-toggle"><input type="checkbox" id="an-compact"> Compact type</label><button type="button" class="quiet-button" id="an-print">Print sheets</button><button type="button" class="copy-button" id="an-copy-all">Copy all (text)</button></div>' +
+    '<p class="an-status" id="an-status" role="status" aria-live="polite"></p><div class="an-preview" id="an-preview"></div></section></div>';
+  var tabsEl = panel.querySelector('#an-tabs'), formEl = panel.querySelector('#an-form'), prevEl = panel.querySelector('#an-preview'), statusEl = panel.querySelector('#an-status');
+
+  /* ---------- form ---------- */
+  function chipState(p, g, o) { return (p.c[g] && p.c[g][o]) || 0; }
+  function chips(p, g) {
+    var G = typeof g === 'string' ? GROUPS[g] : g;
+    var s = '<div class="an-group" data-group="' + G.k + '"><div class="an-gt">' + esc(G.t) + '</div><div class="an-chips' + (G.m === 'tri' ? ' an-tri' : '') + '">';
+    G.o.forEach(function (o) {
+      var st = chipState(p, G.k, o);
+      s += '<button type="button" class="an-chip" data-g="' + G.k + '" data-o="' + esc(o) + '" data-s="' + st + '" aria-pressed="' + (st ? 'true' : 'false') + '">' + esc(lab(o)) + '</button>';
+    });
+    return s + '</div></div>';
+  }
+  var txt = function (p, k, label, cls, ph, type) {
+    return '<div class="an-field ' + (cls || '') + '"><label>' + esc(label) + '<input type="' + (type || 'text') + '" data-k="' + k + '" value="' + esc(p.v[k] || '') + '" placeholder="' + esc(ph || '') + '" autocomplete="off"></label></div>';
+  };
+  var note = function (p, k, label, rows, ph) {
+    return '<div class="an-field an-wide"><label>' + esc(label) + '<textarea data-k="' + k + '" rows="' + (rows || 2) + '" placeholder="' + esc(ph || '') + '">' + esc(p.v[k] || '') + '</textarea></label></div>';
+  };
+  var unitInput = function (p, k, label, uk, units, cls) {
+    return '<div class="an-field ' + cls + '"><label>' + label + '<span class="an-unit"><input type="text" inputmode="decimal" data-k="' + k + '" value="' + esc(p.v[k] || '') + '"><select data-k="' + uk + '" aria-label="' + label + ' units">' +
+      units.map(function (u) { return '<option' + (p.v[uk] === u ? ' selected' : '') + '>' + u + '</option>'; }).join('') + '</select></span></label></div>';
+  };
+  var sec = function (title, id, inner, open) { return '<details class="an-sec" data-sec="' + id + '"' + (open === false ? '' : ' open') + '><summary>' + esc(title) + '<span class="an-sec-mark" aria-hidden="true"></span></summary><div class="an-sec-body">' + inner + '</div></details>'; };
+  var grid = function (inner) { return '<div class="an-grid">' + inner + '</div>'; };
+
+  function buildForm(p) {
+    var h = '';
+    h += '<div class="an-form-head"><h3>' + esc(p.v.name || 'New patient') + '</h3><button type="button" class="quiet-button" id="an-remove">' + (patients.length > 1 ? 'Remove patient' : 'Clear form') + '</button></div>';
+    h += '<div class="an-expand"><button type="button" class="an-link" data-expand="1">Expand all</button> · <button type="button" class="an-link" data-expand="0">Collapse all</button></div>';
+    h += sec('Case', 'case', grid(txt(p, 'name', 'Name', 'an-s4', 'Last, First') + txt(p, 'last4', 'Last 4', 'an-s2', '1234') + txt(p, 'age', 'Age', 'an-s2', '', 'text') + txt(p, 'date', 'Date', 'an-s2') +
+      txt(p, 'room', 'OR / location', 'an-s3') + txt(p, 'proc', 'Procedure', 'an-s5', 'e.g., Right total knee arthroplasty') + txt(p, 'surgeon', 'Surgeon', 'an-s4') +
+      unitInput(p, 'ht', 'Height', 'hUnit', ['cm', 'in'], 'an-s3') + unitInput(p, 'wt', 'Weight', 'wUnit', ['kg', 'lb'], 'an-s3') + '<div class="an-field an-s4 an-auto" data-auto="bmi"></div>') +
+      chips(p, 'sex') + chips(p, 'pos') + chips(p, 'dispo') + chips(p, 'npo') + grid(txt(p, 'npoSolid', 'Last solids', 'an-s5', 'e.g., midnight') + txt(p, 'npoClear', 'Last clear liquids', 'an-s5', 'e.g., 0600')));
+    h += sec('History', 'hx', chips(p, 'allergy') + note(p, 'allergyNote', 'Allergy reactions', 1, 'e.g., penicillin: rash') + '<div class="an-subhead">Past medical history</div>' +
+      L.pmh.map(function (g) { return chips(p, g); }).join('') + note(p, 'pmhNote', 'History details', 2, 'e.g., EF 35%, stents 2021, A1c 8.1') +
+      '<div class="an-subhead">Medications</div>' + chips(p, L.meds[0]) + note(p, 'medsNote', 'Other home medications / instructions given', 2) +
+      '<div class="an-subhead">Anesthesia and social history</div>' + chips(p, 'prior') + note(p, 'priorNote', 'Anesthesia history details', 1) + chips(p, 'social'));
+    h += sec('Exam and risk', 'exam', '<div class="an-subhead">Vitals</div>' + grid(txt(p, 'bp', 'BP', 'an-s3', '120/80') + txt(p, 'hr', 'HR', 'an-s2') + txt(p, 'rr', 'RR', 'an-s2') + txt(p, 'spo2', 'SpO2 %', 'an-s2') + txt(p, 'temp', 'Temp', 'an-s3')) +
+      '<div class="an-subhead">Airway</div>' + L.airway.map(function (g) { return chips(p, g); }).join('') +
+      '<div class="an-subhead">Cardiopulmonary</div>' + chips(p, 'heart') + chips(p, 'lungs') + chips(p, 'mets') + note(p, 'examNote', 'Other exam findings', 2) +
+      '<div class="an-subhead">Risk scores</div>' + chips(p, 'rcri') + chips(p, 'stop') + chips(p, 'apfel') + '<div class="an-scores" data-auto="scores"></div>');
+    h += sec('Labs', 'labs', '<div class="an-field an-wide"><label>Paste EMR labs (auto-fills the fields and fishbones)<textarea data-emr rows="4" placeholder="Paste lab results here. Tables, lists, and trend columns are supported."></textarea></label></div>' +
+      '<div class="an-labstatus" data-labstatus></div>' +
+      '<div class="an-labgrid">' + L.labFields.map(function (x) { return '<label>' + x[0] + '<input data-lab="' + x[1] + '" value="' + esc(p.labs[x[1]] || '') + '" inputmode="decimal" autocomplete="off"></label>'; }).join('') + '</div>' +
+      '<div class="an-subhead">Coagulation and other</div><div class="an-labgrid">' + L.extraFields.map(function (x) { return '<label>' + x[0] + '<input data-lab="' + x[1] + '" value="' + esc(p.labs[x[1]] || '') + '" autocomplete="off"></label>'; }).join('') + '</div>' +
+      note(p, 'labNote2', 'Lab comments', 1, 'e.g., type and screen pending') + '<p class="an-hint">Highlighted fields are outside typical adult reference ranges; this is a visual aid only.</p>');
+    h += sec('Imaging and studies', 'img', '<div class="an-quick">' + L.studies.map(function (s) { return '<button type="button" class="an-chip an-quick-btn" data-ins="' + esc(s) + '">+ ' + esc(s) + '</button>'; }).join('') + '</div>' +
+      '<div class="an-field an-wide"><label>Paste imaging, ECG, echo, and other study results<textarea data-k="studies" rows="5" placeholder="Paste reports here. Use the buttons above to add a labeled line.">' + esc(p.v.studies || '') + '</textarea></label></div>' +
+      '<label class="an-check"><input type="checkbox" data-k="impOnly"' + (p.v.impOnly ? ' checked' : '') + '> Print the impression only when a pasted report has an "Impression:" section</label>');
+    h += sec('Anesthesia plan', 'plan', chips(p, 'asa') + chips(p, EMERG) + L.plan.slice(1).map(function (g) { return chips(p, g); }).join('') + note(p, 'planNote', 'Plan comments', 3, 'e.g., Adductor canal block with ropivacaine; avoid long-acting opioids; extubate awake'));
+    return h;
+  }
+
+  var OPEN = {};
+  function renderForm() {
+    var p = cur();
+    formEl.querySelectorAll('details[data-sec]').forEach(function (d) { OPEN[d.dataset.sec] = d.open; });
+    formEl.innerHTML = buildForm(p);
+    formEl.querySelectorAll('details[data-sec]').forEach(function (d) { if (d.dataset.sec in OPEN) d.open = OPEN[d.dataset.sec]; });
+    refreshAuto(); refreshLabFlags(); setLabStatus();
+    var ta = formEl.querySelector('[data-emr]'); if (ta && p.emrText) ta.value = p.emrText;
+  }
+
+  function refreshAuto() {
+    var p = cur(), b = bmiOf(p), e;
+    if ((e = formEl.querySelector('[data-auto="bmi"]'))) e.textContent = isNaN(b) ? '' : 'BMI ' + b.toFixed(1) + ' (' + bmiCat(b) + ')';
+    if ((e = formEl.querySelector('[data-auto="scores"]'))) {
+      var rc = rcri(p), sb = stopbang(p), ap = apfel(p), af = airwayFlags(p);
+      e.innerHTML = '<div><b>RCRI</b> ' + rc.n + ' · ' + rc.tier + '</div><div><b>STOP-BANG</b> ' + sb.n + '/8 · ' + sb.tier + (sb.auto.length ? ' <span>(auto: ' + esc(sb.auto.join(', ')) + ')</span>' : '') + '</div>' +
+        '<div><b>PONV (Apfel)</b> ' + ap.n + '/4 · about ' + ap.pct + '%' + (ap.f.length ? ' <span>(' + esc(ap.f.join(', ')) + ')</span>' : '') + '</div>' +
+        (af.flags.length ? '<div class="an-warn"><b>Airway concerns</b> ' + esc(af.flags.join(', ')) + '</div>' : '');
+    }
+  }
+  function refreshLabFlags() {
+    formEl.querySelectorAll('input[data-lab]').forEach(function (i) { var f = flagFor(i.dataset.lab, i.value); if (f) i.dataset.flag = f; else delete i.dataset.flag; i.title = f ? (f === 'hi' ? 'Above' : 'Below') + ' typical adult range' : ''; });
+  }
+  function setLabStatus(msg) {
+    var e = formEl.querySelector('[data-labstatus]'); if (e) e.textContent = msg != null ? msg : (cur()._labMsg || '');
+  }
+
+  /* ---------- tabs ---------- */
+  function progress(p) {
+    var any = function (gs) { return gs.some(function (g) { return Object.keys(p.c[g] || {}).length; }); };
+    return [!!(p.v.name && p.v.proc), any(['allergy', 'pmhCv', 'pmhPulm', 'pmhNeuro', 'pmhEndo', 'pmhGi', 'meds', 'prior', 'social']), !!(p.v.bp || p.v.hr), any(['mall', 'mouth', 'tmd', 'neck', 'jaw', 'dent', 'airOther']),
+      Object.keys(p.labs).some(function (k) { return p.labs[k]; }), !!(p.v.studies || '').trim(), any(['asa']), any(['tech']), any(['consent'])];
+  }
+  function renderTabs() {
+    tabsEl.innerHTML = '';
+    patients.forEach(function (p, i) {
+      var b = el('button', 'an-tab'); b.type = 'button'; b.setAttribute('role', 'tab'); b.setAttribute('aria-selected', String(i === active)); b.tabIndex = i === active ? 0 : -1; b.dataset.i = i;
+      var top = el('div', 'an-tab-top'); top.append(el('span', 'an-tab-name', (p.v.name || '').trim() || 'Patient ' + (i + 1)));
+      if ((p.v.room || '').trim()) top.append(el('span', 'an-tab-room', p.v.room.trim()));
+      var pr = progress(p), bar = el('div', 'an-tab-bar'); pr.forEach(function (on) { bar.append(el('i', on ? 'on' : '')); });
+      b.setAttribute('aria-label', ((p.v.name || '').trim() || 'Patient ' + (i + 1)) + ', ' + pr.filter(Boolean).length + ' of ' + pr.length + ' sections filled');
+      b.append(top, el('div', 'an-tab-meta', (p.v.proc || '').trim() || 'No procedure entered'), bar); tabsEl.append(b);
+    });
+  }
+
+  /* ---------- preview ---------- */
+  var timer = 0;
+  function schedule() { clearTimeout(timer); timer = setTimeout(renderPreview, 60); }
+  function renderPreview() {
+    renderTabs();
+    prevEl.innerHTML = '';
+    patients.forEach(function (p, i) {
+      var w = el('div', 'an-wrap'), bar = el('div', 'an-wrap-bar');
+      var lbl = el('span', 'an-wrap-label'); lbl.append(el('strong', '', 'Patient ' + (i + 1)), document.createTextNode(p.v.name ? ' · ' + p.v.name : ''));
+      var warn = el('span', 'an-overflow', '⚠ Longer than a half page; prints as a full page. Trim text or use compact type.'); warn.hidden = true;
+      var cp = el('button', 'copy-button an-copy-one', 'Copy text'); cp.type = 'button'; cp.dataset.i = i;
+      bar.append(lbl, warn, cp);
+      var scale = el('div', 'an-scale'); var sheet = buildSheet(p); scale.append(sheet); w.append(bar, scale); prevEl.append(w);
+    });
+    fit();
+  }
+  function fit() {
+    var limit = 5.15 * 96 + 2;
+    prevEl.querySelectorAll('.an-wrap').forEach(function (w) {
+      var sc = w.querySelector('.an-scale'), sh = sc.firstChild, avail = w.clientWidth, full = 7.9 * 96;
+      if (!avail) return;
+      sc.style.zoom = 1; var over = sh.offsetHeight > limit;
+      w.querySelector('.an-overflow').hidden = !over; sh.classList.toggle('an-over', over);
+      var z = Math.min(1, avail / full); sc.style.zoom = z;
+    });
+  }
+  window.addEventListener('resize', function () { clearTimeout(fit._t); fit._t = setTimeout(fit, 100); });
+
+  /* ---------- events ---------- */
+  function toggle(p, g, o) {
+    var G = GROUPS[g], c = p.c[g] || (p.c[g] = {}), s = c[o] || 0;
+    if (G.m === 'single') { Object.keys(c).forEach(function (k) { delete c[k]; }); if (!s) c[o] = 1; }
+    else if (G.m === 'tri') { s = (s + 1) % 3; if (s) c[o] = s; else delete c[o]; }
+    else { if (s) delete c[o]; else c[o] = 1; }
+    if (g === 'allergy') {
+      if (c['NKDA'] && o === 'NKDA') Object.keys(c).forEach(function (k) { if (k !== 'NKDA') delete c[k]; });
+      else if (c[o] && o !== 'NKDA') delete c['NKDA'];
+    }
+    if (g === 'prior' && c[o]) {
+      if (o === 'No prior anesthesia') Object.keys(c).forEach(function (k) { if (k !== o) delete c[k]; }); else delete c['No prior anesthesia'];
+    }
+    var group = formEl.querySelector('.an-group[data-group="' + g + '"]');
+    if (group) group.querySelectorAll('.an-chip').forEach(function (b) { var st = chipState(p, g, b.dataset.o); b.dataset.s = st; b.setAttribute('aria-pressed', st ? 'true' : 'false'); });
+  }
+  formEl.addEventListener('click', function (e) {
+    var p = cur(), t = e.target.closest('button'); if (!t) return;
+    if (t.classList.contains('an-quick-btn')) {
+      var ta = formEl.querySelector('textarea[data-k="studies"]'), cur_ = ta.value;
+      ta.value = cur_ + (cur_ && !/\n$/.test(cur_) ? '\n' : '') + t.dataset.ins + ': '; p.v.studies = ta.value; ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); schedule(); return;
+    }
+    if (t.dataset.expand) { formEl.querySelectorAll('details[data-sec]').forEach(function (d) { d.open = t.dataset.expand === '1'; }); return; }
+    if (t.id === 'an-remove') { removePatient(); return; }
+    if (t.classList.contains('an-chip') && t.dataset.g) { toggle(p, t.dataset.g, t.dataset.o); refreshAuto(); schedule(); }
+  });
+  formEl.addEventListener('input', function (e) {
+    var p = cur(), t = e.target;
+    if (t.matches('[data-emr]')) { clearTimeout(t._t); t._t = setTimeout(function () { p.emrText = t.value; var n = applyPaste(p, t.value);
+      p._labMsg = !t.value.trim() ? '' : n ? 'Applied ' + n + ' lab result' + (n === 1 ? '' : 's') + '.' + (p.labNote ? ' ' + p.labNote : '') : 'No recognized lab names with numeric results yet.';
+      formEl.querySelectorAll('input[data-lab]').forEach(function (i) { i.value = p.labs[i.dataset.lab] || ''; }); refreshLabFlags(); refreshAuto(); setLabStatus(); schedule(); }, 120); return; }
+    if (t.matches('[data-lab]')) { var f = t.dataset.lab; p.labs[f] = t.value.trim(); if (p.pasted[f] !== p.labs[f]) delete p.pasted[f]; refreshLabFlags(); schedule(); return; }
+    if (t.dataset.k) {
+      p.v[t.dataset.k] = t.type === 'checkbox' ? t.checked : t.value;
+      if (t.dataset.k === 'name') { var hh = formEl.querySelector('.an-form-head h3'); if (hh) hh.textContent = t.value.trim() || 'New patient'; }
+      refreshAuto(); schedule();
+    }
+  });
+  formEl.addEventListener('change', function (e) { var t = e.target; if (t.matches('select[data-k]')) { cur().v[t.dataset.k] = t.value; refreshAuto(); schedule(); } });
+
+  tabsEl.addEventListener('click', function (e) { var b = e.target.closest('.an-tab'); if (b) switchTo(+b.dataset.i); });
+  tabsEl.addEventListener('keydown', function (e) {
+    var n = patients.length, k = e.key, i = active;
+    if (k === 'ArrowRight') i = (active + 1) % n; else if (k === 'ArrowLeft') i = (active - 1 + n) % n; else if (k === 'Home') i = 0; else if (k === 'End') i = n - 1; else return;
+    e.preventDefault(); switchTo(i, true);
+  });
+  function switchTo(i, focus) {
+    active = i; renderForm(); renderTabs();
+    if (focus) { var b = tabsEl.querySelector('.an-tab[data-i="' + i + '"]'); if (b) b.focus(); }
+    var w = prevEl.querySelectorAll('.an-wrap')[i];
+    if (w && window.innerWidth >= 1100) w.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+  function removePatient() {
+    var p = cur();
+    if (hasData(p) && !window.confirm(patients.length > 1 ? 'Remove this patient and all of their entries?' : 'Clear this form?')) return;
+    if (patients.length > 1) { patients.splice(active, 1); active = Math.min(active, patients.length - 1); } else patients[0] = newPatient();
+    renderForm(); renderPreview();
+  }
+  panel.querySelector('#an-add').addEventListener('click', function () { patients.push(newPatient()); active = patients.length - 1; renderForm(); renderPreview(); var n = formEl.querySelector('[data-k="name"]'); if (n) n.focus(); });
+  panel.querySelector('#an-clear-all').addEventListener('click', function () {
+    if (patients.some(hasData) && !window.confirm('Clear all patients and start over?')) return;
+    patients = [newPatient()]; active = 0; renderForm(); renderPreview();
+  });
+  panel.querySelector('#an-compact').addEventListener('change', function (e) { compact = e.target.checked; renderPreview(); });
+  panel.querySelector('#an-print').addEventListener('click', function () { window.print(); });
+
+  function flash(msg) { statusEl.textContent = msg; statusEl.classList.add('show'); clearTimeout(flash._t); flash._t = setTimeout(function () { statusEl.textContent = ''; statusEl.classList.remove('show'); }, 2600); }
+  function copy(text, ok) {
+    var done = function () { flash(ok); }, fail = function () {
+      var ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.append(ta); ta.select();
+      try { document.execCommand('copy') ? done() : flash('Copy was blocked; select the text manually.'); } catch (_) { flash('Copy was blocked; select the text manually.'); } ta.remove();
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fail); else fail();
+  }
+  panel.querySelector('#an-copy-all').addEventListener('click', function () { copy(patients.map(plainText).join('\n\n' + '-'.repeat(60) + '\n\n'), 'Copied ' + patients.length + ' plan' + (patients.length === 1 ? '' : 's') + ' as text.'); });
+  prevEl.addEventListener('click', function (e) { var b = e.target.closest('.an-copy-one'); if (b) copy(plainText(patients[+b.dataset.i]), 'Copied patient ' + (+b.dataset.i + 1) + ' as text.'); });
+
+  window.addEventListener('beforeunload', function (e) { if (patients.some(hasData)) { e.preventDefault(); e.returnValue = ''; } });
+  document.addEventListener('visibilitychange', function () { if (!panel.hidden) fit(); });
+  new MutationObserver(function () { if (!panel.hidden) { fit(); } }).observe(panel, { attributes: true, attributeFilter: ['hidden'] });
+
+  patients.push(newPatient());
+  renderForm(); renderPreview();
+  window.AnesthesiaPlan = { patients: function () { return patients; }, summarize: summarize, plainText: plainText, stopbang: stopbang, apfel: apfel, rcri: rcri, airwayFlags: airwayFlags, bmi: bmiOf, applyPaste: applyPaste };
 })();
 
 ;(function(){var p=document.getElementById('med-rec-panel');if(p)p.remove();})();
