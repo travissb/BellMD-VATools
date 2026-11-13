@@ -1311,7 +1311,6 @@ html[data-theme="dark"] #pre-rounds-panel .pre-rounds-sheet { border-color: #aeb
     <button class="tool-tab" id="exam-note-tab" type="button" role="tab" aria-selected="true" aria-controls="exam-note-panel" tabindex="0">Exam Note</button>
     <button class="tool-tab" id="ros-tab" type="button" role="tab" aria-selected="false" aria-controls="ros-panel" tabindex="-1">ROS</button>
     <button class="tool-tab" id="pre-rounds-tab" type="button" role="tab" aria-selected="false" aria-controls="pre-rounds-panel" tabindex="-1">Pre-Rounds</button>
-    <button class="tool-tab" id="med-rec-tab" type="button" role="tab" aria-selected="false" aria-controls="med-rec-panel" tabindex="-1">Med Rec Assist</button>
   </nav>
 
   <main class="page workspace-panel" id="exam-note-panel" role="tabpanel" aria-labelledby="exam-note-tab" tabindex="0">
@@ -6009,6 +6008,8 @@ window.ROS_LIB = (function () {
   }).observe(statusEl, { childList: true, characterData: true, subtree: true });
   renderPreRounds();
 })();
+
+;(function(){var p=document.getElementById('med-rec-panel');if(p)p.remove();})();
 </script>
 </body>
 </html>
