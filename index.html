@@ -1285,7 +1285,7 @@ html[data-theme="dark"] #pre-rounds-panel .pre-rounds-sheet { border-color: #aeb
 #anes-panel .an-intro { margin: 0 0 12px; color: var(--muted); line-height: 1.5; }
 .an-layout { display: grid; grid-template-columns: minmax(460px, .9fr) minmax(0, 1.3fr); gap: 16px; align-items: start; }
 #anes-panel .panel { padding: 0; border-top: 3px solid var(--accent); border-radius: 0; }
-.an-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding: 10px 14px; background: var(--surface-head); border-bottom: 1px solid var(--line); }
+.an-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; padding: 8px 12px; background: var(--surface-head); border-bottom: 1px solid var(--line); }
 .an-toolbar h2 { flex: 1 1 auto; margin: 0; font-size: 14px; letter-spacing: .02em; }
 .an-toolbar .copy-button { margin-left: 0; }
 .an-compact-toggle { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: var(--muted); }
@@ -1294,8 +1294,8 @@ html[data-theme="dark"] #pre-rounds-panel .pre-rounds-sheet { border-color: #aeb
 }
 
 /* patient cards */
-.an-tabs { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 8px; padding: 12px 14px 4px; }
-.an-tab { display: grid; gap: 3px; padding: 8px 10px 7px; text-align: left; color: var(--ink); background: var(--surface-solid); border: 1px solid var(--line); border-radius: 0; cursor: pointer; font: inherit; }
+.an-tabs { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 6px; padding: 8px 12px 2px; }
+.an-tab { display: grid; gap: 2px; padding: 6px 8px; text-align: left; color: var(--ink); background: var(--surface-solid); border: 1px solid var(--line); border-radius: 0; cursor: pointer; font: inherit; }
 .an-tab:hover { border-color: var(--accent); }
 .an-tab[aria-selected="true"] { background: var(--surface-head); border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
 .an-tab-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
@@ -1305,26 +1305,38 @@ html[data-theme="dark"] #pre-rounds-panel .pre-rounds-sheet { border-color: #aeb
 .an-tab-bar { display: flex; gap: 2px; margin-top: 3px; }
 .an-tab-bar i { flex: 1; height: 3px; background: var(--line); }
 .an-tab-bar i.on { background: var(--brand-green, #16a34a); }
-
+.an-search { position: relative; z-index: 2; padding: 5px 12px 2px; }
+.an-search input { display: block; width: 100%; padding: 6px 8px; color: var(--ink); background: var(--field-bg); border: 1px solid var(--line); font: inherit; font-size: 12px; }
+.an-search input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.an-search-status { min-height: 0; margin: 2px 0 0; color: var(--muted); font-size: 10px; }
+.an-search-status:empty { display: none; }
+.an-search-results { display: grid; max-height: 220px; overflow-y: auto; margin-top: 2px; border: 1px solid var(--line); background: var(--surface-solid); box-shadow: 0 8px 18px rgba(15, 23, 42, .12); }
+.an-search-results[hidden] { display: none; }
+.an-search-result { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; padding: 5px 8px; color: var(--ink); background: transparent; border: 0; border-bottom: 1px solid var(--line); cursor: pointer; font: inherit; text-align: left; }
+.an-search-result:last-child { border-bottom: 0; }
+.an-search-result:hover, .an-search-result:focus-visible { outline: none; background: var(--surface-head); }
+.an-search-result[aria-pressed="true"] .an-search-result-label::after { content: " · selected"; color: var(--accent); font-size: .85em; font-weight: 700; }
+.an-search-result-label { flex: 1 1 52%; min-width: 0; overflow-wrap: anywhere; font-size: 12px; font-weight: 650; }
+.an-search-result-section { flex: 0 1 48%; min-width: 0; max-width: 48%; color: var(--muted); font-size: 10px; text-align: right; overflow-wrap: anywhere; }
 /* form */
-.an-form { padding: 0 14px 16px; }
-.an-form-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 0 2px; }
+.an-form { padding: 0 10px 12px; }
+.an-form-head { display: flex; justify-content: space-between; align-items: center; gap: 6px; padding: 6px 0 2px; }
 .an-form-head h3 { margin: 0; font-size: 16px; }
-.an-expand { margin: 0 0 8px; font-size: 12px; color: var(--muted); }
+.an-expand { margin: 0 0 5px; font-size: 11px; color: var(--muted); }
 .an-link { padding: 0; font: inherit; color: var(--accent); background: none; border: 0; cursor: pointer; text-decoration: underline; }
-.an-sec { margin: 0 0 8px; border: 1px solid var(--line); background: var(--surface-solid); }
-.an-sec > summary { display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; cursor: pointer; list-style: none; background: var(--surface-head); font-size: 11px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); }
+.an-sec { margin: 0 0 5px; border: 1px solid var(--line); background: var(--surface-solid); }
+.an-sec > summary { display: flex; align-items: center; justify-content: space-between; padding: 7px 10px; cursor: pointer; list-style: none; background: var(--surface-head); font-size: 11px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); }
 .an-sec > summary::-webkit-details-marker { display: none; }
 .an-sec-mark::before { content: "+"; font-size: 15px; font-weight: 700; }
 .an-sec[open] .an-sec-mark::before { content: "\2212"; }
-.an-sec-body { padding: 10px 12px 12px; }
-.an-subhead { margin: 12px 0 6px; padding-top: 8px; border-top: 1px solid var(--line); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
-.an-grid { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 8px 10px; margin-bottom: 8px; }
+.an-sec-body { padding: 7px 9px 9px; }
+.an-subhead { margin: 8px 0 4px; padding-top: 5px; border-top: 1px solid var(--line); font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.an-grid { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 6px 8px; margin-bottom: 6px; }
 .an-s2 { grid-column: span 2; } .an-s3 { grid-column: span 3; } .an-s4 { grid-column: span 4; } .an-s5 { grid-column: span 5; }
-.an-wide { grid-column: 1 / -1; margin: 6px 0; }
-.an-field label, .an-labgrid label { display: block; font-size: 11px; font-weight: 700; letter-spacing: .02em; color: var(--muted); }
+.an-wide { grid-column: 1 / -1; margin: 4px 0; }
+.an-field label, .an-labgrid label { display: block; font-size: 10px; font-weight: 700; letter-spacing: .02em; color: var(--muted); }
 .an-field input[type="text"], .an-field textarea, .an-field select, .an-labgrid input {
-  display: block; width: 100%; margin-top: 3px; padding: 7px 9px; font: inherit; font-size: 13px; font-weight: 400; line-height: 1.4; text-transform: none; letter-spacing: 0;
+  display: block; width: 100%; margin-top: 2px; padding: 5px 7px; font: inherit; font-size: 12px; font-weight: 400; line-height: 1.35; text-transform: none; letter-spacing: 0;
   color: var(--ink); background: var(--field-bg); border: 1px solid var(--line); }
 .an-field input:focus, .an-field textarea:focus, .an-field select:focus, .an-labgrid input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
 .an-field textarea { resize: vertical; min-height: 44px; }
@@ -1334,14 +1346,28 @@ html[data-theme="dark"] #pre-rounds-panel .pre-rounds-sheet { border-color: #aeb
 .an-auto { align-self: end; padding-bottom: 8px; font-size: 12px; font-weight: 700; color: var(--accent); }
 
 /* chips */
-.an-group { margin: 0 0 10px; }
-.an-gt { margin: 0 0 4px; font-size: 11px; font-weight: 700; color: var(--muted); }
-.an-chips { display: flex; flex-wrap: wrap; gap: 5px; }
-.an-chip { padding: 5px 9px; font: inherit; font-size: 12px; line-height: 1.25; color: var(--ink); background: var(--surface-solid); border: 1px solid var(--line); cursor: pointer; text-align: left; }
+.an-group { margin: 0 0 7px; }
+.an-gt { margin: 0 0 3px; font-size: 10px; font-weight: 700; color: var(--muted); }
+.an-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.an-chip { padding: 4px 7px; font: inherit; font-size: 11px; line-height: 1.2; color: var(--ink); background: var(--surface-solid); border: 1px solid var(--line); cursor: pointer; text-align: left; }
 .an-chip:hover { border-color: var(--accent); }
 .an-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 .an-chip[data-s="1"] { color: #fff; background: var(--accent); border-color: var(--accent); font-weight: 600; }
 html[data-theme="dark"] .an-chip[data-s="1"] { color: #0b1221; }
+.an-chip.an-med-label { color: var(--med-ink); background: var(--med-bg); border-color: var(--med-border); }
+.an-chip.an-med-label[data-s="1"] { color: var(--med-ink); background: var(--med-bg); border-color: var(--med-border); box-shadow: inset 0 0 0 1px var(--med-border); font-weight: 800; }
+.an-med-induction { --med-ink: #5b4300; --med-bg: #fff3b0; --med-border: #d7ad00; }
+.an-med-opioid { --med-ink: #123d72; --med-bg: #dbeafe; --med-border: #3b82f6; }
+.an-med-nmb { --med-ink: #7f1d1d; --med-bg: #fee2e2; --med-border: #ef4444; }
+.an-med-benzodiazepine { --med-ink: #7c2d12; --med-bg: #ffedd5; --med-border: #f97316; }
+.an-med-vasopressor { --med-ink: #4c1d95; --med-bg: #ede9fe; --med-border: #8b5cf6; }
+.an-med-antiemetic { --med-ink: #14532d; --med-bg: #dcfce7; --med-border: #22c55e; }
+.an-med-anticholinergic { --med-ink: #374151; --med-bg: #e5e7eb; --med-border: #6b7280; }
+.an-med-other { --med-ink: #334155; --med-bg: #f8fafc; --med-border: #94a3b8; }
+.an-med-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 3px 8px; margin: 3px 0 7px; color: var(--muted); font-size: 10px; }
+.an-med-legend-label { flex: 0 0 100%; font-weight: 700; }
+.an-med-key { display: inline-flex; align-items: center; gap: 3px; white-space: nowrap; }
+.an-med-swatch { display: inline-block; width: 9px; height: 9px; border: 1px solid var(--med-border); background: var(--med-bg); }
 .an-tri .an-chip[data-s="1"]::after { content: " · continue"; font-weight: 400; }
 .an-tri .an-chip[data-s="2"] { color: #78350f; background: #fde68a; border-color: #f59e0b; font-weight: 600; }
 .an-tri .an-chip[data-s="2"]::after { content: " · HOLD"; }
@@ -1416,6 +1442,11 @@ html[data-theme="dark"] .an-labgrid input[data-flag="lo"] { color: #93c5fd; back
 .an-plan-detail { min-width: 0; min-height: 1.9em; padding: 2px 6px; border-right: 1px solid #e0e7eb; border-bottom: 1px solid #e0e7eb; overflow-wrap: anywhere; }
 .an-plan-detail:nth-child(even) { border-right: 0; }
 .an-plan-detail span { display: inline; margin: 0 4px 0 0; }
+.an-plan-detail .an-med-tag { display: inline-block; margin: 1px 2px 1px 0; padding: 0 3px; color: var(--med-ink); background: var(--med-bg); border: 1px solid var(--med-border); border-radius: 2px; font-size: .92em; font-weight: 700; line-height: 1.25; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.an-plan > .an-med-legend { gap: 2px 7px; margin: 0; padding: 2px 6px; color: #465e6e; background: #f3f7fa; border-bottom: 1px solid #d5dee5; font-size: .66em; }
+.an-plan .an-med-legend-label { display: none; }
+.an-plan .an-med-key { gap: 2px; }
+.an-plan .an-med-swatch { width: 7px; height: 7px; }
 .an-plan-comments { min-height: 2.25em; padding: 3px 6px; border-top: 1px solid #bdcbd3; overflow-wrap: anywhere; }
 .an-plan-comments b { color: #526a78; font-size: .73em; letter-spacing: .07em; text-transform: uppercase; }
 .an-overview { display: grid; grid-template-columns: 1fr 1.15fr; gap: 5px; padding: 0 7px; }
@@ -6392,6 +6423,53 @@ window.AN_LIB = (function () {
   var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
   var lab = function (o) { return o.split('|')[0]; };
   var out = function (o) { var a = o.split('|'); return a[1] || a[0]; };
+  var MED_CATEGORIES = [
+    { key: 'induction', label: 'Induction agents', short: 'Induction' },
+    { key: 'opioid', label: 'Opioids', short: 'Opioid' },
+    { key: 'nmb', label: 'Neuromuscular blockers', short: 'Paralytic' },
+    { key: 'benzodiazepine', label: 'Benzodiazepines', short: 'Benzodiazepine' },
+    { key: 'vasopressor', label: 'Vasopressors', short: 'Vasopressor' },
+    { key: 'antiemetic', label: 'Antiemetics', short: 'Antiemetic' },
+    { key: 'anticholinergic', label: 'Anticholinergics', short: 'Anticholinergic' },
+    { key: 'other', label: 'Other medications', short: 'Other' }
+  ];
+  var FIELD_SEARCH_ALIASES = {
+    na: 'sodium', k: 'potassium', cl: 'chloride', hco3: 'bicarbonate',
+    bun: 'blood urea nitrogen', cr: 'creatinine', gluc: 'blood glucose',
+    wbc: 'white blood cell count', hgb: 'hemoglobin', hct: 'hematocrit',
+    plts: 'platelets', inr: 'international normalized ratio', pt: 'prothrombin time',
+    ptt: 'partial thromboplastin time', a1c: 'hemoglobin a1c', alb: 'albumin',
+    tbili: 'total bilirubin', ast: 'aspartate aminotransferase', alt: 'alanine aminotransferase',
+    trop: 'troponin', hcg: 'pregnancy test'
+  };
+  function medicationCategory(value) {
+    var text = String(value || '').trim().toLowerCase();
+    if (!text || /^(avoid|avoidance|minimize|opioid-sparing)\b/.test(text)) return '';
+    if (/\bneostigmine\b/.test(text)) return 'other';
+    if (/\b(ondansetron|dexamethasone|scopolamine|aprepitant|haloperidol|droperidol)\b/.test(text)) return 'antiemetic';
+    if (/\b(propofol|etomidate|ketamine)\b/.test(text)) return 'induction';
+    if (/\b(succinylcholine|rocuronium|cisatracurium|neuromuscular blocker|paralytic)\b/.test(text)) return 'nmb';
+    if (/\b(midazolam|benzodiazepine)\b/.test(text)) return 'benzodiazepine';
+    if (/\b(fentanyl|methadone|opioid)\b/.test(text)) return 'opioid';
+    if (/\b(norepinephrine|noradrenaline|epinephrine|adrenaline|phenylephrine|vasopressin|ephedrine|dobutamine|dopamine|metaraminol|vasopressor)\b/.test(text)) return 'vasopressor';
+    if (/\b(atropine|glycopyrrolate|anticholinergic)\b/.test(text)) return 'anticholinergic';
+    if (/\b(lidocaine|dexmedetomidine|sevoflurane|desflurane|isoflurane|sugammadex|neostigmine|acetaminophen|ketorolac|gabapentinoid|nsaid)\b/.test(text)) return 'other';
+    return '';
+  }
+  function medicationLegend(className) {
+    var legend = el('div', 'an-med-legend' + (className ? ' ' + className : ''));
+    legend.setAttribute('role', 'note');
+    legend.setAttribute('aria-label', 'Anesthesia medication label color key');
+    legend.append(el('span', 'an-med-legend-label', 'Medication label colors'));
+    MED_CATEGORIES.forEach(function (category) {
+      var key = el('span', 'an-med-key');
+      key.setAttribute('aria-label', category.label);
+      key.title = category.label;
+      key.append(el('span', 'an-med-swatch an-med-' + category.key), document.createTextNode(category.short));
+      legend.append(key);
+    });
+    return legend;
+  }
   var num = function (s) { var m = String(s == null ? '' : s).match(/-?\d+(\.\d+)?/); return m ? parseFloat(m[0]) : NaN; };
   var today = function () { var d = new Date(); return (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear(); };
 
@@ -6495,6 +6573,7 @@ window.AN_LIB = (function () {
   ];
   function fishbone(def, values) {
     var svg = makeFishboneDiagram(def.title, values, def.lines, def.points, def.text(values));
+    svg.setAttribute('viewBox', '0 0 300 114');
     svg.removeAttribute('height');
     var vals = svg.querySelectorAll('text[font-size="11"]');
     def.points.forEach(function (pt, i) {
@@ -6623,6 +6702,14 @@ window.AN_LIB = (function () {
       if (text) parent.append(document.createTextNode(text));
       else parent.append(el('span', 'an-write-line' + (fill ? ' an-fill' : ''), ' '));
     };
+    var planValue = function (parent, text) {
+      if (!text) { valueOrLine(parent, '', true); return; }
+      text.split(/,\s*/).forEach(function (part, i) {
+        if (i) parent.append(document.createTextNode(', '));
+        var category = medicationCategory(part);
+        parent.append(category ? el('span', 'an-med-tag an-med-' + category, part) : document.createTextNode(part));
+      });
+    };
     var meta = function (parent, label, text) {
       var d = el('div', 'an-meta-item');
       d.append(el('small', 'an-meta-label', label));
@@ -6667,6 +6754,7 @@ window.AN_LIB = (function () {
     var planHead = el('div', 'an-plan-head'), planTitle = el('h5', '', 'Anesthesia plan');
     planHead.append(planTitle);
     plan.append(planHead);
+    plan.append(medicationLegend());
     var primary = el('div', 'an-plan-primary');
     [['Technique', planRows.Technique], ['Airway', planRows.Airway], ['Monitors / access', planRows['Monitors / access']]].forEach(function (x) {
       var d = el('div', 'an-plan-focus'); d.append(el('span', '', x[0]));
@@ -6678,7 +6766,7 @@ window.AN_LIB = (function () {
       ['Analgesia', planRows.Analgesia], ['PONV prophylaxis', planRows['PONV prophylaxis']],
       ['Blood / fluids', planRows['Blood / fluids']], ['Special considerations', planRows['Special considerations']],
       ['Consent', planRows.Consent]].forEach(function (x) {
-      var d = el('div', 'an-plan-detail'); d.append(el('span', '', x[0])); valueOrLine(d, x[1], !x[1]); details.append(d);
+      var d = el('div', 'an-plan-detail'); d.append(el('span', '', x[0])); planValue(d, x[1]); details.append(d);
     });
     plan.append(details);
     var comments = el('div', 'an-plan-comments');
@@ -6754,11 +6842,16 @@ window.AN_LIB = (function () {
     '<p class="an-intro">Tap options to fill in each section, paste labs to build fishbones, and print one assessment sheet per patient. Nothing is saved between page loads.</p>' +
     '<div class="an-layout">' +
     '<section class="panel an-input" aria-label="Patient entry"><div class="an-toolbar"><h2>Patient information</h2><button type="button" class="quiet-button" id="an-add">Add patient</button><button type="button" class="quiet-button" id="an-clear-all">Clear all</button></div>' +
-    '<div class="an-tabs" id="an-tabs" role="tablist" aria-label="Anesthesia patients"></div><div class="an-form" id="an-form"></div></section>' +
+    '<div class="an-tabs" id="an-tabs" role="tablist" aria-label="Anesthesia patients"></div>' +
+    '<div class="an-search"><input id="an-search-input" type="search" autocomplete="off" aria-label="Search patient information and options" placeholder="Search patient information" aria-controls="an-search-results" aria-expanded="false">' +
+    '<p class="an-search-status" id="an-search-status" role="status" aria-live="polite"></p><div class="an-search-results" id="an-search-results" role="region" aria-label="Search results" hidden></div></div>' +
+    '<div class="an-form" id="an-form"></div></section>' +
     '<section class="panel an-output" aria-label="Printable preview"><div class="an-toolbar"><h2>Printable preview</h2>' +
     '<label class="an-compact-toggle"><input type="checkbox" id="an-compact"> Compact type</label><button type="button" class="quiet-button" id="an-print">Print sheets</button><button type="button" class="copy-button" id="an-copy-all">Copy all (text)</button></div>' +
     '<p class="an-status" id="an-status" role="status" aria-live="polite"></p><div class="an-preview" id="an-preview"></div></section></div>';
   var tabsEl = panel.querySelector('#an-tabs'), formEl = panel.querySelector('#an-form'), prevEl = panel.querySelector('#an-preview'), statusEl = panel.querySelector('#an-status');
+  var searchInput = panel.querySelector('#an-search-input'), searchResultsEl = panel.querySelector('#an-search-results'), searchStatusEl = panel.querySelector('#an-search-status');
+  var currentSearchResults = [];
 
   /* ---------- form ---------- */
   function chipState(p, g, o) { return (p.c[g] && p.c[g][o]) || 0; }
@@ -6767,10 +6860,108 @@ window.AN_LIB = (function () {
     var s = '<div class="an-group" data-group="' + G.k + '"><div class="an-gt">' + esc(G.t) + '</div><div class="an-chips' + (G.m === 'tri' ? ' an-tri' : '') + '">';
     G.o.forEach(function (o) {
       var st = chipState(p, G.k, o);
-      s += '<button type="button" class="an-chip" data-g="' + G.k + '" data-o="' + esc(o) + '" data-s="' + st + '" aria-pressed="' + (st ? 'true' : 'false') + '">' + esc(lab(o)) + '</button>';
+      var med = /^(drugs|maint|analg|ponv)$/.test(G.k) ? medicationCategory(lab(o)) : '';
+      var medInfo = MED_CATEGORIES.find(function (category) { return category.key === med; });
+      s += '<button type="button" class="an-chip' + (med ? ' an-med-label an-med-' + med : '') + '" data-g="' + G.k + '" data-o="' + esc(o) + '" data-s="' + st + '"' +
+        (medInfo ? ' title="' + esc(medInfo.label) + '"' : '') + ' aria-pressed="' + (st ? 'true' : 'false') + '">' + esc(lab(o)) + '</button>';
     });
     return s + '</div></div>';
   }
+  function searchSection(element) {
+    var section = element.closest('details[data-sec]');
+    return section ? section.querySelector('summary').textContent.trim() : 'Patient information';
+  }
+  function updateSearchResults(query) {
+    var q = String(query || '').trim().toLowerCase();
+    currentSearchResults = [];
+    searchResultsEl.replaceChildren();
+    if (!q) {
+      searchResultsEl.hidden = true;
+      searchInput.setAttribute('aria-expanded', 'false');
+      searchStatusEl.textContent = '';
+      return;
+    }
+    var matchesQuery = function (values) {
+      return values.filter(Boolean).some(function (value) {
+        var text = String(value).trim().toLowerCase();
+        return q.length < 2 ? text === q : text.indexOf(q) !== -1;
+      });
+    };
+
+    var matches = [];
+    formEl.querySelectorAll('.an-group[data-group]').forEach(function (group) {
+      var groupKey = group.dataset.group, groupTitle = group.querySelector('.an-gt').textContent.trim();
+      var section = searchSection(group);
+      group.querySelectorAll('.an-chip[data-g][data-o]').forEach(function (chip) {
+        var option = chip.dataset.o, labelText = chip.textContent.trim();
+        var category = medicationCategory(lab(option));
+        var categoryLabel = MED_CATEGORIES.find(function (item) { return item.key === category; });
+        if (!matchesQuery([labelText, groupTitle, categoryLabel && categoryLabel.label, categoryLabel && categoryLabel.short]) &&
+          !(q.length >= 4 && matchesQuery([section]))) return;
+        matches.push({
+          kind: 'option', label: labelText, section: section + ' · ' + groupTitle,
+          group: groupKey, option: option, selected: !!chipState(cur(), groupKey, option),
+          score: labelText.toLowerCase().indexOf(q) === 0 ? 0 : 1, element: chip
+        });
+      });
+    });
+    formEl.querySelectorAll('input[data-k], textarea[data-k], select[data-k], textarea[data-emr], input[data-lab]').forEach(function (control) {
+      var labelElement = control.closest('label');
+      var labelText = (control.getAttribute('aria-label') || (labelElement && labelElement.textContent) || control.dataset.k || control.dataset.lab || 'Field').replace(/\s+/g, ' ').trim();
+      var section = searchSection(control);
+      var alias = control.dataset.lab && FIELD_SEARCH_ALIASES[control.dataset.lab];
+      if (!matchesQuery([labelText, alias]) && !(q.length >= 4 && matchesQuery([section]))) return;
+      matches.push({ kind: 'field', label: labelText, section: section, score: labelText.toLowerCase().indexOf(q) === 0 ? 0 : 1, element: control });
+    });
+    matches.sort(function (a, b) { return a.score - b.score || a.label.localeCompare(b.label); });
+    var total = matches.length, shown = matches.slice(0, 15);
+    currentSearchResults = shown;
+    shown.forEach(function (result, index) {
+      var button = el('button', 'an-search-result');
+      button.type = 'button'; button.dataset.index = index;
+      if (result.kind === 'option') button.setAttribute('aria-pressed', result.selected ? 'true' : 'false');
+      button.append(el('span', 'an-search-result-label', result.label), el('span', 'an-search-result-section', result.section));
+      searchResultsEl.append(button);
+    });
+    searchResultsEl.hidden = !shown.length;
+    searchInput.setAttribute('aria-expanded', shown.length ? 'true' : 'false');
+    searchStatusEl.textContent = total ? (total > shown.length ? 'Showing ' + shown.length + ' of ' + total + ' matches. Refine your search for more.' : total + ' match' + (total === 1 ? '' : 'es') + '.') : 'No matching fields or options.';
+  }
+  searchInput.addEventListener('input', function () { updateSearchResults(searchInput.value); });
+  searchInput.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') { searchInput.value = ''; updateSearchResults(''); return; }
+    if (event.key === 'ArrowDown') {
+      var first = searchResultsEl.querySelector('.an-search-result');
+      if (first) { event.preventDefault(); first.focus(); }
+    } else if (event.key === 'Enter') {
+      var firstResult = searchResultsEl.querySelector('.an-search-result');
+      if (firstResult) { event.preventDefault(); firstResult.click(); }
+    }
+  });
+  searchResultsEl.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') { event.preventDefault(); searchInput.focus(); }
+    if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+    var items = Array.from(searchResultsEl.querySelectorAll('.an-search-result'));
+    var index = items.indexOf(document.activeElement);
+    if (event.key === 'ArrowUp' && index === 0) { event.preventDefault(); searchInput.focus(); return; }
+    var next = event.key === 'ArrowDown' ? Math.min(items.length - 1, index + 1) : Math.max(0, index - 1);
+    if (items[next]) { event.preventDefault(); items[next].focus(); }
+  });
+  searchResultsEl.addEventListener('click', function (event) {
+    var button = event.target.closest('.an-search-result');
+    if (!button) return;
+    var result = currentSearchResults[+button.dataset.index];
+    if (!result) return;
+    if (result.kind === 'option') {
+      toggle(cur(), result.group, result.option);
+      refreshAuto(); schedule(); updateSearchResults(searchInput.value); searchInput.focus();
+      return;
+    }
+    var section = result.element.closest('details[data-sec]');
+    if (section) section.open = true;
+    result.element.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    result.element.focus({ preventScroll: true });
+  });
   var txt = function (p, k, label, cls, ph, type) {
     return '<div class="an-field ' + (cls || '') + '"><label>' + esc(label) + '<input type="' + (type || 'text') + '" data-k="' + k + '" value="' + esc(p.v[k] || '') + '" placeholder="' + esc(ph || '') + '" autocomplete="off"></label></div>';
   };
@@ -6781,7 +6972,7 @@ window.AN_LIB = (function () {
     return '<div class="an-field ' + cls + '"><label>' + label + '<span class="an-unit"><input type="text" inputmode="decimal" data-k="' + k + '" value="' + esc(p.v[k] || '') + '"><select data-k="' + uk + '" aria-label="' + label + ' units">' +
       units.map(function (u) { return '<option' + (p.v[uk] === u ? ' selected' : '') + '>' + u + '</option>'; }).join('') + '</select></span></label></div>';
   };
-  var sec = function (title, id, inner, open) { return '<details class="an-sec" data-sec="' + id + '"' + (open === false ? '' : ' open') + '><summary>' + esc(title) + '<span class="an-sec-mark" aria-hidden="true"></span></summary><div class="an-sec-body">' + inner + '</div></details>'; };
+  var sec = function (title, id, inner, open) { return '<details class="an-sec" data-sec="' + id + '"' + (open ? ' open' : '') + '><summary>' + esc(title) + '<span class="an-sec-mark" aria-hidden="true"></span></summary><div class="an-sec-body">' + inner + '</div></details>'; };
   var grid = function (inner) { return '<div class="an-grid">' + inner + '</div>'; };
 
   function buildForm(p) {
@@ -6791,7 +6982,7 @@ window.AN_LIB = (function () {
     h += sec('Case', 'case', grid(txt(p, 'name', 'Name', 'an-s4', 'Last, First') + txt(p, 'last4', 'Last 4', 'an-s2', '1234') + txt(p, 'age', 'Age', 'an-s2', '', 'text') + txt(p, 'date', 'Date', 'an-s2') +
       txt(p, 'room', 'OR / location', 'an-s3') + txt(p, 'proc', 'Procedure', 'an-s5', 'e.g., Right total knee arthroplasty') + txt(p, 'surgeon', 'Surgeon', 'an-s4') +
       unitInput(p, 'ht', 'Height', 'hUnit', ['cm', 'in'], 'an-s3') + unitInput(p, 'wt', 'Weight', 'wUnit', ['kg', 'lb'], 'an-s3') + '<div class="an-field an-s4 an-auto" data-auto="bmi"></div>') +
-      chips(p, 'sex') + chips(p, 'pos') + chips(p, 'dispo') + chips(p, 'npo') + grid(txt(p, 'npoSolid', 'Last solids', 'an-s5', 'e.g., midnight') + txt(p, 'npoClear', 'Last clear liquids', 'an-s5', 'e.g., 0600')));
+      chips(p, 'sex') + chips(p, 'pos') + chips(p, 'dispo') + chips(p, 'npo') + grid(txt(p, 'npoSolid', 'Last solids', 'an-s5', 'e.g., midnight') + txt(p, 'npoClear', 'Last clear liquids', 'an-s5', 'e.g., 0600')), true);
     h += sec('History', 'hx', chips(p, 'allergy') + note(p, 'allergyNote', 'Allergy reactions', 1, 'e.g., penicillin: rash') + '<div class="an-subhead">Past medical history</div>' +
       L.pmh.map(function (g) { return chips(p, g); }).join('') + note(p, 'pmhNote', 'History details', 2, 'e.g., EF 35%, stents 2021, A1c 8.1') +
       '<div class="an-subhead">Medications</div>' + chips(p, L.meds[0]) + note(p, 'medsNote', 'Other home medications / instructions given', 2) +
@@ -6808,7 +6999,7 @@ window.AN_LIB = (function () {
     h += sec('Imaging and studies', 'img', '<div class="an-quick">' + L.studies.map(function (s) { return '<button type="button" class="an-chip an-quick-btn" data-ins="' + esc(s) + '">+ ' + esc(s) + '</button>'; }).join('') + '</div>' +
       '<div class="an-field an-wide"><label>Paste imaging, ECG, echo, and other study results<textarea data-k="studies" rows="5" placeholder="Paste reports here. Use the buttons above to add a labeled line.">' + esc(p.v.studies || '') + '</textarea></label></div>' +
       '<label class="an-check"><input type="checkbox" data-k="impOnly"' + (p.v.impOnly ? ' checked' : '') + '> Print the impression only when a pasted report has an "Impression:" section</label>');
-    h += sec('Anesthesia plan', 'plan', chips(p, 'asa') + chips(p, EMERG) + L.plan.slice(1).map(function (g) { return chips(p, g); }).join('') + note(p, 'planNote', 'Plan comments', 3, 'e.g., Adductor canal block with ropivacaine; avoid long-acting opioids; extubate awake'));
+    h += sec('Anesthesia plan', 'plan', medicationLegend().outerHTML + chips(p, 'asa') + chips(p, EMERG) + L.plan.slice(1).map(function (g) { return chips(p, g); }).join('') + note(p, 'planNote', 'Plan comments', 3, 'e.g., Adductor canal block with ropivacaine; avoid long-acting opioids; extubate awake'));
     return h;
   }
 
@@ -6820,6 +7011,7 @@ window.AN_LIB = (function () {
     formEl.querySelectorAll('details[data-sec]').forEach(function (d) { if (d.dataset.sec in OPEN) d.open = OPEN[d.dataset.sec]; });
     refreshAuto(); refreshLabFlags(); setLabStatus();
     var ta = formEl.querySelector('[data-emr]'); if (ta && p.emrText) ta.value = p.emrText;
+    updateSearchResults(searchInput.value);
   }
 
   function refreshAuto() {
